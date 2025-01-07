@@ -18,6 +18,10 @@ const App = () => {
 
   const handleAdd = (event) => {
     event.preventDefault()
+    if (persons.some((e) => ( e.name === newName))) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
     setPersons(persons.concat({ name: newName }))
   }
 
