@@ -26,7 +26,16 @@ const App = () => {
       alert(`${newName} is already added to phonebook with number ${newNumber}`)
       return
     }
-    setPersons(persons.concat({ name: newName, number: newNumber, visible: true }))
+
+    const newPerson = { name: newName, number: newNumber, visible: true }
+
+    axios.post("http://localhost:3001/persons", newPerson).then((res) => {
+      alert("Person added to phonebook")
+      setPersons(persons.concat(res.data))
+    }).catch((err) => {
+      console.log(err);
+      alert("Unable to add person")
+    })
   }
 
   const handleNameInput = (event) => {
