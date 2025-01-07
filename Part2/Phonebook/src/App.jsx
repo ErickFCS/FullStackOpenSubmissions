@@ -26,7 +26,23 @@ const App = () => {
       alert(`${newName} is already added to phonebook with number ${newNumber}`)
       return
     }
+    const existIndex = persons.findIndex((e) => (e.name === newName))
+    if (existIndex !== -1) {
+      const exist = persons[existIndex]
+      if (!window.confirm(`${newName} is already added to phonebook, wanna replace old number ${exist.number} with new number ${newNumber}`)) return
+      const newPerson = { name: newName, number: newNumber, visible: true }
 
+      phonebookService.updateData(exist.id, newPerson).then((res) => {
+        alert("Person updated to phonebook")
+        const newPersons = [...persons]
+        newPersons.splice(existIndex, 1, newPerson)
+        setPersons(newPersons)
+      }).catch((err) => {
+        console.log(err);
+        alert("Unable to update person")
+      })
+      return
+    }
     const newPerson = { name: newName, number: newNumber, visible: true }
 
     phonebookService.createData(newPerson).then((res) => {

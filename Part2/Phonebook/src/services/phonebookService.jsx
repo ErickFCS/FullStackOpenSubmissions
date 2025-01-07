@@ -20,9 +20,9 @@ const createData = async (newObj) => {
         })
 }
 
-const updateData = async (newObj) => {
+const updateData = async (objId, newObj) => {
     return axios
-        .put("http://localhost:3001/persons", newObj)
+        .put(`http://localhost:3001/persons/${objId}`, newObj)
         .then((res) => (res.data))
         .catch((err) => {
             console.error(err);
