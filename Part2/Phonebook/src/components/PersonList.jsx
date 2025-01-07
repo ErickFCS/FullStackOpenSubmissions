@@ -3,12 +3,14 @@ const Person = ({ name, number }) => (
 )
 
 const PersonList = ({ persons }) => (
-    persons.map((e, i) => {
-        if (!e.visible) return
-        return (
-            <Person key={e.name + i} name={e.name} number={e.number} />
-        )
-    })
+    <>
+        {persons.map((e, i) => {
+            if (!e.visible) return
+            return (
+                <Person key={e.name + i} name={e.name} number={e.number} />
+            )
+        })}
+    </>
 )
 
 export default PersonList
