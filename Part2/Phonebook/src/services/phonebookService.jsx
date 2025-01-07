@@ -11,7 +11,8 @@ const fetchData = async () => {
 }
 
 const createData = async (newObj) => {
-    return axios.post("http://localhost:3001/persons", newObj)
+    return axios
+        .post("http://localhost:3001/persons", newObj)
         .then((res) => (res.data))
         .catch((err) => {
             console.error(err);
@@ -20,7 +21,8 @@ const createData = async (newObj) => {
 }
 
 const updateData = async (newObj) => {
-    return axios.put("http://localhost:3001/persons", newObj)
+    return axios
+        .put("http://localhost:3001/persons", newObj)
         .then((res) => (res.data))
         .catch((err) => {
             console.error(err);
@@ -28,4 +30,14 @@ const updateData = async (newObj) => {
         })
 }
 
-export default { fetchData, createData, updateData }
+const deleteData = async (objId) => {
+    return axios
+        .delete(`http://localhost:3001/persons/${objId}`)
+        .then((res)=>(res.data))
+        .catch((err)=>{
+            console.error(err);
+            return Promise.reject("Unable to delete")
+        })
+}
+
+export default { fetchData, createData, updateData, deleteData };

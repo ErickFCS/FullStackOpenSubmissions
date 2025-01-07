@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import PersonList from './components/PersonList'
 import PersonForm from './components/PersonForm'
 import Search from './components/Search'
-import axios from 'axios'
 import phonebookService from './services/phonebookService'
 
 const App = () => {
@@ -61,6 +60,14 @@ const App = () => {
     setPersons(newPersons)
   }
 
+  const handleDelete = (obj) => {
+    if (!window.confirm(`Are you sure you want to delete ${obj.name}?`)) return
+    phonebookService.deleteData(obj.id).then((res) => {
+      const newPersons = persons.filter((e) => (!(e.id === obj.id)))
+      setPersons(newPersons)
+    })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -68,7 +75,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm handleAdd={handleAdd} handleNameInput={handleNameInput} handleNumberInput={handleNumberInput} />
       <h2>Numbers</h2>
-      <PersonList persons={persons} />
+      <PersonList persons={persons} onDelete={handleDelete} />
     </div>
   )
 }
