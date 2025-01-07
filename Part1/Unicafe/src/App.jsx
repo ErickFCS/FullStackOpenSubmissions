@@ -12,6 +12,23 @@ const TotalPercentage = ({ text, value }) => (
   <p>{text}: {value}%</p>
 )
 
+const Statistics = ({stats}) => {
+  
+  const { good, neutral, bad, all, average, positive } = stats
+  
+  return (
+    <>
+      <h2>statistics</h2>
+      <Total text="good" value={good} />
+      <Total text="neutral" value={neutral} />
+      <Total text="bad" value={bad} />
+      <Total text="all" value={all} />
+      <Total text="average" value={average} />
+      <TotalPercentage text="positive" value={positive} />
+    </>
+  )
+}
+
 function App() {
 
   const [good, setGood] = useState(0)
@@ -20,6 +37,15 @@ function App() {
   const [all, setAll] = useState(0)
   const [average, setAverage] = useState(0)
   const [positive, setPositive] = useState(0)
+  
+  const stats = {
+    good: good,
+    neutral: neutral,
+    bad: bad,
+    all: all,
+    average: average,
+    positive: positive,
+  }
 
   const onGood = () => {
     setAverage((good + 1 - bad) / (all + 1))
@@ -48,13 +74,7 @@ function App() {
       <Button text="good" onClick={onGood} />
       <Button text="neutral" onClick={onNeutral} />
       <Button text="bad" onClick={onBad} />
-      <h2>statistics</h2>
-      <Total text="good" value={good} />
-      <Total text="neutral" value={neutral} />
-      <Total text="bad" value={bad} />
-      <Total text="all" value={all} />
-      <Total text="average" value={average} />
-      <TotalPercentage text="positive" value={positive} />
+      <Statistics stats={stats} />
     </>
   )
 }
