@@ -3,6 +3,7 @@ import PersonList from './components/PersonList'
 import PersonForm from './components/PersonForm'
 import Search from './components/Search'
 import axios from 'axios'
+import phonebookService from './services/phonebookService'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,8 +12,8 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((res) => {
-      setPersons(res.data)
+    phonebookService.fetchData().then((res) => {
+      setPersons(res)
     })
   }, [])
 
@@ -29,9 +30,9 @@ const App = () => {
 
     const newPerson = { name: newName, number: newNumber, visible: true }
 
-    axios.post("http://localhost:3001/persons", newPerson).then((res) => {
+    phonebookService.createData(newPerson).then((res) => {
       alert("Person added to phonebook")
-      setPersons(persons.concat(res.data))
+      setPersons(persons.concat(res))
     }).catch((err) => {
       console.log(err);
       alert("Unable to add person")
