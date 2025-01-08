@@ -45,10 +45,17 @@ function App() {
     }
   }
 
+  const handleShow = (commonName) => {
+    restCountriesService.fetchCountry(commonName)
+      .then((res) => {
+        setCountryInfo(res)
+      })
+  }
+
   return (
     <>
       <SearchBar handleSearch={handleSearch} />
-      <CountryList countries={countryList} />
+      <CountryList countries={countryList} onShow={handleShow}/>
       <CountryInfo info={countryInfo} />
     </>
   )

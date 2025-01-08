@@ -1,4 +1,4 @@
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, onShow }) => {
     if (countries.length > 10) return <div>Too many matches, specify another filter</div>
     if (countries.length <= 1) return null
     return (
@@ -15,6 +15,7 @@ const CountryList = ({ countries }) => {
                         <tr key={`${country.name.common}`}>
                             <td key={`common_${country.name.common}`}>{country.name.common}</td>
                             <td key={`official_${country.name.official}`}>{country.name.official}</td>
+                            <button key={`button_${country.name.common}`} onClick={() => { onShow(country.name.common) }}>Show</button>
                         </tr>
                     ))}
                 </tbody>
