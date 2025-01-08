@@ -15,7 +15,9 @@ const CountryList = ({ countries, onShow }) => {
                         <tr key={`${country.name.common}`}>
                             <td key={`common_${country.name.common}`}>{country.name.common}</td>
                             <td key={`official_${country.name.official}`}>{country.name.official}</td>
-                            <button key={`button_${country.name.common}`} onClick={() => { onShow(country.name.common) }}>Show</button>
+                            <td>
+                                <button key={`button_${country.name.common}`} onClick={() => { onShow(country.name.common) }}>Show</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

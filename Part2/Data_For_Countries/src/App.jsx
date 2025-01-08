@@ -14,7 +14,6 @@ function App() {
     restCountriesService.fetchAllCountrys()
       .then((res) => {
         const newCountries = res.map(({ name }) => ({ name }))
-        console.log(newCountries);
         setCountries(newCountries);
       })
       .catch((err) => {
