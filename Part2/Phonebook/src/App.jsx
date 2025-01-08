@@ -3,12 +3,16 @@ import PersonList from './components/PersonList'
 import PersonForm from './components/PersonForm'
 import Search from './components/Search'
 import phonebookService from './services/phonebookService'
+import Message from './components/Message'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     phonebookService.fetchData().then((res) => {
@@ -19,11 +23,17 @@ const App = () => {
   const handleAdd = (event) => {
     event.preventDefault()
     if (newName == '' || newNumber == '') {
-      alert("Empty fields not allowed")
+      setError("Empty fields not allowed")
+      setTimeout(() => {
+        setError(null)
+      }, 3000);
       return
     }
     if (persons.some((e) => (e.name === newName && e.number === newNumber))) {
-      alert(`${newName} is already added to phonebook with number ${newNumber}`)
+      setError(`${newName} is already added to phonebook with number ${newNumber}`)
+      setTimeout(() => {
+        setError(null)
+      }, 3000);
       return
     }
     const existIndex = persons.findIndex((e) => (e.name === newName))
@@ -33,24 +43,36 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber, visible: true }
 
       phonebookService.updateData(exist.id, newPerson).then((res) => {
-        alert("Person updated to phonebook")
+        setMessage("Person updated to phonebook")
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000);
         const newPersons = [...persons]
         newPersons.splice(existIndex, 1, newPerson)
         setPersons(newPersons)
       }).catch((err) => {
         console.log(err);
-        alert("Unable to update person")
+        setError("Unable to update person")
+        setTimeout(() => {
+          setError(null)
+        }, 3000);
       })
       return
     }
     const newPerson = { name: newName, number: newNumber, visible: true }
 
     phonebookService.createData(newPerson).then((res) => {
-      alert("Person added to phonebook")
+      setMessage(`${newName} added to phonebook`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000);
       setPersons(persons.concat(res))
     }).catch((err) => {
       console.log(err);
-      alert("Unable to add person")
+      setError("Unable to add person")
+      setTimeout(() => {
+        setError(null)
+      }, 3000);
     })
   }
 
@@ -81,12 +103,19 @@ const App = () => {
     phonebookService.deleteData(obj.id).then((res) => {
       const newPersons = persons.filter((e) => (!(e.id === obj.id)))
       setPersons(newPersons)
+    }).catch((err) => {
+      console.log(err);
+      setError(`Unable to delete ${obj.name}`)
+      setTimeout(() => {
+        setError(null)
+      }, 3000);
     })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message} error={error} />
       <Search handleSearch={handleSearch} />
       <h2>add a new</h2>
       <PersonForm handleAdd={handleAdd} handleNameInput={handleNameInput} handleNumberInput={handleNumberInput} />
