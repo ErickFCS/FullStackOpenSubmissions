@@ -16,6 +16,7 @@ const App = () => {
 
   useEffect(() => {
     phonebookService.fetchData().then((res) => {
+      res.forEach((e) => { e.visible = true })
       setPersons(res)
     })
   }, [])
@@ -66,7 +67,7 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
       }, 3000);
-      setPersons(persons.concat(res))
+      setPersons(persons.concat(newPerson))
     }).catch((err) => {
       console.log(err);
       setError("Unable to add person")
