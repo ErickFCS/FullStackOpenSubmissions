@@ -1,9 +1,13 @@
-const dummy = (blogs) => {
-    return 1
-}
+const dummy = (blogs) => (
+    1
+)
 
-const totalLikes = (blogs) => {
-    return blogs.reduce((sum, blog) => (sum + blog.likes), 0)
-}
+const totalLikes = (blogs) => (
+    blogs.reduce((sum, blog) => (sum + blog.likes), 0)
+)
 
-export default { dummy, totalLikes }
+const favoriteBlog = (blogs) => (
+    blogs.reduce((p, a) => { return p.likes > a.likes ? p : a })
+)
+
+export default { dummy, totalLikes, favoriteBlog }
