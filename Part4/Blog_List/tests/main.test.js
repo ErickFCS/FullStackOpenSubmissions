@@ -75,7 +75,7 @@ describe('total likes', () => {
         assert.strictEqual(result, 12)
         result = listHelper.totalLikes(blogs.slice(2, 4))
         assert.strictEqual(result, 22)
-        result = listHelper.totalLikes(blogs.slice(5, 6))
+        result = listHelper.totalLikes(blogs.slice(4, 6))
         assert.strictEqual(result, 2)
     })
 
@@ -100,12 +100,63 @@ describe('favorite blog', () => {
         assert.deepStrictEqual(result, blogs[0])
         result = listHelper.favoriteBlog(blogs.slice(2, 4))
         assert.deepStrictEqual(result, blogs[2])
-        result = listHelper.favoriteBlog(blogs.slice(5, 6))
+        result = listHelper.favoriteBlog(blogs.slice(4, 6))
         assert.deepStrictEqual(result, blogs[5])
     })
 
     test('when list has many blogs, equals the one with more likes', () => {
         const result = listHelper.favoriteBlog(blogs)
         assert.deepStrictEqual(result, blogs[2])
+    })
+})
+
+describe('most blogs', () => {
+    test('when list has only one blog, equals that blog author and number 1', () => {
+        let result = listHelper.mostBlogs(blogs.slice(0, 1))
+        assert.deepStrictEqual(result, {
+            author: "Michael Chan",
+            blogs: 1
+        })
+        result = listHelper.mostBlogs(blogs.slice(1, 2))
+        console.log(result);
+        assert.deepStrictEqual(result, {
+            author: "Edsger W. Dijkstra",
+            blogs: 1
+        })
+        result = listHelper.mostBlogs(blogs.slice(2, 3))
+        console.log(result);
+        assert.deepStrictEqual(result, {
+            author: "Edsger W. Dijkstra",
+            blogs: 1
+        })
+    })
+
+    test('when list has only two blogs, equals the one with more likes author and number 1', () => {
+        let result = listHelper.mostBlogs(blogs.slice(0, 2))
+        assert.deepStrictEqual(result, {
+            author: "Edsger W. Dijkstra",
+            blogs: 1
+        })
+        result = listHelper.mostBlogs(blogs.slice(2, 4))
+        assert.deepStrictEqual(result, {
+            author: "Robert C. Martin",
+            blogs: 1
+        })
+    })
+
+    test('when list has only two blogs with the same author, equals the author and number 2', () => {
+        let result = listHelper.mostBlogs(blogs.slice(4))
+        assert.deepStrictEqual(result, {
+            author: "Robert C. Martin",
+            blogs: 2
+        })
+    })
+
+    test('when list has many blogs, equals the one with more likes author and number of blogs posted', () => {
+        const result = listHelper.mostBlogs(blogs)
+        assert.deepStrictEqual(result, {
+            author: "Robert C. Martin",
+            blogs: 3
+        })
     })
 })
