@@ -61,6 +61,16 @@ describe('Blogs API tests', () => {
             blogs.map(({ title, author, url, likes }) => ({ title, author, url, likes }))
         )
     })
+    test('Verify id property is named id and not _id', async () => {
+        const result = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        assert.strictEqual(
+            result.body.every((e) => (Object.hasOwn(e, "id") && !Object.hasOwn(e, "_id"))),
+            true
+        )
+    })
     after(async () => {
         await mongoose.connection.close()
     })
