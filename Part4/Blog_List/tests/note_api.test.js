@@ -114,8 +114,26 @@ describe('Blogs API tests', () => {
         const { title, author, url, likes } = result.body
         assert.deepStrictEqual(
             { title, author, url, likes },
-            {...newBlog, likes: 0}
+            { ...newBlog, likes: 0 }
         )
+    })
+    test('Verify bad request', async () => {
+        const newBlog = {
+            title: "New blog",
+            author: "New author",
+            url: "http://newblog.com",
+            likes: 5
+        }
+        const result = await api
+            .post('/api/blogs')
+            .send({ ...newBlog, title: null })
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        const result2 = await api
+            .post('/api/blogs')
+            .send({ ...newBlog, url: null })
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
     })
     after(async () => {
         await mongoose.connection.close()
