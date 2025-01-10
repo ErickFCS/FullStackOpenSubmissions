@@ -100,6 +100,23 @@ describe('Blogs API tests', () => {
                 .map(({ title, author, url, likes }) => ({ title, author, url, likes }))
         )
     })
+    test('Verify likes property is default to 0', async () => {
+        const newBlog = {
+            title: "New blog",
+            author: "New author",
+            url: "http://newblog.com",
+        }
+        const result = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        const { title, author, url, likes } = result.body
+        assert.deepStrictEqual(
+            { title, author, url, likes },
+            {...newBlog, likes: 0}
+        )
+    })
     after(async () => {
         await mongoose.connection.close()
     })
