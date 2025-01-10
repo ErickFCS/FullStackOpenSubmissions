@@ -71,6 +71,35 @@ describe('Blogs API tests', () => {
             true
         )
     })
+    test('Post request to /api/blogs', async () => {
+        const newBlog = {
+            title: "New blog",
+            author: "New author",
+            url: "http://newblog.com",
+            likes: 5
+        }
+        const result = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        const { title, author, url, likes } = result.body
+        assert.deepStrictEqual(
+            { title, author, url, likes },
+            newBlog
+        )
+        const result2 = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        assert.deepStrictEqual(
+            result2.body
+                .map(({ title, author, url, likes }) => ({ title, author, url, likes })),
+            blogs
+                .concat(newBlog)
+                .map(({ title, author, url, likes }) => ({ title, author, url, likes }))
+        )
+    })
     after(async () => {
         await mongoose.connection.close()
     })
