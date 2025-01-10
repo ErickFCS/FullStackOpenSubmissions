@@ -1,30 +1,17 @@
 import { Router } from "express";
 import Blog from '../models/blog.js'
-import logger from "../utils/logger.js";
 
 const BlogsRouter = Router()
 
-BlogsRouter.get('/', (request, response, next) => {
-    Blog
-        .find({})
-        .then(blogs => {
-            response.json(blogs)
-        })
-        .catch((error) => {
-            next(error)
-        })
+BlogsRouter.get('/', async (request, response) => {
+    const blogs = await Blog.find({})
+    response.json(blogs)
 })
 
-BlogsRouter.post('/', (request, response) => {
+BlogsRouter.post('/', async (request, response) => {
     const blog = new Blog(request.body)
-    blog
-        .save()
-        .then(result => {
-            response.status(201).json(result)
-        })
-        .catch((error) => {
-            next(error)
-        })
+    const result = await blog.save()
+    response.status(201).json(result)
 })
 
 export default BlogsRouter
