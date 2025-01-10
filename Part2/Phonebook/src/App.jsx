@@ -53,7 +53,7 @@ const App = () => {
         setPersons(newPersons)
       }).catch((err) => {
         console.log(err);
-        setError("Unable to update person")
+        setError(err.response.data.error || "Unable to update person")
         setTimeout(() => {
           setError(null)
         }, 3000);
@@ -70,7 +70,7 @@ const App = () => {
       setPersons(persons.concat(newPerson))
     }).catch((err) => {
       console.log(err);
-      setError("Unable to add person")
+      setError(err.response.data.error || "Unable to add person")
       setTimeout(() => {
         setError(null)
       }, 3000);

@@ -18,7 +18,7 @@ const createData = async (newObj) => {
         .then((res) => (res.data))
         .catch((err) => {
             console.error(err);
-            return Promise.reject("Unable to create")
+            return Promise.reject(err || "Unable to create")
         })
 }
 
@@ -28,15 +28,15 @@ const updateData = async (objId, newObj) => {
         .then((res) => (res.data))
         .catch((err) => {
             console.error(err);
-            return Promise.reject("Unable to update")
+            return Promise.reject(err || "Unable to update")
         })
 }
 
 const deleteData = async (objId) => {
     return axios
         .delete(`${backendUrl}/api/persons/${objId}`)
-        .then((res)=>(res.data))
-        .catch((err)=>{
+        .then((res) => (res.data))
+        .catch((err) => {
             console.error(err);
             return Promise.reject("Unable to delete")
         })
