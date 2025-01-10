@@ -135,6 +135,29 @@ describe('Blogs API tests', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
     })
+    test('Delete request to /api/blogs/:id', async () => {
+        const { body: blogs } = await api.get('/api/blogs')
+        await api.delete(`/api/blogs/${blogs[0].id}`)
+        const { body: result } = await api.get('/api/blogs')
+        assert.deepStrictEqual(
+            result,
+            blogs.slice(1)
+        )
+    })
+    test('Put request to /api/blogs/:id', async () => {
+        let { body: blogs } = await api.get('/api/blogs')
+        const newBlog = { ...blogs[0], title: "newTitle", author: "newAuthor", url: "http://newblog.com", likes: 10 }
+        const res = await api
+            .put(`/api/blogs/${blogs[0].id}`)
+            .send(newBlog)
+            .expect(200)
+        const { body: result } = await api.get('/api/blogs')
+        blogs.splice(0, 1, { ...newBlog, id: blogs[0].id })
+        assert.deepStrictEqual(
+            result,
+            blogs
+        )
+    })
     after(async () => {
         await mongoose.connection.close()
     })
