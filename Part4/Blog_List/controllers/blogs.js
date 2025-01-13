@@ -6,14 +6,6 @@ import config from '../utils/config.js'
 
 const BlogsRouter = Router()
 
-const getTokenFrom = (request) => {
-    const authorization = request.get('Authorization')
-    if (authorization && authorization.startsWith('Bearer ')) {
-        return authorization.replace('Bearer ', '')
-    }
-    return null
-}
-
 BlogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('User', { username: 1, name: 1, id: 1 })
     response.json(blogs)
@@ -21,8 +13,7 @@ BlogsRouter.get('/', async (request, response) => {
 
 BlogsRouter.post('/', async (request, response) => {
     let blog = new Blog(request.body)
-    const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, config.JWT_SECRET)
+    const decodedToken = jwt.verify(request.token, config.JWT_SECRET)
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
