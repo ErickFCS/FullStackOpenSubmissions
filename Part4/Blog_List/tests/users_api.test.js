@@ -111,6 +111,37 @@ describe('Users API tests', () => {
             { ...result.body[0], id: undefined, password: undefined, passwordHash: undefined }
         )
     })
+    test('Verify bad requests', async () => {
+        await User.deleteMany({})
+        await api
+            .post('/api/users')
+            .send({
+                username: "Er",
+                password: "qwertyuiop",
+                name: "Erick"
+            })
+            .expect(400)
+        await api
+            .post('/api/users')
+            .send({
+                username: "erick_fernando",
+                password: "qwertyuiop",
+                name: ""
+            })
+            .expect(400)
+        await api
+            .post('/api/users')
+            .send({
+                username: "erick_fernando",
+                password: "qw",
+                name: "Erick"
+            })
+            .expect(400)
+        const users = await api
+            .get('/api/users')
+            .expect(200)
+        assert.strictEqual(users.body.length, 0)
+    })
     after(async () => {
         await mongoose.connection.close()
     })

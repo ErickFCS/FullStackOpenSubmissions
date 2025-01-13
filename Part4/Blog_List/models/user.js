@@ -3,16 +3,22 @@ import mongoose from 'mongoose'
 const userSchema = mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, "username must be given"],
+        unique: true,
+        validate: {
+            validator: (v) => (
+                /^.{3,}$/.test(v)
+            ),
+            message: props => "username must be at least 3 characters long"
+        }
     },
     passwordHash: {
         type: String,
-        required: true
+        required: [true, "there must be a password"]
     },
     name: {
         type: String,
-        required: true
+        required: [true, "you must have a name"]
     }
 })
 

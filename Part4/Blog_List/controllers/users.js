@@ -11,7 +11,11 @@ UsersRouter.get('/', async (request, response) => {
 
 UsersRouter.post('/', async (request, response, next) => {
     const { username, password, name } = request.body
-    const passwordHash = password ? await bcrypt.hash(password, 10) : undefined
+    if (!/^.{3,}$/.test(password)) {
+        next({ name: 'ValidationError', message: 'password must be at least 3 characters long' })
+        return
+    }
+    const passwordHash = await bcrypt.hash(password, 10)
     const newUser = new User({ username, passwordHash, name })
     const savedUser = await newUser.save()
     response.sendStatus(201).json(savedUser)
