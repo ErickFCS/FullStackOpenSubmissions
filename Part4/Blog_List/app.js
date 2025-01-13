@@ -6,6 +6,7 @@ import logger from './utils/logger.js'
 import config from './utils/config.js'
 import BlogsRouter from './controllers/blogs.js'
 import UsersRouter from './controllers/users.js'
+import LoginRouter from './controllers/login.js'
 import { requestLogger, unknownEndpoint, errorHandler } from './utils/middleware.js'
 
 const app = express()
@@ -26,6 +27,7 @@ app.use(requestLogger)
 
 app.use("/api/blogs", BlogsRouter)
 app.use("/api/users", UsersRouter)
+app.use("/api/login", LoginRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

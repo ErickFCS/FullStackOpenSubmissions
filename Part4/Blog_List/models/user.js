@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
             validator: (v) => (
                 /^.{3,}$/.test(v)
             ),
-            message: props => "username must be at least 3 characters long"
+            message: "username must be at least 3 characters long"
         }
     },
     passwordHash: {

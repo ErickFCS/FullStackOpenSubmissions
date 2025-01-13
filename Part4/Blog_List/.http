@@ -18,9 +18,20 @@ POST http://localhost:3001/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "Erick",
-    "password": "ferasdfas",
+    "username": "root",
+    "password": "9h50KcYZ",
     # "passwordHash": "$2b$10$6cm/SYVBrDSSQlTH3YYx3elYbYzW45G.dOwshMwYI0Sdt0eo2ehHS",
-    "name": "Robert",
+    "name": "root",
+    "EOF": ""
+}
+###
+POST http://localhost:3001/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "9h50KcYZ",
+    # "passwordHash": "$2b$10$6cm/SYVBrDSSQlTH3YYx3elYbYzW45G.dOwshMwYI0Sdt0eo2ehHS",
+    "name": "root",
     "EOF": ""
 }
