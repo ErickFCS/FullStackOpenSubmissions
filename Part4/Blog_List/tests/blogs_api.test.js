@@ -2,12 +2,13 @@ import { test, describe, after, beforeEach } from 'node:test'
 import assert from 'node:assert'
 import app from '../app.js'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 import supertest from 'supertest'
 import mongoose from 'mongoose'
 
 const api = supertest(app)
 
-const blogs = [
+var blogs = [
     {
         title: "React patterns",
         author: "Michael Chan",
@@ -46,9 +47,31 @@ const blogs = [
     }
 ]
 
+var token
+
 describe('Blogs API tests', () => {
     beforeEach(async () => {
         await Blog.deleteMany({})
+        await User.deleteMany({})
+        const baseUser = {
+            username: "newuser",
+            name: "New user",
+            password: "newpassword",
+        }
+        const { body: user } = await api
+            .post('/api/users')
+            .send(baseUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        const { body } = await api
+            .post('/api/login')
+            .send(baseUser)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        token = body.token
+        blogs.forEach((e) => {
+            e.User = user.id
+        })
         await Blog.insertMany(blogs)
     })
     test('Get request to /api/blogs', async () => {
@@ -76,17 +99,18 @@ describe('Blogs API tests', () => {
             title: "New blog",
             author: "New author",
             url: "http://newblog.com",
-            likes: 5
+            likes: 0,
         }
         const result = await api
             .post('/api/blogs')
             .send(newBlog)
+            .set({ Authorization: `Bearer ${token}` })
             .expect(201)
             .expect('Content-Type', /application\/json/)
         const { title, author, url, likes } = result.body
         assert.deepStrictEqual(
             { title, author, url, likes },
-            newBlog
+            { ...newBlog, likes: 0 }
         )
         const result2 = await api
             .get('/api/blogs')
@@ -109,6 +133,7 @@ describe('Blogs API tests', () => {
         const result = await api
             .post('/api/blogs')
             .send(newBlog)
+            .set({ Authorization: `Bearer ${token}` })
             .expect(201)
             .expect('Content-Type', /application\/json/)
         const { title, author, url, likes } = result.body
@@ -127,17 +152,21 @@ describe('Blogs API tests', () => {
         await api
             .post('/api/blogs')
             .send({ ...newBlog, title: null })
+            .set({ Authorization: `Bearer ${token}` })
             .expect(400)
             .expect('Content-Type', /application\/json/)
         await api
             .post('/api/blogs')
             .send({ ...newBlog, url: null })
+            .set({ Authorization: `Bearer ${token}` })
             .expect(400)
             .expect('Content-Type', /application\/json/)
     })
     test('Delete request to /api/blogs/:id', async () => {
         const { body: blogs } = await api.get('/api/blogs')
-        await api.delete(`/api/blogs/${blogs[0].id}`)
+        await api
+            .delete(`/api/blogs/${blogs[0].id}`)
+            .set({ Authorization: `Bearer ${token}` })
         const { body: result } = await api.get('/api/blogs')
         assert.deepStrictEqual(
             result,
@@ -146,10 +175,11 @@ describe('Blogs API tests', () => {
     })
     test('Put request to /api/blogs/:id', async () => {
         let { body: blogs } = await api.get('/api/blogs')
-        const newBlog = { ...blogs[0], title: "newTitle", author: "newAuthor", url: "http://newblog.com", likes: 10 }
+        const newBlog = { ...blogs[0], title: "newTitle", author: "newAuthor", url: "http://newblog.com" }
         await api
             .put(`/api/blogs/${blogs[0].id}`)
             .send(newBlog)
+            .set({ Authorization: `Bearer ${token}` })
             .expect(200)
         const { body: result } = await api.get('/api/blogs')
         blogs.splice(0, 1, { ...newBlog, id: blogs[0].id })

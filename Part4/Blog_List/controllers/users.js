@@ -17,8 +17,12 @@ UsersRouter.post('/', async (request, response, next) => {
     }
     const passwordHash = await bcrypt.hash(password, 10)
     const newUser = new User({ username, passwordHash, name })
-    const savedUser = await newUser.save()
-    response.sendStatus(201).json(savedUser)
+    let savedUser = await newUser.save()
+    response.status(201).json({
+        id: savedUser.id,
+        name: savedUser.name,
+        username: savedUser.username
+    })
 })
 
 UsersRouter.put('/:id', (request, response) => {

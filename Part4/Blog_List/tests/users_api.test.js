@@ -107,8 +107,8 @@ describe('Users API tests', () => {
             .get('/api/users')
             .expect(200)
         assert.deepStrictEqual(
-            { ...newUser, id: undefined, password: undefined, passwordHash: undefined },
-            { ...result.body[0], id: undefined, password: undefined, passwordHash: undefined }
+            { ...newUser, Blog: undefined, id: undefined, password: undefined, passwordHash: undefined },
+            { ...result.body[0], Blog: undefined, id: undefined, password: undefined, passwordHash: undefined }
         )
     })
     test('Verify bad requests', async () => {
