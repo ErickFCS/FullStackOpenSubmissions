@@ -7,7 +7,7 @@ import config from './utils/config.js'
 import BlogsRouter from './controllers/blogs.js'
 import UsersRouter from './controllers/users.js'
 import LoginRouter from './controllers/login.js'
-import { requestLogger, unknownEndpoint, errorHandler, getToken } from './utils/middleware.js'
+import { requestLogger, unknownEndpoint, errorHandler, getToken, getUser } from './utils/middleware.js'
 
 const app = express()
 mongoose
@@ -26,9 +26,9 @@ app.use(express.json())
 app.use(requestLogger)
 app.use(getToken)
 
-app.use("/api/blogs", BlogsRouter)
 app.use("/api/users", UsersRouter)
 app.use("/api/login", LoginRouter)
+app.use("/api/blogs", getUser, BlogsRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

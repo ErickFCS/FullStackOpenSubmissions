@@ -1,4 +1,7 @@
 import logger from './logger.js'
+import User from '../models/user.js'
+import jwt from 'jsonwebtoken'
+import config from './config.js'
 
 const requestLogger = (request, response, next) => {
     logger.info(request.method)
@@ -11,6 +14,12 @@ const requestLogger = (request, response, next) => {
 const getToken = (request, response, next) => {
     const authorization = request.get('Authorization')
     request.token = (authorization && authorization.startsWith('Bearer ')) ? authorization.replace('Bearer ', '') : ""
+    request.decodedToken = request.token ? jwt.verify(request.token, config.JWT_SECRET) : {}
+    next()
+}
+
+const getUser = async (request, response, next) => {
+    request.user = request.decodedToken.id ? await User.findOne({ _id: request.decodedToken.id }) : null
     next()
 }
 
@@ -38,4 +47,4 @@ const errorHandler = (error, request, response, next) => {
 }
 
 
-export { requestLogger, unknownEndpoint, errorHandler, getToken }
+export { requestLogger, unknownEndpoint, errorHandler, getToken, getUser }

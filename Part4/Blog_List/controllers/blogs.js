@@ -1,8 +1,5 @@
 import { Router } from 'express';
 import Blog from '../models/blog.js'
-import User from '../models/user.js'
-import jwt from 'jsonwebtoken'
-import config from '../utils/config.js'
 
 const BlogsRouter = Router()
 
@@ -12,28 +9,25 @@ BlogsRouter.get('/', async (request, response) => {
 })
 
 BlogsRouter.post('/', async (request, response) => {
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     let blog = new Blog(request.body)
-    const decodedToken = jwt.verify(request.token, config.JWT_SECRET)
-    if (!decodedToken.id) return response.status(401).json({ error: 'token invalid' })
-    let authorUser = await User.findOne({ _id: decodedToken.id })
-    blog.User = authorUser.id
+    blog.User = request.user.id
     const result = await blog.save()
-    authorUser.Blog.push(result.id)
-    await authorUser.save()
+    request.user.Blog.push(result.id)
+    await request.user.save()
     response.status(201).json(result)
 })
 
 BlogsRouter.delete('/:id', async (request, response) => {
-    const decodedToken = jwt.verify(request.token, config.JWT_SECRET)
-    if (!decodedToken.id) return response.status(401).json({ error: 'token invalid' })
-    const user = await User.findOne({ _id: decodedToken.id })
-    if (!user) return response.status(401).json({ error: 'no valid user' })
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const blog = await Blog.findOne({ _id: request.params.id })
     if (!blog) return response.status(404).json({ error: 'no valid blog' })
-    if (blog.User.toString() !== decodedToken.id) return response.status(401).json({ error: 'You dont have permission to delete this blog' })
+    if (blog.User.toString() !== request.decodedToken.id) return response.status(401).json({ error: 'You dont have permission to delete this blog' })
     await Blog.deleteOne({ _id: request.params.id })
-    user.Blog = user.Blog.filter((e) => (e.toString !== blog.id))
-    await user.save()
+    request.user.Blog = request.user.Blog.filter((e) => (e.toString !== blog.id))
+    await request.user.save()
     response.status(204).end()
 })
 
