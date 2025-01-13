@@ -29,7 +29,7 @@ const errorHandler = (error, request, response, next) => {
     // else {
     //     return response.status(400).json({ error: error })
     // }
-    next()
+    next(error)
 }
 
 

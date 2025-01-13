@@ -1,8 +1,18 @@
-import { Router } from "express";
+import { Router } from 'express';
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
+import jwt from 'jsonwebtoken'
+import config from '../utils/config.js'
 
 const BlogsRouter = Router()
+
+const getTokenFrom = (request) => {
+    const authorization = request.get('Authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '')
+    }
+    return null
+}
 
 BlogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('User', { username: 1, name: 1, id: 1 })
@@ -11,11 +21,16 @@ BlogsRouter.get('/', async (request, response) => {
 
 BlogsRouter.post('/', async (request, response) => {
     let blog = new Blog(request.body)
-    let firstUser = await User.findOne({})
-    blog.User = firstUser.id
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, config.JWT_SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+    }
+    let authorUser = await User.findOne({ _id: decodedToken.id })
+    blog.User = authorUser.id
     const result = await blog.save()
-    firstUser.Blog.push(result.id)
-    await firstUser.save()
+    authorUser.Blog.push(result.id)
+    await authorUser.save()
     response.status(201).json(result)
 })
 
