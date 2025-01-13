@@ -8,7 +8,8 @@ Content-Type: application/json
     "title": "First blog",
     "author": "me",
     "url": "i dont know",
-    "likes": 1000
+    "likes": 1000,
+    "EOF":""
 }
 ###
 GET http://localhost:3001/api/users HTTP/1.1
@@ -17,8 +18,8 @@ POST http://localhost:3001/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "Er",
-    "password": "asdfghjkl",
+    "username": "Erick",
+    "password": "ferasdfas",
     # "passwordHash": "$2b$10$6cm/SYVBrDSSQlTH3YYx3elYbYzW45G.dOwshMwYI0Sdt0eo2ehHS",
     "name": "Robert",
     "EOF": ""

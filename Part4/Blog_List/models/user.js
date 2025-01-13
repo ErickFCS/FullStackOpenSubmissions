@@ -19,7 +19,13 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: [true, "you must have a name"]
-    }
+    },
+    Blog: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Blog"
+        }
+    ]
 })
 
 userSchema.set('toJSON', {
