@@ -124,12 +124,12 @@ describe('Blogs API tests', () => {
             url: "http://newblog.com",
             likes: 5
         }
-        const result = await api
+        await api
             .post('/api/blogs')
             .send({ ...newBlog, title: null })
             .expect(400)
             .expect('Content-Type', /application\/json/)
-        const result2 = await api
+        await api
             .post('/api/blogs')
             .send({ ...newBlog, url: null })
             .expect(400)
@@ -147,7 +147,7 @@ describe('Blogs API tests', () => {
     test('Put request to /api/blogs/:id', async () => {
         let { body: blogs } = await api.get('/api/blogs')
         const newBlog = { ...blogs[0], title: "newTitle", author: "newAuthor", url: "http://newblog.com", likes: 10 }
-        const res = await api
+        await api
             .put(`/api/blogs/${blogs[0].id}`)
             .send(newBlog)
             .expect(200)
