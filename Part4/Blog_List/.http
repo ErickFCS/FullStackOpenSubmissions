@@ -13,16 +13,21 @@ Content-Type: application/json
     "EOF":""
 }
 ###
+DELETE  http://localhost:3001/api/blogs/678567a3bd6e9f09344d135b HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3ODU1ODViMDM1Y2UyMmJiNGU1NDEzMyIsImlhdCI6MTczNjc5NTY5Nn0.1xpSOuYIGMcaZkhYZ-0JvYtvNcJF1xgHJU1akvyOF2Y
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjY3ODU2ZGE3YmQ1YjMzYTFjNWViYTA5ZSIsImlhdCI6MTczNjc5NzYzNH0.hbOZG-FNXDdX1OCwURJFL4cqEZ2zyDDelMf6mQCwAio
+
+###
 GET http://localhost:3001/api/users HTTP/1.1
 ###
 POST http://localhost:3001/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "root",
+    "username": "user",
     "password": "9h50KcYZ",
     # "passwordHash": "$2b$10$6cm/SYVBrDSSQlTH3YYx3elYbYzW45G.dOwshMwYI0Sdt0eo2ehHS",
-    "name": "root",
+    "name": "user",
     "EOF": ""
 }
 ###
@@ -30,9 +35,9 @@ POST http://localhost:3001/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "root",
+    "username": "user",
     "password": "9h50KcYZ",
     # "passwordHash": "$2b$10$6cm/SYVBrDSSQlTH3YYx3elYbYzW45G.dOwshMwYI0Sdt0eo2ehHS",
-    "name": "root",
+    "name": "user",
     "EOF": ""
 }
