@@ -9,16 +9,16 @@ const blogExample = {
     url: 'https://example.com',
     likes: 10,
     User: {
-        id: "qwertyuiop",
-        username: "username",
-        name: "Name"
+        id: 'qwertyuiop',
+        username: 'username',
+        name: 'Name'
     }
 }
 
 const userExample = {
-    id: "qwertyuiop",
-    username: "username",
-    name: "Name"
+    id: 'qwertyuiop',
+    username: 'username',
+    name: 'Name'
 }
 
 test('Details not visibles at first', () => {
@@ -61,10 +61,10 @@ test('Details visibles after click in show', async () => {
 
     const user = userEvent.setup()
 
-    const show = await screen.getByText("Show")
+    const show = await screen.getByText('Show')
     expect(show).toBeVisible()
     await user.click(show)
-    const hide = await screen.getByText("Hide")
+    const hide = await screen.getByText('Hide')
     expect(hide).toBeVisible()
     const title = screen.getByText(blogExample.title)
     expect(title).toBeVisible()
@@ -93,10 +93,10 @@ test('Details not visibles after click in hide', async () => {
 
     const user = userEvent.setup()
 
-    const show = await screen.getByText("Show")
+    const show = await screen.getByText('Show')
     expect(show).toBeVisible()
     await user.click(show)
-    const hide = await screen.getByText("Hide")
+    const hide = await screen.getByText('Hide')
     expect(hide).toBeVisible()
     await user.click(hide)
     const title = screen.getByText(blogExample.title)
@@ -126,12 +126,12 @@ test('Twice click twice like', async () => {
 
     const user = userEvent.setup()
 
-    const show = await screen.getByText("Show")
+    const show = await screen.getByText('Show')
     expect(show).toBeVisible()
     await user.click(show)
     const likes = screen.queryByText(`likes ${blogExample.likes}`)
     expect(likes).toBeVisible()
-    const giveLike = screen.getByText("like")
+    const giveLike = screen.getByText('like')
     expect(giveLike).toBeVisible()
     await user.click(giveLike)
     await user.click(giveLike)

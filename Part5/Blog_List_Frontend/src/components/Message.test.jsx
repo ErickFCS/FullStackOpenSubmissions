@@ -18,7 +18,7 @@ test('renders error message', () => {
 
 test('renders none', () => {
     const { container } = render(<Message />)
-    const element = container.querySelectorAll("p")
+    const element = container.querySelectorAll('p')
     console.log(element)
     expect(element).toHaveLength(0)
 })

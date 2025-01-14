@@ -31,7 +31,24 @@ const App = () => {
         }, 5000)
     }, [message, error])
 
-
+    const createHandler = (title, author, url) => {
+        return BlogService
+            .createBlog({ title, author, url }, user)
+            .then((createdBlog) => {
+                setMessage('blog creating successed')
+                createdBlog.User = {
+                    id: user.id,
+                    name: user.name,
+                    username: user.username
+                }
+                const newBlogs = blogs.concat(createdBlog)
+                setBlogs(newBlogs)
+            })
+            .catch((err) => {
+                setError('blog creating failed')
+                return Promise.reject(err)
+            })
+    }
 
     return (
         <div>
@@ -49,11 +66,7 @@ const App = () => {
                         showButtonText='create new blog'
                         hideButtonText='cancel'>
                         <CreateForm
-                            user={user}
-                            blogs={blogs}
-                            setBlogs={setBlogs}
-                            setMessage={setMessage}
-                            setError={setError} />
+                            createHandler={createHandler} />
                     </Toggle>
                     <Blogs
                         blogs={blogs}
