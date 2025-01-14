@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Message from './components/Message'
+import Toggle from './components/Toggle'
 import AccountForm from './components/AccountForm'
 import CreateForm from './components/CreateForm'
 import BlogService from './services/blogsService'
@@ -80,7 +81,9 @@ const App = () => {
         <div>
             <Message message={message} error={error} />
             <AccountForm user={user} loginHandler={loginHandler} logoutHandler={logoutHandler} inputStates={{ setPassword, setUsername }} />
-            <CreateForm user={user} createHandler={createHandler} inputStates={{ setAuthor, setTitle, setUrl }} />
+            <Toggle showButtonText="create new blog" hideButtonText="cancel">
+                <CreateForm user={user} createHandler={createHandler} inputStates={{ setAuthor, setTitle, setUrl }} />
+            </Toggle>
             <Blogs user={user} blogs={blogs} />
         </div>
     )
