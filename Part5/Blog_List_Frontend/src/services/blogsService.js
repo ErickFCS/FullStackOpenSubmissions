@@ -6,4 +6,14 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const createBlog = async (blog, user) => {
+  const request = await axios
+    .post(baseUrl, blog, { headers: { 'Authorization': `Bearer ${user.token}` } })
+    .catch((err) => {
+      console.error(err)
+      return "Unable to create blog"
+    })
+  return request.data
+}
+
+export default { getAll, createBlog }

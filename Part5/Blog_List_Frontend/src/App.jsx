@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import AccountForm from './components/AccountForm'
+import CreateForm from './components/CreateForm'
 import BlogService from './services/blogsService'
 import AccountService from './services/accountService'
 
@@ -38,9 +38,24 @@ const App = () => {
         window.localStorage.removeItem("user")
     }
 
+    const createHandler = async (event) => {
+        event.preventDefault()
+        const title = event.target.title.value
+        const author = event.target.author.value
+        const url = event.target.url.value
+        await BlogService.createBlog({ title, author, url }, user)
+        event.target.title.value = ""
+        event.target.author.value = ""
+        event.target.url.value = ""
+        BlogService.getAll().then(blogs =>
+            setBlogs(blogs)
+        )
+    }
+
     return (
         <div>
             <AccountForm user={user} loginHandler={loginHandler} logoutHandler={logoutHandler} />
+            <CreateForm user={user} createHandler={createHandler} />
             <Blogs user={user} blogs={blogs} />
         </div>
     )
