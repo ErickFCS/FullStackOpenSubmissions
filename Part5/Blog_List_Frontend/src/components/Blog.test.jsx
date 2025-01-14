@@ -110,3 +110,31 @@ test('Details not visibles after click in hide', async () => {
     expect(mockLikesHandler.mock.calls).toHaveLength(0)
     expect(mockRemoveHandler.mock.calls).toHaveLength(0)
 })
+
+test('Twice click twice like', async () => {
+    const mockLikesHandler = vi.fn()
+    const mockRemoveHandler = vi.fn()
+
+    render(
+        <Blog
+            blog={blogExample}
+            user={userExample}
+            likesHandler={mockLikesHandler}
+            removeHandler={mockRemoveHandler}
+        />
+    )
+
+    const user = userEvent.setup()
+
+    const show = await screen.getByText("Show")
+    expect(show).toBeVisible()
+    await user.click(show)
+    const likes = screen.queryByText(`likes ${blogExample.likes}`)
+    expect(likes).toBeVisible()
+    const giveLike = screen.getByText("like")
+    expect(giveLike).toBeVisible()
+    await user.click(giveLike)
+    await user.click(giveLike)
+    expect(mockLikesHandler.mock.calls).toHaveLength(2)
+    expect(mockRemoveHandler.mock.calls).toHaveLength(0)
+})
