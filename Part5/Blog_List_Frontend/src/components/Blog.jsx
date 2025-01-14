@@ -23,11 +23,11 @@ const Blog = ({ blog, likesHandler, removeHandler, user }) => {
     return (
         <div style={border}>
             <p style={text}>{blog.title}<button onClick={toggleVisibility}>{buttonText}</button></p>
+            <p style={text}>{blog.author}</p>
             <p style={{ ...text, ...visibleWhenVisible }}>{blog.url}</p>
             <p style={{ ...text, ...visibleWhenVisible }}>likes {blog.likes}
                 <button onClick={() => { likesHandler(blog) }}>like</button>
             </p>
-            <p style={{ ...text, ...visibleWhenVisible }}>{blog.author}</p>
             {user.id === blog.User.id ?
                 <p style={{ ...text, ...visibleWhenVisible }}><button onClick={() => { removeHandler(blog) }}>remove</button></p> :
                 null}
