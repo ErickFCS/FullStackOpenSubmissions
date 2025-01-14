@@ -10,10 +10,10 @@ const Blogs = ({ blogs, user, setBlogs, setMessage, setError }) => {
                 let newBlogs = [...blogs]
                 newBlogs[blog.index].likes = newBlogs[blog.index].likes + 1
                 setBlogs(newBlogs)
-                setMessage("Liked")
+                setMessage('Liked')
             }).catch((err) => {
                 console.error(err)
-                setError("Unable to like")
+                setError('Unable to like')
                 return
             })
     }

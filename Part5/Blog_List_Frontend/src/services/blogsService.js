@@ -15,13 +15,13 @@ const createBlog = (blog, user) => {
         })
         .catch((err) => {
             console.error(err)
-            return Promise.reject("Unable to create blog")
+            return Promise.reject('Unable to create blog')
         })
 }
 
 const giveLike = (blog, user) => {
     const config = {
-        method: "put",
+        method: 'put',
         url: `${baseUrl}/${blog.id}`,
         headers: {
             'Authorization': `Bearer ${user.token}`
@@ -37,13 +37,13 @@ const giveLike = (blog, user) => {
         })
         .catch((err) => {
             console.error(err)
-            return Promise.reject("Unable to give like")
+            return Promise.reject('Unable to give like')
         })
 }
 
 const deleteBlog = (blog, user) => {
     const config = {
-        method: "delete",
+        method: 'delete',
         url: `${baseUrl}/${blog.id}`,
         headers: {
             'Authorization': `Bearer ${user.token}`
@@ -56,7 +56,7 @@ const deleteBlog = (blog, user) => {
         })
         .catch((err) => {
             console.error(err)
-            return Promise.reject("Unable to delete blog")
+            return Promise.reject('Unable to delete blog')
         })
 }
 

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const baseUrl = '/api/login'
 
@@ -9,7 +9,7 @@ const login = async (username, password) => {
             password
         }).catch((err) => {
             console.error(err)
-            return Promise.reject("unable to login")
+            return Promise.reject('unable to login')
         })
     return response.data
 }

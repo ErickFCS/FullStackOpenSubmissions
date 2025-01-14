@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const Blog = ({ blog, likesHandler, removeHandler, user }) => {
     const [isVisible, setIsVisible] = useState(false)
-    const [buttonText, setButtonText] = useState("Show")
+    const [buttonText, setButtonText] = useState('Show')
     const visibleWhenVisible = { display: isVisible ? 'block' : 'none' }
     const toggleVisibility = () => {
         let buttonText = isVisible ? 'Show' : 'Hide'
@@ -29,7 +29,7 @@ const Blog = ({ blog, likesHandler, removeHandler, user }) => {
             </p>
             <p style={{ ...text, ...visibleWhenVisible }}>{blog.author}</p>
             {user.id === blog.User.id ?
-                <p><button onClick={() => { removeHandler(blog) }}>remove</button></p> :
+                <p style={{ ...text, ...visibleWhenVisible }}><button onClick={() => { removeHandler(blog) }}>remove</button></p> :
                 null}
         </div >
     )
