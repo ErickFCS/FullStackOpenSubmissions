@@ -78,14 +78,28 @@ const App = () => {
     }
     return (
         <div>
-            <Message message={message} error={error} />
-            <AccountForm user={user} loginHandler={loginHandler} logoutHandler={logoutHandler} inputStates={{ setPassword, setUsername }} />
+            <Message
+                message={message}
+                error={error} />
+            <AccountForm
+                user={user}
+                loginHandler={loginHandler}
+                logoutHandler={logoutHandler}
+                inputStates={{ setPassword, setUsername }} />
             {user.name ?
                 <>
-                    <Toggle showButtonText="create new blog" hideButtonText="cancel">
-                        <CreateForm createHandler={createHandler} />
+                    <Toggle
+                        showButtonText="create new blog"
+                        hideButtonText="cancel">
+                        <CreateForm
+                            createHandler={createHandler} />
                     </Toggle>
-                    <Blogs blogs={blogs} user={user} setBlogs={setBlogs} />
+                    <Blogs
+                        blogs={blogs}
+                        user={user}
+                        setBlogs={setBlogs}
+                        setMessage={setMessage}
+                        setError={setError} />
                 </>
                 : null}
         </div>

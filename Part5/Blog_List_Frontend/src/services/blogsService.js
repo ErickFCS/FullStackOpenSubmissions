@@ -41,4 +41,23 @@ const giveLike = (blog, user) => {
         })
 }
 
-export default { getAll, createBlog, giveLike }
+const deleteBlog = (blog, user) => {
+    const config = {
+        method: "delete",
+        url: `${baseUrl}/${blog.id}`,
+        headers: {
+            'Authorization': `Bearer ${user.token}`
+        }
+    }
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject("Unable to delete blog")
+        })
+}
+
+export default { getAll, createBlog, giveLike, deleteBlog }
