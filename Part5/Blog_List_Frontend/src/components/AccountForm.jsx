@@ -1,11 +1,11 @@
-const AccountForm = ({ user, loginHandler, logoutHandler }) => {
+const AccountForm = ({ user, loginHandler, logoutHandler, inputStates }) => {
     if (!user.name) return (
         <>
             <h2>log in to application</h2>
             <form onSubmit={loginHandler}>
-                username: <input name="username" type="text" />
+                username: <input onChange={({ target }) => { inputStates.setUsername(target.value) }} name="username" type="text" />
                 <br />
-                password: <input name="password" type="password" />
+                password: <input onChange={({ target }) => { inputStates.setPassword(target.value) }} name="password" type="password" />
                 <br />
                 <button type="submit">login</button>
             </form>
