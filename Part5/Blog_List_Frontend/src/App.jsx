@@ -63,9 +63,9 @@ const App = () => {
         const url = event.target.url.value
         BlogService
             .createBlog({ title, author, url }, user)
-            .then(() => {
+            .then((createdBlog) => {
                 setMessage("blog creating successed")
-                const newBlogs = blogs.concat({ title, author, url, likes: 0 })
+                const newBlogs = blogs.concat(createdBlog)
                 setBlogs(newBlogs)
                 event.target.title.value = ""
                 event.target.author.value = ""
@@ -76,7 +76,6 @@ const App = () => {
             })
 
     }
-
     return (
         <div>
             <Message message={message} error={error} />
@@ -86,7 +85,7 @@ const App = () => {
                     <Toggle showButtonText="create new blog" hideButtonText="cancel">
                         <CreateForm createHandler={createHandler} />
                     </Toggle>
-                    <Blogs blogs={blogs} user={user} />
+                    <Blogs blogs={blogs} user={user} setBlogs={setBlogs} />
                 </>
                 : null}
         </div>
