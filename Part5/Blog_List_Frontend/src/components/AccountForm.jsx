@@ -1,4 +1,4 @@
-const AccountForm = ({ user, loginHandler }) => {
+const AccountForm = ({ user, loginHandler, logoutHandler }) => {
     if (!user.name) return (
         <>
             <h2>log in to application</h2>
@@ -14,6 +14,7 @@ const AccountForm = ({ user, loginHandler }) => {
     else return (
         <>
             {user.name} is logged in
+            <button type="button" onClick={logoutHandler}>logout</button>
         </>
     )
 }
