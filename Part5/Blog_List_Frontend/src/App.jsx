@@ -13,9 +13,6 @@ const App = () => {
     const [user, setUser] = useState({})
     const [message, setMessage] = useState(null)
     const [error, setError] = useState(null)
-    const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
-    const [url, setUrl] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -61,6 +58,9 @@ const App = () => {
 
     const createHandler = (event) => {
         event.preventDefault()
+        const title = event.target.title.value
+        const author = event.target.author.value
+        const url = event.target.url.value
         BlogService
             .createBlog({ title, author, url }, user)
             .then(() => {
@@ -81,10 +81,14 @@ const App = () => {
         <div>
             <Message message={message} error={error} />
             <AccountForm user={user} loginHandler={loginHandler} logoutHandler={logoutHandler} inputStates={{ setPassword, setUsername }} />
-            <Toggle showButtonText="create new blog" hideButtonText="cancel">
-                <CreateForm user={user} createHandler={createHandler} inputStates={{ setAuthor, setTitle, setUrl }} />
-            </Toggle>
-            <Blogs user={user} blogs={blogs} />
+            {user.name ?
+                <>
+                    <Toggle showButtonText="create new blog" hideButtonText="cancel">
+                        <CreateForm createHandler={createHandler} />
+                    </Toggle>
+                    <Blogs blogs={blogs} />
+                </>
+                : null}
         </div>
     )
 }

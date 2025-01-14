@@ -1,12 +1,11 @@
 import Blog from './Blog'
 
-const Blogs = ({ user, blogs }) => {
-    if (!user.name) return null
+const Blogs = ({ blogs }) => {
     return (
         <>
             <h2>blogs</h2>
-            {blogs.map(blog => (
-                <Blog key={blog.id} blog={blog} />
+            {blogs.map((blog, i) => (
+                <Blog key={i} blog={blog} />
             ))}
         </>
     )
