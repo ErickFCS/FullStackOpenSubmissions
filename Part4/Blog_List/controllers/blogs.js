@@ -11,7 +11,8 @@ BlogsRouter.get('/', async (request, response) => {
 BlogsRouter.post('/', async (request, response) => {
     if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
     if (!request.user) return response.status(401).json({ error: 'no valid user' })
-    const { title, author, url } = request.body
+    const { title, url } = request.body
+    const author = request.user.username
     let blog = new Blog({ title, author, url })
     blog.User = request.user.id
     const result = await blog.save()
@@ -37,11 +38,15 @@ BlogsRouter.put('/:id', async (request, response) => {
     if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const blog = await Blog.findOne({ _id: request.params.id })
     if (!blog) return response.status(404).json({ error: 'no valid blog' })
-    if (blog.User.toString() !== request.decodedToken.id) return response.status(401).json({ error: 'You dont have permission to delete this blog' })
-    const { title, author, url } = request.body
-    blog.title = title || blog.title
-    blog.author = author || blog.author
-    blog.url = url || blog.url
+    const { title, author, url, likes } = request.body
+    if (likes) {
+        blog.likes = blog.likes + 1
+    } else {
+        if (blog.User.toString() !== request.decodedToken.id) return response.status(401).json({ error: 'You dont have permission to edit this blog' })
+        blog.title = title || blog.title
+        blog.author = author || blog.author
+        blog.url = url || blog.url
+    }
     const result = await blog.save()
     response.status(200).json(result)
 })

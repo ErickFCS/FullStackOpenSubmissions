@@ -86,7 +86,7 @@ const App = () => {
                     <Toggle showButtonText="create new blog" hideButtonText="cancel">
                         <CreateForm createHandler={createHandler} />
                     </Toggle>
-                    <Blogs blogs={blogs} />
+                    <Blogs blogs={blogs} user={user} />
                 </>
                 : null}
         </div>

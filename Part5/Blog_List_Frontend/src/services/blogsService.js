@@ -2,18 +2,43 @@ import axios from 'axios'
 const baseUrl = '/api/blogs'
 
 const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+    return axios
+        .get(baseUrl)
+        .then(response => response.data)
 }
 
-const createBlog = async (blog, user) => {
-  const request = await axios
-    .post(baseUrl, blog, { headers: { 'Authorization': `Bearer ${user.token}` } })
-    .catch((err) => {
-      console.error(err)
-      return "Unable to create blog"
-    })
-  return request.data
+const createBlog = (blog, user) => {
+    return axios
+        .post(baseUrl, blog, { headers: { 'Authorization': `Bearer ${user.token}` } })
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject("Unable to create blog")
+        })
 }
 
-export default { getAll, createBlog }
+const giveLike = (blog, user) => {
+    const config = {
+        method: "put",
+        url: `${baseUrl}/${blog.id}`,
+        headers: {
+            'Authorization': `Bearer ${user.token}`
+        },
+        data: {
+            likes: 1
+        }
+    }
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject("Unable to give like")
+        })
+}
+
+export default { getAll, createBlog, giveLike }
