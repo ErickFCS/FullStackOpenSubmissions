@@ -7,6 +7,7 @@ import config from './utils/config.js'
 import BlogsRouter from './controllers/blogs.js'
 import UsersRouter from './controllers/users.js'
 import LoginRouter from './controllers/login.js'
+import TestRouter from './controllers/tests.js'
 import { requestLogger, unknownEndpoint, errorHandler, getToken, getUser } from './utils/middleware.js'
 
 const app = express()
@@ -29,6 +30,10 @@ app.use(getToken)
 app.use("/api/users", UsersRouter)
 app.use("/api/login", LoginRouter)
 app.use("/api/blogs", getUser, BlogsRouter)
+
+if (process.env.NODE_ENV === 'test') {
+    app.use('/api/tests', TestRouter)
+}
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
