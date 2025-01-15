@@ -11,8 +11,11 @@ const CreateForm = ({ createHandler }) => {
         createHandler(title, author, url)
             .then(() => {
                 setTitle('')
+                event.target.title.value = ''
                 setAuthor('')
+                event.target.author.value = ''
                 setUrl('')
+                event.target.url.value = ''
             })
             .catch((err) => { })
     }

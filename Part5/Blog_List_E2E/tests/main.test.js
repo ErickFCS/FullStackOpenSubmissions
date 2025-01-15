@@ -156,6 +156,59 @@ describe('Blog app', () => {
       await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
     })
 
+    test('the blog with more likes is at the top', async ({ page }) => {
+      const createBlogButton = await page.getByRole('button', { name: 'create new blog' })
+      const titleInput = await page.getByPlaceholder('title')
+      const authorInput = await page.getByPlaceholder('author')
+      const urlInput = await page.getByPlaceholder('url')
+      const createButton = await page.getByRole('button', { name: 'create' })
+      await createBlogButton.click()
+      await titleInput.fill('Test Title1')
+      await authorInput.fill('This doesn\'t matter')
+      await urlInput.fill('https://www.testBlogUrl.com')
+      await createButton.click()
+      await page.waitForTimeout(7000)
+      await titleInput.fill('Test Title2')
+      await authorInput.fill('This doesn\'t matter2')
+      await urlInput.fill('https://www.testBlogUrl2.com')
+      await createButton.click()
+      await page.waitForTimeout(7000)
+      const showButtons = await page.getByRole('button', { name: 'Show' }).all()
+      for (let i = showButtons.length; i > 0; i--) {
+        const element = showButtons[i - 1];
+        await element.click()
+      }
+      const likeButtons = await page.getByRole('button', { name: 'like' })
+
+      await likeButtons.nth(1).click()
+      await page.waitForTimeout(1000)
+
+      await expect(likeButtons.nth(0).locator('../..').getByText('Test Title2')).toBeVisible()
+      expect(await likeButtons.nth(0).locator('../..').getByText('likes ').innerText()).toContain('likes 1')
+      await expect(likeButtons.nth(1).locator('../..').getByText('Test Title1')).toBeVisible()
+      expect(await likeButtons.nth(1).locator('../..').getByText('likes ').innerText()).toContain('likes 0')
+
+      await likeButtons.nth(1).click()
+      await page.waitForTimeout(1000)
+      await likeButtons.nth(1).click()
+      await page.waitForTimeout(1000)
+
+      await expect(likeButtons.nth(0).locator('../..').getByText('Test Title1')).toBeVisible()
+      expect(await likeButtons.nth(0).locator('../..').getByText('likes ').innerText()).toContain('likes 2')
+      await expect(likeButtons.nth(1).locator('../..').getByText('Test Title2')).toBeVisible()
+      expect(await likeButtons.nth(1).locator('../..').getByText('likes ').innerText()).toContain('likes 1')
+
+      await likeButtons.nth(1).click()
+      await page.waitForTimeout(1000)
+      await likeButtons.nth(1).click()
+      await page.waitForTimeout(1000)
+
+      await expect(likeButtons.nth(0).locator('../..').getByText('Test Title2')).toBeVisible()
+      expect(await likeButtons.nth(0).locator('../..').getByText('likes ').innerText()).toContain('likes 3')
+      await expect(likeButtons.nth(1).locator('../..').getByText('Test Title1')).toBeVisible()
+      expect(await likeButtons.nth(1).locator('../..').getByText('likes ').innerText()).toContain('likes 2')
+    })
+
   })
 
 })
