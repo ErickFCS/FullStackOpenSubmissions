@@ -51,4 +51,36 @@ describe('Blog app', () => {
     })
   })
 
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      const usernameInput = await page.locator('input[name="username"]')
+      const passwordInput = await page.locator('input[name="password"]')
+      const loginButton = await page.getByRole('button', { name: 'login' })
+      await usernameInput.fill('test_user')
+      await passwordInput.fill('testUserPassword')
+      await loginButton.click()
+    })
+
+    test.only('a new blog can be created', async ({ page }) => {
+      const createBlogButton = await page.getByRole('button', { name: 'create new blog' })
+      const titleInput = await page.getByPlaceholder('title')
+      const authorInput = await page.getByPlaceholder('author')
+      const urlInput = await page.getByPlaceholder('url')
+      const createButton = await page.getByRole('button', { name: 'create' })
+      await createBlogButton.click()
+      await titleInput.fill('Test Title')
+      await authorInput.fill('This doesn\'t matter')
+      await urlInput.fill('https://www.testBlogUrl.com')
+      await createButton.click()
+      await expect(page.getByText('blog creating successed')).toBeVisible()
+      const showButton = await page.getByRole('button', { name: 'Show' })
+      await showButton.click()
+      const container = await page.locator('div > p')
+      await expect(container.getByText('Test Title')).toBeVisible()
+      await expect(container.getByText('test_user')).toBeVisible()
+      await expect(container.getByText('likes 0')).toBeVisible()
+      await expect(container.getByText('https://www.testBlogUrl.com')).toBeVisible()
+    })
+  })
+
 })
