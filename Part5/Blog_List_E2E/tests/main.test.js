@@ -102,7 +102,7 @@ describe('Blog app', () => {
       await expect(container.getByText('likes 1')).toBeVisible()
     })
 
-    test.only('a blog can be deleted', async ({ page }) => {
+    test('a blog can be deleted', async ({ page }) => {
       const createBlogButton = await page.getByRole('button', { name: 'create new blog' })
       const titleInput = await page.getByPlaceholder('title')
       const authorInput = await page.getByPlaceholder('author')
@@ -122,6 +122,38 @@ describe('Blog app', () => {
       await removeButton.click()
       const container = await page.locator('div > p')
       await expect(container.first()).not.toBeVisible()
+    })
+
+    test('a blog can be deleted only by the owner', async ({ page }) => {
+      const createBlogButton = await page.getByRole('button', { name: 'create new blog' })
+      const titleInput = await page.getByPlaceholder('title')
+      const authorInput = await page.getByPlaceholder('author')
+      const urlInput = await page.getByPlaceholder('url')
+      const createButton = await page.getByRole('button', { name: 'create' })
+      await createBlogButton.click()
+      await titleInput.fill('Test Title')
+      await authorInput.fill('This doesn\'t matter')
+      await urlInput.fill('https://www.testBlogUrl.com')
+      await createButton.click()
+      const logoutButton = await page.getByRole('button', { name: 'logout' })
+      await logoutButton.click()
+      const requests = await request.newContext()
+      await requests.post('/api/users', {
+        data: {
+          name: "Test User 2",
+          username: "test_user2",
+          password: 'testUserPassword2'
+        }
+      })
+      const usernameInput = await page.locator('input[name="username"]')
+      const passwordInput = await page.locator('input[name="password"]')
+      const loginButton = await page.getByRole('button', { name: 'login' })
+      await usernameInput.fill('test_user2')
+      await passwordInput.fill('testUserPassword2')
+      await loginButton.click()
+      const showButton = await page.getByRole('button', { name: 'Show' })
+      await showButton.click()
+      await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
     })
 
   })
