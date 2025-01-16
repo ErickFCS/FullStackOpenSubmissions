@@ -5,7 +5,7 @@ const Anecdote = ({ anecdote }) => {
     const { id, content, votes } = anecdote
     const dispatch = useDispatch()
     const vote = (id) => {
-        dispatch(voteFor(id))
+        dispatch(voteFor({ id }))
     }
     return (
         <div>
