@@ -39,16 +39,10 @@ export const createNewAnecdote = (content) => (
             .createNew(content)
             .then((res) => {
                 dispatch(appendAnecdote(res))
-                dispatch(setNotification(`'${res.content}' was created`))
-                setTimeout(() => {
-                    dispatch(clearNotification())
-                }, 5000)
+                dispatch(setNotification(`'${res.content}' was created`, 5))
             })
             .catch((err) => {
-                dispatch(setNotification(`'${content}' wasn't created`))
-                setTimeout(() => {
-                    dispatch(clearNotification())
-                }, 5000)
+                dispatch(setNotification(`'${content}' wasn't created`, 5))
             })
     }
 )
@@ -60,16 +54,10 @@ export const voteForAnecdote = (anecdote) => (
             .updateAnecdote({ ...anecdote, votes: anecdote.votes + 1 })
             .then(() => {
                 dispatch(voteFor({ id }))
-                dispatch(setNotification(`you voted '${content}'`))
-                setTimeout(() => {
-                    dispatch(clearNotification())
-                }, 5000)
+                dispatch(setNotification(`you voted '${content}'`, 5))
             })
             .catch(() => {
-                dispatch(setNotification(`'${content}' wasn't voted`))
-                setTimeout(() => {
-                    dispatch(clearNotification())
-                }, 5000)
+                dispatch(setNotification(`'${content}' wasn't voted`, 5))
             })
     }
 )
