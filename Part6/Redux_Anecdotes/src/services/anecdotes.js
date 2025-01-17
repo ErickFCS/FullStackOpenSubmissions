@@ -22,4 +22,14 @@ const createNew = (content) => {
         })
 }
 
-export default { fetchAll, createNew }
+const updateAnecdote = (anecdote) => {
+    return axios
+        .put(`${baseUrl}/${anecdote.id}`, { ...anecdote })
+        .then(response => response.data)
+        .catch(error => {
+            console.error(error)
+            return Promise.reject('Unable to create new')
+        })
+}
+
+export default { fetchAll, createNew, updateAnecdote }
