@@ -12,4 +12,14 @@ const fetchAll = () => {
         })
 }
 
-export default { fetchAll }
+const createNew = (content) => {
+    return axios
+        .post(baseUrl, { content, votes: 0 })
+        .then(response => response.data)
+        .catch(error => {
+            console.error(error);
+            return Promise.reject("Unable to create new")
+        })
+}
+
+export default { fetchAll, createNew }
