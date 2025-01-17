@@ -7,8 +7,8 @@ const fetchAll = () => {
         .get(baseUrl)
         .then(response => response.data)
         .catch(error => {
-            console.error(error);
-            return Promise.reject("Unable to fetch all")
+            console.error(error)
+            return Promise.reject('Unable to fetch all')
         })
 }
 
@@ -17,8 +17,8 @@ const createNew = (content) => {
         .post(baseUrl, { content, votes: 0 })
         .then(response => response.data)
         .catch(error => {
-            console.error(error);
-            return Promise.reject("Unable to create new")
+            console.error(error)
+            return Promise.reject('Unable to create new')
         })
 }
 

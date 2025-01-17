@@ -45,7 +45,7 @@ export const createNewAnecdote = (content) => (
                 }, 5000)
             })
             .catch((err) => {
-                dispatch(setNotification(`'${res.content}' wasn't created`))
+                dispatch(setNotification(`'${content}' wasn't created`))
                 setTimeout(() => {
                     dispatch(clearNotification())
                 }, 5000)
