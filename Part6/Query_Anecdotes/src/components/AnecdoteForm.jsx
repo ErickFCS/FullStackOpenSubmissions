@@ -20,7 +20,7 @@ const AnecdoteForm = () => {
             }, 5000)
         },
         onError: (err) => {
-            notificationDispatch(setNotification(`${res.content} wasn't created`))
+            notificationDispatch(setNotification('to short anecdote, must have lenght 5 or more'))
             setTimeout(() => {
                 notificationDispatch(clearNotification())
             }, 5000)
