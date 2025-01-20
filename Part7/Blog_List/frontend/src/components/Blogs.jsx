@@ -1,7 +1,10 @@
 import Blog from './Blog'
 import BlogsService from '../services/blogsService'
+import { useDispatch } from 'react-redux'
+import { newNotification } from '../reducers/notifications'
 
-const Blogs = ({ blogs, user, setBlogs, setMessage, setError }) => {
+const Blogs = ({ blogs, user, setBlogs }) => {
+    const dispatch = useDispatch()
     blogs.sort((a, b) => b.likes - a.likes)
     const likesHandler = (blog) => {
         BlogsService.giveLike(blog, user)
@@ -9,11 +12,11 @@ const Blogs = ({ blogs, user, setBlogs, setMessage, setError }) => {
                 let newBlogs = [...blogs]
                 newBlogs[blog.index].likes = newBlogs[blog.index].likes + 1
                 setBlogs(newBlogs)
-                setMessage('Liked')
+                dispatch(newNotification('Liked', 5))
             })
             .catch((err) => {
                 console.error(err)
-                setError('Unable to like')
+                dispatch(newNotification('Unable to like', 5, true))
                 return
             })
     }
@@ -24,10 +27,10 @@ const Blogs = ({ blogs, user, setBlogs, setMessage, setError }) => {
             .then((res) => {
                 let newBlogs = blogs.filter((e) => e.id !== blog.id)
                 setBlogs(newBlogs)
-                setMessage(`${blog.title} removed`)
+                dispatch(newNotification(`${blog.title} removed`, 5))
             })
             .catch((err) => {
-                setError(`unable to remove ${blog.title}`)
+                dispatch(newNotification(`unable to remove ${blog.title}`, 5, true))
             })
     }
     return (

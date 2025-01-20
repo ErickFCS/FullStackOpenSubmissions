@@ -6,12 +6,14 @@ import AccountForm from './components/AccountForm'
 import CreateForm from './components/CreateForm'
 import BlogService from './services/blogsService'
 import './index.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { newNotification } from './reducers/notifications'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState({})
-    const [message, setMessage] = useState(null)
-    const [error, setError] = useState(null)
+    const dispatch = useDispatch()
+    const { message, error } = useSelector(state => state.notification)
 
     useEffect(() => {
         BlogService.getAll().then((blogs) => setBlogs(blogs))
@@ -22,17 +24,11 @@ const App = () => {
         if (savedUser.name) setUser(savedUser)
     }, [])
 
-    useEffect(() => {
-        setTimeout(() => {
-            setMessage(null)
-            setError(null)
-        }, 5000)
-    }, [message, error])
-
     const createHandler = (title, author, url) => {
         return BlogService.createBlog({ title, author, url }, user)
             .then((createdBlog) => {
-                setMessage('blog creating successed')
+                console.log("starting notification")
+                dispatch(newNotification('blog creating successed', 5))
                 createdBlog.User = {
                     id: user.id,
                     name: user.name,
@@ -42,7 +38,7 @@ const App = () => {
                 setBlogs(newBlogs)
             })
             .catch((err) => {
-                setError('blog creating failed')
+                dispatch(newNotification('blog creating failed', 5, true))
                 return Promise.reject(err)
             })
     }
@@ -51,8 +47,6 @@ const App = () => {
         <div>
             <Message message={message} error={error} />
             <AccountForm
-                setMessage={setMessage}
-                setError={setError}
                 user={user}
                 setUser={setUser}
             />
@@ -67,8 +61,6 @@ const App = () => {
                         blogs={blogs}
                         user={user}
                         setBlogs={setBlogs}
-                        setMessage={setMessage}
-                        setError={setError}
                     />
                 </>
             ) : null}

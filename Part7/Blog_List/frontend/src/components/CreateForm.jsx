@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import BlogService from '../services/blogsService'
 
 const CreateForm = ({ createHandler }) => {
     const [title, setTitle] = useState('')

@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import AccountService from '../services/accountService'
+import { useDispatch } from 'react-redux'
+import { newNotification } from '../reducers/notifications'
 
-const AccountForm = ({ user, setUser, setError, setMessage }) => {
+const AccountForm = ({ user, setUser }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const dispatch = useDispatch()
 
     const loginHandler = (event) => {
         event.preventDefault()
@@ -12,19 +15,19 @@ const AccountForm = ({ user, setUser, setError, setMessage }) => {
             .then((newUser) => {
                 setUser(newUser)
                 window.localStorage.setItem('user', JSON.stringify(newUser))
-                setMessage('login successful')
+                dispatch(newNotification('login successful', 5))
                 setUsername('')
                 setPassword('')
             })
             .catch((err) => {
-                setError('login unsuccessful')
+                dispatch(newNotification('login unsuccessful', 5, true))
             })
     }
 
     const logoutHandler = () => {
         setUser({})
         window.localStorage.removeItem('user')
-        setMessage('logout successful')
+        dispatch(newNotification('logout successful', 5))
     }
 
     if (!user.name)
@@ -68,8 +71,6 @@ const AccountForm = ({ user, setUser, setError, setMessage }) => {
 AccountForm.propType = {
     user: PropTypes.object.isRequired,
     setUser: PropTypes.func.isRequired,
-    setError: PropTypes.func.isRequired,
-    setMessage: PropTypes.func.isRequired,
 }
 
 export default AccountForm
