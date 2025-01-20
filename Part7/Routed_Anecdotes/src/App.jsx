@@ -68,9 +68,9 @@ const CreateNew = (props) => {
     }
 
     const handleReset = () => {
-        content.reset()
-        author.reset()
-        info.reset()
+        content.methods.reset()
+        author.methods.reset()
+        info.methods.reset()
     }
 
     return (
@@ -79,15 +79,15 @@ const CreateNew = (props) => {
             <form onSubmit={handleSubmit}>
                 <div>
                     content
-                    <input {...content} />
+                    <input {...content.values} />
                 </div>
                 <div>
                     author
-                    <input {...author} />
+                    <input {...author.values} />
                 </div>
                 <div>
                     url for more info
-                    <input {...info} />
+                    <input {...info.values} />
                 </div>
                 <button type='submit'>create</button>
                 <button type='button' onClick={handleReset}>reset</button>
