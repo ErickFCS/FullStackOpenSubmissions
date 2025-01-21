@@ -19,7 +19,7 @@ const createBlog = ({ blog, user }) => {
         })
 }
 
-const giveLike = (blog, user) => {
+const giveLike = ({ blog, user }) => {
     const config = {
         method: 'put',
         url: `${baseUrl}/${blog.id}`,
@@ -41,7 +41,7 @@ const giveLike = (blog, user) => {
         })
 }
 
-const deleteBlog = (blog, user) => {
+const deleteBlog = ({ blog, user }) => {
     const config = {
         method: 'delete',
         url: `${baseUrl}/${blog.id}`,
@@ -52,11 +52,11 @@ const deleteBlog = (blog, user) => {
     return axios
         .request(config)
         .then((response) => {
-            return response.data
+            return blog
         })
         .catch((err) => {
             console.error(err)
-            return Promise.reject('Unable to delete blog')
+            return blog
         })
 }
 
