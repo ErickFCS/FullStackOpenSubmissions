@@ -5,7 +5,7 @@ const getAll = () => {
     return axios.get(baseUrl).then((response) => response.data)
 }
 
-const createBlog = (blog, user) => {
+const createBlog = ({ blog, user }) => {
     return axios
         .post(baseUrl, blog, {
             headers: { Authorization: `Bearer ${user.token}` },
