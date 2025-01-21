@@ -1,53 +1,34 @@
 import { useState } from 'react'
 
 const Blog = ({ blog, likesHandler, removeHandler, user }) => {
-    const [isVisible, setIsVisible] = useState(false)
     const [buttonText, setButtonText] = useState('Show')
+    const [isVisible, setIsVisible] = useState(false)
     const visibleWhenVisible = { display: isVisible ? 'block' : 'none' }
     const toggleVisibility = () => {
         let buttonText = isVisible ? 'Show' : 'Hide'
         setButtonText(buttonText)
         setIsVisible(!isVisible)
     }
-    const border = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-    }
-    const text = {
-        fontSize: 18,
-        margin: 0,
-    }
     return (
-        <div style={border}>
-            <p style={text}>
+        <div className='blogContainer'>
+            <p>
                 {blog.title}
                 <button onClick={toggleVisibility}>{buttonText}</button>
             </p>
-            <p style={text}>{blog.author}</p>
-            <p style={{ ...text, ...visibleWhenVisible }}>{blog.url}</p>
-            <p style={{ ...text, ...visibleWhenVisible }}>
+            <p>{blog.author}</p>
+            <p style={visibleWhenVisible}>{blog.url}</p>
+            <p style={visibleWhenVisible}>
                 likes {blog.likes}
-                <button
-                    onClick={() => {
-                        likesHandler(blog)
-                    }}>
-                    like
-                </button>
+                <button onClick={() => { likesHandler(blog) }}>like</button>
             </p>
             {user.id === blog.User.id ? (
-                <p style={{ ...text, ...visibleWhenVisible }}>
-                    <button
-                        onClick={() => {
-                            removeHandler(blog)
-                        }}>
+                <p style={visibleWhenVisible}>
+                    <button onClick={() => { removeHandler(blog) }}>
                         remove
                     </button>
                 </p>
             ) : null}
-        </div>
+        </div >
     )
 }
 

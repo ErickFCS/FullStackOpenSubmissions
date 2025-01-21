@@ -1,14 +1,15 @@
+import { setNotification, clearNotification } from '../context/notifications'
+import { useContext } from 'react'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import Blog from './Blog'
 import BlogsService from '../services/blogsService'
-import { useContext } from 'react'
 import notificationContext from '../context/notifications'
-import { setNotification, clearNotification } from '../context/notifications'
-import { useQueryClient, useMutation } from '@tanstack/react-query'
 import userContext from '../context/user'
 
 const Blogs = ({ blogs }) => {
-    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
+    const [user, userDispatch] = useContext(userContext)
+
     blogs.sort((a, b) => b.likes - a.likes)
 
     const queryClient = useQueryClient()
@@ -78,9 +79,7 @@ const Blogs = ({ blogs }) => {
         },
     })
 
-    const likesHandler = (blog) => {
-        blogsMutation.mutate({ blog, user })
-    }
+    const likesHandler = (blog) => { blogsMutation.mutate({ blog, user }) }
 
     const removeHandler = (blog) => {
         if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`))

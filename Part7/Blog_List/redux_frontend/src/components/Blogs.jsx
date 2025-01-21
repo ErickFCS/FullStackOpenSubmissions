@@ -1,7 +1,7 @@
-import Blog from './Blog'
-import { useDispatch, useSelector } from 'react-redux'
-import { newNotification } from '../reducers/notifications'
 import { giveLike, removeBlog } from '../reducers/blogs'
+import { newNotification } from '../reducers/notifications'
+import { useDispatch, useSelector } from 'react-redux'
+import Blog from './Blog'
 
 const Blogs = () => {
     const dispatch = useDispatch()

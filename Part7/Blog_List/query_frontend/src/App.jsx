@@ -1,21 +1,21 @@
-import { useEffect } from 'react'
-import Blogs from './components/Blogs'
-import Message from './components/Message'
-import Toggle from './components/Toggle'
-import AccountForm from './components/AccountForm'
-import CreateForm from './components/CreateForm'
-import BlogService from './services/blogsService'
 import './index.css'
-import { useContext } from 'react'
-import notificationContext from './context/notifications'
 import { setNotification, clearNotification } from './context/notifications'
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
-import userContext from './context/user'
 import { setUser } from './context/user'
+import { useContext } from 'react'
+import { useEffect } from 'react'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import AccountForm from './components/AccountForm'
+import Blogs from './components/Blogs'
+import BlogService from './services/blogsService'
+import CreateForm from './components/CreateForm'
+import Message from './components/Message'
+import notificationContext from './context/notifications'
+import Toggle from './components/Toggle'
+import userContext from './context/user'
 
 const App = () => {
-    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
+    const [user, userDispatch] = useContext(userContext)
 
     useEffect(() => {
         const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
@@ -30,7 +30,6 @@ const App = () => {
         retryDelay: 1000,
         refetchOnWindowFocus: false,
     })
-
     const queryClient = useQueryClient()
     const blogsMutation = useMutation({
         mutationKey: ['blogs'],
@@ -70,9 +69,7 @@ const App = () => {
         },
     })
 
-    const createHandler = (title, author, url) => {
-        return blogsMutation.mutateAsync({ blog: { title, author, url }, user })
-    }
+    const createHandler = (title, author, url) => (blogsMutation.mutateAsync({ blog: { title, author, url }, user }))
 
     if (result.isFetching) return <div>...Loadiing</div>
     if (result.error) return <div>Unable to reach server</div>
@@ -81,8 +78,7 @@ const App = () => {
         <div>
             <Message
                 message={notification.message}
-                error={notification.error}
-            />
+                error={notification.error} />
             <AccountForm />
             {user.name ? (
                 <>

@@ -11,3 +11,16 @@
     border-radius: 5px;
     text-align: center;
 }
+
+.blogContainer {
+    padding-top: 10px;
+    padding-left: 2px;
+    border: solid #000000;
+    border-width: 1px;
+    margin-bottom: 5px;
+}
+
+.blogContainer>p {
+    font-size: 18px;
+    margin: 0px;
+}

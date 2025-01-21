@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types'
-import { useState, useContext } from 'react'
+import { setNotification, clearNotification } from '../context/notifications'
+import { setUser, clearUser } from '../context/user'
+import { useContext } from 'react'
 import AccountService from '../services/accountService'
 import notificationContext from '../context/notifications'
-import { setNotification, clearNotification } from '../context/notifications'
+import useInput from '../hooks/useInput'
 import userContext from '../context/user'
-import { setUser, clearUser } from '../context/user'
 
 const AccountForm = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
+    const [user, userDispatch] = useContext(userContext)
+    const password = useInput('password')
+    const username = useInput('text')
 
     const loginHandler = (event) => {
         event.preventDefault()
-        AccountService.login(username, password)
+        AccountService.login(username.values.value, password.values.value)
             .then((newUser) => {
                 userDispatch(setUser(newUser))
                 window.localStorage.setItem('user', JSON.stringify(newUser))
@@ -29,8 +29,8 @@ const AccountForm = () => {
                         lastTimeOut: timeOut,
                     })
                 )
-                setUsername('')
-                setPassword('')
+                username.methods.reset()
+                password.methods.reset()
             })
             .catch((err) => {
                 if (notification.lastTimeOut)
@@ -67,23 +67,11 @@ const AccountForm = () => {
             <>
                 <h2>log in to application</h2>
                 <form onSubmit={loginHandler}>
-                    username:{' '}
-                    <input
-                        onChange={({ target }) => {
-                            setUsername(target.value)
-                        }}
-                        name='username'
-                        type='text'
-                    />
+                    username:
+                    <input {...username.values} placeholder='username' />
                     <br />
-                    password:{' '}
-                    <input
-                        onChange={({ target }) => {
-                            setPassword(target.value)
-                        }}
-                        name='password'
-                        type='password'
-                    />
+                    password:
+                    <input {...password.values} placeholder='password' />
                     <br />
                     <button type='submit'>login</button>
                 </form>
@@ -92,7 +80,7 @@ const AccountForm = () => {
     else
         return (
             <div>
-                {user.username} is logged in{' '}
+                {user.username} is logged in
                 <button type='button' onClick={logoutHandler}>
                     logout
                 </button>

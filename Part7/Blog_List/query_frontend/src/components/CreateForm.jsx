@@ -1,57 +1,34 @@
 import { useState } from 'react'
+import useInput from '../hooks/useInput'
 
 const CreateForm = ({ createHandler }) => {
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+    const author = useInput('text')
+    const title = useInput('text')
+    const url = useInput('text')
 
     const onSubmitHandler = (event) => {
         event.preventDefault()
-        createHandler(title, author, url)
+        createHandler(author.values.value, title.values.value, url.values.value)
             .then(() => {
-                setTitle('')
-                event.target.title.value = ''
-                setAuthor('')
-                event.target.author.value = ''
-                setUrl('')
-                event.target.url.value = ''
+                author.methods.reset()
+                title.methods.reset()
+                url.methods.reset()
             })
-            .catch((err) => {})
+            .catch((err) => { console.error(err) })
     }
 
     return (
         <>
             <h2>create new</h2>
             <form onSubmit={onSubmitHandler}>
-                title:{' '}
-                <input
-                    onChange={({ target }) => {
-                        setTitle(target.value)
-                    }}
-                    placeholder='title'
-                    type='text'
-                    name='title'
-                />
+                title:
+                <input {...title.values} placeholder="author" />
                 <br />
-                author:{' '}
-                <input
-                    onChange={({ target }) => {
-                        setAuthor(target.value)
-                    }}
-                    placeholder='author'
-                    type='text'
-                    name='author'
-                />
+                author:
+                <input {...author.values} placeholder="title" />
                 <br />
-                url:{' '}
-                <input
-                    onChange={({ target }) => {
-                        setUrl(target.value)
-                    }}
-                    placeholder='url'
-                    type='text'
-                    name='url'
-                />
+                url:
+                <input {...url.values} placeholder="url" />
                 <br />
                 <button type='submit'>create</button>
             </form>
