@@ -2,7 +2,13 @@ import axios from 'axios'
 const baseUrl = '/api/blogs'
 
 const getAll = () => {
-    return axios.get(baseUrl).then((response) => response.data)
+    return axios
+        .get(baseUrl)
+        .then((response) => response.data)
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject('Unable to get all blogs')
+        })
 }
 
 const createBlog = (blog, user) => {

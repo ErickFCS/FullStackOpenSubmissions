@@ -8,15 +8,15 @@ import BlogService from './services/blogsService'
 import './index.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { newNotification } from './reducers/notifications'
+import { initializeBlogs, newBlog } from './reducers/blogs'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState({})
     const dispatch = useDispatch()
     const { message, error } = useSelector(state => state.notification)
 
     useEffect(() => {
-        BlogService.getAll().then((blogs) => setBlogs(blogs))
+        dispatch(initializeBlogs())
     }, [])
 
     useEffect(() => {
@@ -25,21 +25,13 @@ const App = () => {
     }, [])
 
     const createHandler = (title, author, url) => {
-        return BlogService.createBlog({ title, author, url }, user)
-            .then((createdBlog) => {
-                console.log("starting notification")
+        return dispatch(newBlog(title, author, url, user))
+            .then(() => {
                 dispatch(newNotification('blog creating successed', 5))
-                createdBlog.User = {
-                    id: user.id,
-                    name: user.name,
-                    username: user.username,
-                }
-                const newBlogs = blogs.concat(createdBlog)
-                setBlogs(newBlogs)
             })
             .catch((err) => {
+                console.error(err)
                 dispatch(newNotification('blog creating failed', 5, true))
-                return Promise.reject(err)
             })
     }
 
@@ -58,9 +50,7 @@ const App = () => {
                         <CreateForm createHandler={createHandler} />
                     </Toggle>
                     <Blogs
-                        blogs={blogs}
                         user={user}
-                        setBlogs={setBlogs}
                     />
                 </>
             ) : null}
