@@ -9,8 +9,8 @@ const userSlice = createSlice({
         },
         clearUser(state, action) {
             return {}
-        }
-    }
+        },
+    },
 })
 
 export const { setUser, clearUser } = userSlice.actions

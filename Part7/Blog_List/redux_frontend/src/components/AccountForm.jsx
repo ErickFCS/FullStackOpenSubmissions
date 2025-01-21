@@ -9,7 +9,7 @@ const AccountForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
+    const user = useSelector((state) => state.user)
 
     const loginHandler = (event) => {
         event.preventDefault()

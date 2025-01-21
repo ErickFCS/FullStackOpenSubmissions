@@ -12,8 +12,8 @@ import { setUser } from './reducers/user'
 
 const App = () => {
     const dispatch = useDispatch()
-    const { message, error } = useSelector(state => state.notification)
-    const user = useSelector(state => state.user)
+    const { message, error } = useSelector((state) => state.notification)
+    const user = useSelector((state) => state.user)
 
     useEffect(() => {
         dispatch(initializeBlogs())

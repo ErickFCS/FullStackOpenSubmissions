@@ -15,13 +15,15 @@ const notificationSlice = createSlice({
         },
         clearNotification(state, action) {
             return { lastTimeOut: null, message: '', error: '' }
-        }
-    }
+        },
+    },
 })
 
-export const { setMessage, setError, setLastTimeOut, clearNotification } = notificationSlice.actions
+export const { setMessage, setError, setLastTimeOut, clearNotification } =
+    notificationSlice.actions
 
-export const newNotification = (message, duration, isError = false) => (
+export const newNotification =
+    (message, duration, isError = false) =>
     async (dispatch, getState) => {
         const lastTimeOut = getState().notification.lastTimeOut
         if (isError) dispatch(setError(message))
@@ -32,6 +34,5 @@ export const newNotification = (message, duration, isError = false) => (
         }, duration * 1000)
         dispatch(setLastTimeOut(timeOut))
     }
-)
 
 export default notificationSlice.reducer

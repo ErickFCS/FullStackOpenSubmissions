@@ -5,8 +5,8 @@ import { giveLike, removeBlog } from '../reducers/blogs'
 
 const Blogs = () => {
     const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
-    var blogs = [...useSelector(state => state.blogs)]
+    const user = useSelector((state) => state.user)
+    var blogs = [...useSelector((state) => state.blogs)]
     blogs.sort((a, b) => b.likes - a.likes)
     const likesHandler = (blog) => {
         dispatch(giveLike(blog, user))
@@ -25,9 +25,10 @@ const Blogs = () => {
                 dispatch(newNotification(`${blog.title} removed`, 5))
             })
             .catch((err) => {
-                dispatch(newNotification(`unable to remove ${blog.title}`, 5, true))
+                dispatch(
+                    newNotification(`unable to remove ${blog.title}`, 5, true)
+                )
             })
-
     }
     return (
         <>

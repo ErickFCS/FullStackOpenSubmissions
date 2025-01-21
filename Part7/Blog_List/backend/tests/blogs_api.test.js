@@ -135,14 +135,12 @@ describe('Blogs API tests', () => {
                 url,
                 likes,
             })),
-            blogs
-                .concat(newBlog)
-                .map(({ title, author, url, likes }) => ({
-                    title,
-                    author,
-                    url,
-                    likes,
-                }))
+            blogs.concat(newBlog).map(({ title, author, url, likes }) => ({
+                title,
+                author,
+                url,
+                likes,
+            }))
         )
     })
     test('Verify likes property is default to 0', async () => {
