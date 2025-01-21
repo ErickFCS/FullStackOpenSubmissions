@@ -1,19 +1,21 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import AccountService from '../services/accountService'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { newNotification } from '../reducers/notifications'
+import { clearUser, setUser } from '../reducers/user'
 
-const AccountForm = ({ user, setUser }) => {
+const AccountForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
 
     const loginHandler = (event) => {
         event.preventDefault()
         AccountService.login(username, password)
             .then((newUser) => {
-                setUser(newUser)
+                dispatch(setUser(newUser))
                 window.localStorage.setItem('user', JSON.stringify(newUser))
                 dispatch(newNotification('login successful', 5))
                 setUsername('')
@@ -25,7 +27,7 @@ const AccountForm = ({ user, setUser }) => {
     }
 
     const logoutHandler = () => {
-        setUser({})
+        dispatch(clearUser())
         window.localStorage.removeItem('user')
         dispatch(newNotification('logout successful', 5))
     }
@@ -66,11 +68,6 @@ const AccountForm = ({ user, setUser }) => {
                 </button>
             </div>
         )
-}
-
-AccountForm.propType = {
-    user: PropTypes.object.isRequired,
-    setUser: PropTypes.func.isRequired,
 }
 
 export default AccountForm

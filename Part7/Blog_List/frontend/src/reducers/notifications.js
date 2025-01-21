@@ -29,7 +29,7 @@ export const newNotification = (message, duration, isError = false) => (
         if (lastTimeOut) clearTimeout(lastTimeOut)
         const timeOut = setTimeout(() => {
             dispatch(clearNotification())
-        }, duration * 1000);
+        }, duration * 1000)
         dispatch(setLastTimeOut(timeOut))
     }
 )

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { newNotification } from '../reducers/notifications'
 import { giveLike, removeBlog } from '../reducers/blogs'
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     var blogs = [...useSelector(state => state.blogs)]
     blogs.sort((a, b) => b.likes - a.likes)
     const likesHandler = (blog) => {

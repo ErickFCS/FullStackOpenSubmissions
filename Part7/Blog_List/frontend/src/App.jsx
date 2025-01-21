@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Message from './components/Message'
 import Toggle from './components/Toggle'
 import AccountForm from './components/AccountForm'
 import CreateForm from './components/CreateForm'
-import BlogService from './services/blogsService'
 import './index.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { newNotification } from './reducers/notifications'
 import { initializeBlogs, newBlog } from './reducers/blogs'
+import { setUser } from './reducers/user'
 
 const App = () => {
-    const [user, setUser] = useState({})
     const dispatch = useDispatch()
     const { message, error } = useSelector(state => state.notification)
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -21,7 +21,7 @@ const App = () => {
 
     useEffect(() => {
         const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
-        if (savedUser.name) setUser(savedUser)
+        if (savedUser.name) dispatch(setUser(savedUser))
     }, [])
 
     const createHandler = (title, author, url) => {
@@ -38,10 +38,7 @@ const App = () => {
     return (
         <div>
             <Message message={message} error={error} />
-            <AccountForm
-                user={user}
-                setUser={setUser}
-            />
+            <AccountForm />
             {user.name ? (
                 <>
                     <Toggle
@@ -49,9 +46,7 @@ const App = () => {
                         hideButtonText='cancel'>
                         <CreateForm createHandler={createHandler} />
                     </Toggle>
-                    <Blogs
-                        user={user}
-                    />
+                    <Blogs />
                 </>
             ) : null}
         </div>
