@@ -4,8 +4,10 @@ import { useContext } from 'react'
 import notificationContext from '../context/notifications'
 import { setNotification, clearNotification } from '../context/notifications'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
+import userContext from '../context/user'
 
-const Blogs = ({ blogs, user }) => {
+const Blogs = ({ blogs }) => {
+    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
     blogs.sort((a, b) => b.likes - a.likes)
 
@@ -15,41 +17,65 @@ const Blogs = ({ blogs, user }) => {
         mutationFn: BlogsService.giveLike,
         onSuccess: (res) => {
             let blogs = queryClient.getQueryData(['blogs'])
-            queryClient.setQueryData(['blogs'], blogs.map((e) => e.id !== res.id ? e : { ...e, likes: e.likes + 1 }))
+            queryClient.setQueryData(
+                ['blogs'],
+                blogs.map((e) =>
+                    e.id !== res.id ? e : { ...e, likes: e.likes + 1 }
+                )
+            )
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
-            notificationDispatch(setNotification({ message: 'Liked', lastTimeOut: timeOut }))
+            }, 5000)
+            notificationDispatch(
+                setNotification({ message: 'Liked', lastTimeOut: timeOut })
+            )
         },
         onError: (err) => {
             console.error(err)
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
-            notificationDispatch(setNotification({ error: 'Unable to like', lastTimeOut: timeOut }))
-        }
+            }, 5000)
+            notificationDispatch(
+                setNotification({
+                    error: 'Unable to like',
+                    lastTimeOut: timeOut,
+                })
+            )
+        },
     })
     const blogsDeleteMutation = useMutation({
         mutationKey: ['blogs'],
         mutationFn: BlogsService.deleteBlog,
         onSuccess: (res) => {
-            const newBlogs = queryClient.getQueryData(['blogs']).filter((e) => e.id !== res.id)
+            const newBlogs = queryClient
+                .getQueryData(['blogs'])
+                .filter((e) => e.id !== res.id)
             queryClient.setQueryData(['blogs'], newBlogs)
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
-            notificationDispatch(setNotification({ message: `${res.title} removed`, lastTimeOut: timeOut }))
+            }, 5000)
+            notificationDispatch(
+                setNotification({
+                    message: `${res.title} removed`,
+                    lastTimeOut: timeOut,
+                })
+            )
         },
         onError: (err) => {
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
-            notificationDispatch(setNotification({ error: `unable to remove ${err.title}`, lastTimeOut: timeOut }))
-        }
+            }, 5000)
+            notificationDispatch(
+                setNotification({
+                    error: `unable to remove ${err.title}`,
+                    lastTimeOut: timeOut,
+                })
+            )
+        },
     })
 
     const likesHandler = (blog) => {

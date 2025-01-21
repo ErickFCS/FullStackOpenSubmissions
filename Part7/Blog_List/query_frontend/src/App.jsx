@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Message from './components/Message'
 import Toggle from './components/Toggle'
@@ -10,14 +10,16 @@ import { useContext } from 'react'
 import notificationContext from './context/notifications'
 import { setNotification, clearNotification } from './context/notifications'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import userContext from './context/user'
+import { setUser } from './context/user'
 
 const App = () => {
-    const [user, setUser] = useState({})
+    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
 
     useEffect(() => {
         const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
-        if (savedUser.name) setUser(savedUser)
+        if (savedUser.name) userDispatch(setUser(savedUser))
     }, [])
 
     const result = useQuery({
@@ -26,7 +28,7 @@ const App = () => {
         queryFn: BlogService.getAll,
         retry: 3,
         retryDelay: 1000,
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
 
     const queryClient = useQueryClient()
@@ -37,8 +39,13 @@ const App = () => {
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
-            notificationDispatch(setNotification({ message: 'blog creating successed', lastTimeOut: timeOut }))
+            }, 5000)
+            notificationDispatch(
+                setNotification({
+                    message: 'blog creating successed',
+                    lastTimeOut: timeOut,
+                })
+            )
             createdBlog.User = {
                 id: user.id,
                 name: user.name,
@@ -51,32 +58,32 @@ const App = () => {
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
-            }, 5000);
+            }, 5000)
             console.error(err)
-            notificationDispatch(setNotification({ error: 'blog creating failed', lastTimeOut: timeOut }))
+            notificationDispatch(
+                setNotification({
+                    error: 'blog creating failed',
+                    lastTimeOut: timeOut,
+                })
+            )
             return Promise.reject(err)
-        }
+        },
     })
-
 
     const createHandler = (title, author, url) => {
         return blogsMutation.mutateAsync({ blog: { title, author, url }, user })
     }
 
-    if (result.isFetching) return (
-        <div>...Loadiing</div>
-    )
-    if (result.error) return (
-        <div>Unable to reach server</div>
-    )
+    if (result.isFetching) return <div>...Loadiing</div>
+    if (result.error) return <div>Unable to reach server</div>
     const blogs = result.data
     return (
         <div>
-            <Message message={notification.message} error={notification.error} />
-            <AccountForm
-                user={user}
-                setUser={setUser}
+            <Message
+                message={notification.message}
+                error={notification.error}
             />
+            <AccountForm />
             {user.name ? (
                 <>
                     <Toggle
@@ -84,10 +91,7 @@ const App = () => {
                         hideButtonText='cancel'>
                         <CreateForm createHandler={createHandler} />
                     </Toggle>
-                    <Blogs
-                        blogs={blogs}
-                        user={user}
-                    />
+                    <Blogs blogs={blogs} user={user} />
                 </>
             ) : null}
         </div>

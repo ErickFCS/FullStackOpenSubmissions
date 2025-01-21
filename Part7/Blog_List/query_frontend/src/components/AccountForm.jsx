@@ -3,43 +3,63 @@ import { useState, useContext } from 'react'
 import AccountService from '../services/accountService'
 import notificationContext from '../context/notifications'
 import { setNotification, clearNotification } from '../context/notifications'
+import userContext from '../context/user'
+import { setUser, clearUser } from '../context/user'
 
-const AccountForm = ({ user, setUser }) => {
+const AccountForm = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [user, userDispatch] = useContext(userContext)
     const [notification, notificationDispatch] = useContext(notificationContext)
 
     const loginHandler = (event) => {
         event.preventDefault()
         AccountService.login(username, password)
             .then((newUser) => {
-                setUser(newUser)
+                userDispatch(setUser(newUser))
                 window.localStorage.setItem('user', JSON.stringify(newUser))
-                if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
+                if (notification.lastTimeOut)
+                    clearTimeout(notification.lastTimeOut)
                 const timeOut = setTimeout(() => {
                     notificationDispatch(clearNotification())
-                }, 5000);
-                notificationDispatch(setNotification({ message: 'login successful', lastTimeOut: timeOut }))
+                }, 5000)
+                notificationDispatch(
+                    setNotification({
+                        message: 'login successful',
+                        lastTimeOut: timeOut,
+                    })
+                )
                 setUsername('')
                 setPassword('')
             })
             .catch((err) => {
-                if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
+                if (notification.lastTimeOut)
+                    clearTimeout(notification.lastTimeOut)
                 const timeOut = setTimeout(() => {
                     notificationDispatch(clearNotification())
-                }, 5000);
-                notificationDispatch(setNotification({ error: 'login unsuccessful', lastTimeOut: timeOut }))
+                }, 5000)
+                notificationDispatch(
+                    setNotification({
+                        error: 'login unsuccessful',
+                        lastTimeOut: timeOut,
+                    })
+                )
             })
     }
 
     const logoutHandler = () => {
-        setUser({})
+        userDispatch(clearUser())
         window.localStorage.removeItem('user')
         if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
         const timeOut = setTimeout(() => {
             notificationDispatch(clearNotification())
-        }, 5000);
-        notificationDispatch(setNotification({ message: 'logout successful', lastTimeOut: timeOut }))
+        }, 5000)
+        notificationDispatch(
+            setNotification({
+                message: 'logout successful',
+                lastTimeOut: timeOut,
+            })
+        )
     }
 
     if (!user.name)
@@ -78,11 +98,6 @@ const AccountForm = ({ user, setUser }) => {
                 </button>
             </div>
         )
-}
-
-AccountForm.propType = {
-    user: PropTypes.object.isRequired,
-    setUser: PropTypes.func.isRequired
 }
 
 export default AccountForm

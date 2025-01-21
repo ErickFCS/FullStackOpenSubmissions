@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext } from 'react'
+import { createContext, useReducer } from 'react'
 
 const notificationReducer = (state, action) => {
     switch (action.type) {
@@ -11,26 +11,30 @@ const notificationReducer = (state, action) => {
     }
 }
 
-export const setNotification = ({ message = '', error = '', lastTimeOut = null }) => (
-    {
-        type: 'SET',
-        payload: { message, error, lastTimeOut }
-    }
-)
+export const setNotification = ({
+    message = '',
+    error = '',
+    lastTimeOut = null,
+}) => ({
+    type: 'SET',
+    payload: { message, error, lastTimeOut },
+})
 
-export const clearNotification = () => (
-    {
-        type: 'CLEAR',
-        payload: null
-    }
-)
+export const clearNotification = () => ({
+    type: 'CLEAR',
+    payload: null,
+})
 
 const notificationContext = createContext()
 
 export const NotificationContextProvider = (props) => {
-    const [notification, notificationDispatch] = useReducer(notificationReducer, { message: '', error: '' })
+    const [notification, notificationDispatch] = useReducer(
+        notificationReducer,
+        { message: '', error: '' }
+    )
     return (
-        <notificationContext.Provider value={[notification, notificationDispatch]}>
+        <notificationContext.Provider
+            value={[notification, notificationDispatch]}>
             {props.children}
         </notificationContext.Provider>
     )
