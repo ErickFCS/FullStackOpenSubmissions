@@ -60,4 +60,26 @@ const deleteBlog = async ({ blog, user }) => {
         })
 }
 
-export default { getAll, createBlog, giveLike, deleteBlog }
+const commentBlog = async ({ blog, user, comment }) => {
+    const config = {
+        method: 'post',
+        url: `${baseUrl}/${blog.id}/comments`,
+        headers: {
+            Authorization: `Bearer ${user.token}`,
+        },
+        data: {
+            comment
+        },
+    }
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject('Unable to comment')
+        })
+}
+
+export default { getAll, createBlog, giveLike, deleteBlog, commentBlog }

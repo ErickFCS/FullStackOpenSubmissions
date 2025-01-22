@@ -94,10 +94,13 @@ const App = () => {
     const targetBlog = matchBlogId ? blogs.find((e) => e.id === matchBlogId.params.id) : null
     return (
         <>
-            <div>
-                <Link to='/'>blogs</Link>
-                <Link to='/users'>users</Link>
-            </div>
+            {user.name ?
+                <div>
+                    <Link to='/'>blogs</Link>
+                    <Link to='/users'>users</Link>
+                </div>
+                : null
+            }
             <Message message={notification.message} error={notification.error} />
             <AccountForm />
             <Routes>

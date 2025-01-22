@@ -27,6 +27,20 @@ BlogsRouter.post('/', async (request, response) => {
     response.status(201).json(result)
 })
 
+BlogsRouter.post('/:id/comments', async (request, response) => {
+    if (!request.decodedToken.id)
+        return response.status(401).json({ error: 'token invalid' })
+    if (!request.user)
+        return response.status(401).json({ error: 'no valid user' })
+    const blog = await Blog.findOne({ _id: request.params.id })
+    if (!blog) return response.status(404).json({ error: 'no valid blog' })
+    const { comment } = request.body
+    if (!comment) return response.status(400).json({ error: 'no comment value found' })
+    blog.comments.push(comment)
+    const result = await blog.save()
+    response.status(200).json(result)
+})
+
 BlogsRouter.delete('/:id', async (request, response) => {
     if (!request.decodedToken.id)
         return response.status(401).json({ error: 'token invalid' })
@@ -39,7 +53,8 @@ BlogsRouter.delete('/:id', async (request, response) => {
             .status(401)
             .json({ error: 'You dont have permission to delete this blog' })
     await Blog.deleteOne({ _id: request.params.id })
-    request.user.Blog = request.user.Blog.filter((e) => e.toString !== blog.id)
+    request.user.Blog = request.user.Blog.filter((e) => (e.toString() !== request.params.id))
+    console.log("user blog", request.user.Blog)
     await request.user.save()
     response.status(204).end()
 })
