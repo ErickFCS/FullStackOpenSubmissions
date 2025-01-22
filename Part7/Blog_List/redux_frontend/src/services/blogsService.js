@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-const getAll = () => {
+const getAll = async () => {
     return axios
         .get(baseUrl)
         .then((response) => response.data)
@@ -11,7 +11,7 @@ const getAll = () => {
         })
 }
 
-const createBlog = (blog, user) => {
+const createBlog = async (blog, user) => {
     return axios
         .post(baseUrl, blog, {
             headers: { Authorization: `Bearer ${user.token}` },
@@ -25,7 +25,7 @@ const createBlog = (blog, user) => {
         })
 }
 
-const giveLike = (blog, user) => {
+const giveLike = async (blog, user) => {
     const config = {
         method: 'put',
         url: `${baseUrl}/${blog.id}`,
@@ -47,7 +47,7 @@ const giveLike = (blog, user) => {
         })
 }
 
-const deleteBlog = (blog, user) => {
+const deleteBlog = async (blog, user) => {
     const config = {
         method: 'delete',
         url: `${baseUrl}/${blog.id}`,

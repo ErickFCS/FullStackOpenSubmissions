@@ -1,4 +1,5 @@
 import './index.css'
+import { Routes, Route, Link } from 'react-router-dom'
 import { setNotification, clearNotification } from './context/notifications'
 import { setUser } from './context/user'
 import { useContext } from 'react'
@@ -12,6 +13,7 @@ import Message from './components/Message'
 import notificationContext from './context/notifications'
 import Toggle from './components/Toggle'
 import userContext from './context/user'
+import Users from './components/Users'
 
 const App = () => {
     const [notification, notificationDispatch] = useContext(notificationContext)
@@ -75,22 +77,23 @@ const App = () => {
     if (result.error) return <div>Unable to reach server</div>
     const blogs = result.data
     return (
-        <div>
-            <Message
-                message={notification.message}
-                error={notification.error} />
+        <>
+            <Message message={notification.message} error={notification.error} />
             <AccountForm />
-            {user.name ? (
-                <>
-                    <Toggle
-                        showButtonText='create new blog'
-                        hideButtonText='cancel'>
-                        <CreateForm createHandler={createHandler} />
-                    </Toggle>
-                    <Blogs blogs={blogs} user={user} />
-                </>
-            ) : null}
-        </div>
+            <Routes>
+                {user.name ? (<>
+                    <Route path='/' element={<>
+                        <Toggle
+                            showButtonText='create new blog'
+                            hideButtonText='cancel'>
+                            <CreateForm createHandler={createHandler} />
+                        </Toggle>
+                        <Blogs blogs={blogs} user={user} />
+                    </>} />
+                    <Route path='/users' element={<Users />} />
+                </>) : null}
+            </Routes >
+        </>
     )
 }
 

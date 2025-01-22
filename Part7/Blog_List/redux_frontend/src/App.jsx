@@ -1,6 +1,7 @@
 import './index.css'
 import { initializeBlogs, newBlog } from './reducers/blogs'
 import { newNotification } from './reducers/notifications'
+import { Routes, Route, Link } from 'react-router-dom'
 import { setUser } from './reducers/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -9,6 +10,7 @@ import Blogs from './components/Blogs'
 import CreateForm from './components/CreateForm'
 import Message from './components/Message'
 import Toggle from './components/Toggle'
+import Users from './components/Users'
 
 const App = () => {
     const { message, error } = useSelector((state) => state.notification)
@@ -34,20 +36,29 @@ const App = () => {
 
 
     return (
-        <div>
+        <>
             <Message message={message} error={error} />
             <AccountForm />
-            {user.name ? (
-                <>
-                    <Toggle
-                        showButtonText='create new blog'
-                        hideButtonText='cancel'>
-                        <CreateForm createHandler={createHandler} />
-                    </Toggle>
-                    <Blogs />
-                </>
-            ) : null}
-        </div>
+            <Routes>
+                <Route path='/' element={
+                    <>
+                        {user.name ? (
+                            <>
+                                <Toggle
+                                    showButtonText='create new blog'
+                                    hideButtonText='cancel'>
+                                    <CreateForm createHandler={createHandler} />
+                                </Toggle>
+                                <Blogs />
+                            </>
+                        ) : null}
+                    </>
+                } />
+                <Route path='/users' element={
+                    <Users />
+                } />
+            </Routes>
+        </>
     )
 }
 
