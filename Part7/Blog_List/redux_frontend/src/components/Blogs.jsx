@@ -1,46 +1,16 @@
-import { giveLike, removeBlog } from '../reducers/blogs'
-import { newNotification } from '../reducers/notifications'
-import { useDispatch, useSelector } from 'react-redux'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
 
-const Blogs = () => {
-    const dispatch = useDispatch()
-    const user = useSelector((state) => state.user)
-    var blogs = [...useSelector((state) => state.blogs)]
-    blogs.sort((a, b) => b.likes - a.likes)
-    const likesHandler = (blog) => {
-        dispatch(giveLike(blog, user))
-            .then((res) => {
-                dispatch(newNotification('Liked', 5))
-            })
-            .catch((err) => {
-                dispatch(newNotification('Unable to like', 5, true))
-            })
-    }
-    const removeHandler = (blog) => {
-        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`))
-            return
-        dispatch(removeBlog(blog, user))
-            .then((res) => {
-                dispatch(newNotification(`${blog.title} removed`, 5))
-            })
-            .catch((err) => {
-                dispatch(
-                    newNotification(`unable to remove ${blog.title}`, 5, true)
-                )
-            })
-    }
+const Blogs = ({ blogs }) => {
+    let sortedBlog = [...blogs]
+    sortedBlog.sort((a, b) => b.likes - a.likes)
+
     return (
         <>
             <h2>blogs</h2>
-            {blogs.map((blog, index) => (
-                <Blog
-                    key={index}
-                    blog={blog}
-                    likesHandler={likesHandler}
-                    removeHandler={removeHandler}
-                    user={user}
-                />
+            {sortedBlog.map((blog, index) => (
+                <div className='blogContainer' key={index}>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </div>
             ))}
         </>
     )

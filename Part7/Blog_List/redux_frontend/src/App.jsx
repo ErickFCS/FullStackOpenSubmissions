@@ -1,25 +1,28 @@
 import './index.css'
 import { initializeBlogs, newBlog } from './reducers/blogs'
 import { newNotification } from './reducers/notifications'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch, Link } from 'react-router-dom'
 import { setUser } from './reducers/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import AccountForm from './components/AccountForm'
+import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import CreateForm from './components/CreateForm'
 import Message from './components/Message'
 import Toggle from './components/Toggle'
-import Users from './components/Users'
 import User from './components/User'
+import Users from './components/Users'
 import userService from './services/userService'
 
 const App = () => {
-    const { message, error } = useSelector((state) => state.notification)
-    const dispatch = useDispatch()
-    const user = useSelector((state) => state.user)
     const [users, setUsers] = useState([])
-    const match = useMatch('/users/:id')
+    const { message, error } = useSelector((state) => state.notification)
+    const blogs = useSelector((state) => state.blogs)
+    const dispatch = useDispatch()
+    const matchBlogId = useMatch('/blogs/:id')
+    const matchUserId = useMatch('/users/:id')
+    const user = useSelector((state) => state.user)
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -43,11 +46,18 @@ const App = () => {
                 dispatch(newNotification('blog creating failed', 5, true))
             })
     )
-
-    const targetUser = match ? users.find((e) => e.id === match.params.id) : null
+    const targetUser = matchUserId ? users.find((e) => e.id === matchUserId.params.id) : null
+    const targetBlog = matchBlogId ? blogs.find((e) => e.id === matchBlogId.params.id) : null
     return (
         <>
             <Message message={message} error={error} />
+            {user.name ?
+                <div>
+                    <Link to='/'>blogs</Link>
+                    <Link to='/users'>users</Link>
+                </div>
+                : null
+            }
             <AccountForm />
             <Routes>
                 <Route path='/' element={
@@ -59,10 +69,13 @@ const App = () => {
                                     hideButtonText='cancel'>
                                     <CreateForm createHandler={createHandler} />
                                 </Toggle>
-                                <Blogs />
+                                <Blogs blogs={blogs} />
                             </>
                         ) : null}
                     </>
+                } />
+                <Route path='/blogs/:id' element={
+                    <Blog blog={targetBlog} />
                 } />
                 <Route path='/users' element={
                     <Users users={users} />
@@ -70,6 +83,7 @@ const App = () => {
                 <Route path='/users/:id' element={
                     <User user={targetUser} />
                 } />
+                <Route path='*' element={<div>Unknown route</div>} />
             </Routes>
         </>
     )

@@ -1,36 +1,65 @@
-import { useState } from 'react'
+import { addComment, giveLike, removeBlog } from '../reducers/blogs'
+import { newNotification } from '../reducers/notifications'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import useInput from '../hooks/useInput'
 
-const Blog = ({ blog, likesHandler, removeHandler, user }) => {
-    const [isVisible, setIsVisible] = useState(false)
-    const [buttonText, setButtonText] = useState('Show')
-    const visibleWhenVisible = { display: isVisible ? 'block' : 'none' }
-    const toggleVisibility = () => {
-        let buttonText = isVisible ? 'Show' : 'Hide'
-        setButtonText(buttonText)
-        setIsVisible(!isVisible)
+const Blog = ({ blog }) => {
+    if (!blog) return null
+    const dispatch = useDispatch()
+    const user = useSelector((state) => state.user)
+    const navigate = useNavigate()
+    const comment = useInput('text')
+
+    const likesHandler = () => {
+        dispatch(giveLike(blog, user))
+            .then((res) => {
+                dispatch(newNotification('Liked', 5))
+            })
+            .catch((err) => {
+                dispatch(newNotification('Unable to like', 5, true))
+            })
+    }
+    const removeHandler = () => {
+        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`))
+            return
+        dispatch(removeBlog(blog, user))
+            .then((res) => {
+                dispatch(newNotification(`${blog.title} removed`, 5))
+            })
+            .catch((err) => {
+                dispatch(
+                    newNotification(`unable to remove ${blog.title}`, 5, true)
+                )
+            })
+        navigate('/')
+    }
+    const commentHandler = (event) => {
+        event.preventDefault()
+        dispatch(addComment(blog, user, comment.values.value))
+        comment.methods.reset()
     }
     return (
-        <div className='blogContainer'>
-            <p>
-                {blog.title}
-                <button onClick={toggleVisibility}>{buttonText}</button>
-            </p>
-            <p>{blog.author}</p>
-            <p style={visibleWhenVisible}>{blog.url}</p>
-            <p style={visibleWhenVisible}>
-                likes {blog.likes}
-                <button onClick={() => { likesHandler(blog) }}>
-                    like
-                </button>
-            </p>
-            {user.id === blog.User.id ? (
-                <p style={visibleWhenVisible}>
-                    <button onClick={() => { removeHandler(blog) }}>
-                        remove
-                    </button>
-                </p>
-            ) : null}
-        </div>
+        <>
+            <h2>{blog.title}</h2>
+            <a href={blog.url}>{blog.url}</a>
+            <p>likes {blog.likes}<button onClick={likesHandler}>like</button></p>
+            <p>added by {blog.author}</p>
+            {user.id === blog.User.id ?
+                <p><button onClick={removeHandler}>remove</button></p>
+                : null
+            }
+            <h3>comments</h3>
+            <form onSubmit={commentHandler}>
+                <input {...comment.values} placeholder='comment here' />
+                <button type='submit'>comment</button>
+            </form>
+            <ul>
+                {blog.comments.map((e, i) => (
+                    <li key={i}>{e}</li>
+                ))}
+            </ul>
+        </>
     )
 }
 
