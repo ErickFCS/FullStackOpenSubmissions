@@ -25,10 +25,7 @@ mongoose
     .catch((error) => {
         logger.error('connection to mongodb failed', error)
     })
-mongoose.connection.on(
-    'error',
-    console.error.bind(console, 'MongoDB connection error:')
-)
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use(cors())
 app.use(express.static('dist'))

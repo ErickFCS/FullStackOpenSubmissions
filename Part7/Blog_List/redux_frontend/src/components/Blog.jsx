@@ -21,16 +21,13 @@ const Blog = ({ blog }) => {
             })
     }
     const removeHandler = () => {
-        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`))
-            return
+        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`)) return
         dispatch(removeBlog(blog, user))
             .then((res) => {
                 dispatch(newNotification(`${blog.title} removed`, 5))
             })
             .catch((err) => {
-                dispatch(
-                    newNotification(`unable to remove ${blog.title}`, 5, true)
-                )
+                dispatch(newNotification(`unable to remove ${blog.title}`, 5, true))
             })
         navigate('/')
     }
@@ -43,12 +40,16 @@ const Blog = ({ blog }) => {
         <>
             <h2>{blog.title}</h2>
             <a href={blog.url}>{blog.url}</a>
-            <p>likes {blog.likes}<button onClick={likesHandler}>like</button></p>
+            <p>
+                likes {blog.likes}
+                <button onClick={likesHandler}>like</button>
+            </p>
             <p>added by {blog.author}</p>
-            {user.id === blog.User.id ?
-                <p><button onClick={removeHandler}>remove</button></p>
-                : null
-            }
+            {user.id === blog.User.id ? (
+                <p>
+                    <button onClick={removeHandler}>remove</button>
+                </p>
+            ) : null}
             <h3>comments</h3>
             <form onSubmit={commentHandler}>
                 <input {...comment.values} placeholder='comment here' />

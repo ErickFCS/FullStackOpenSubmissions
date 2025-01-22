@@ -22,7 +22,7 @@ const blogSlice = createSlice({
     },
 })
 
-export const { appendBlog, deleteBlog, setBlogs, updateBlog, } = blogSlice.actions
+export const { appendBlog, deleteBlog, setBlogs, updateBlog } = blogSlice.actions
 
 export const initializeBlogs = () => async (dispatch) => {
     blogsService
@@ -75,18 +75,20 @@ export const removeBlog = (blog, user) => async (dispatch) => {
         })
 }
 
-export const addComment = (blog, user, comment) => (
-    async (dispatch) => {
-        return blogsService.commentBlog(blog, user, comment)
-            .then((res) => {
-                const updatedBlog = { ...blog, comments: blog.comments.concat(comment) }
-                dispatch(updateBlog(updatedBlog))
-            })
-            .catch((err) => {
-                console.error(err)
-                return Promise.reject(err)
-            })
-    }
-)
+export const addComment = (blog, user, comment) => async (dispatch) => {
+    return blogsService
+        .commentBlog(blog, user, comment)
+        .then((res) => {
+            const updatedBlog = {
+                ...blog,
+                comments: blog.comments.concat(comment),
+            }
+            dispatch(updateBlog(updatedBlog))
+        })
+        .catch((err) => {
+            console.error(err)
+            return Promise.reject(err)
+        })
+}
 
 export default blogSlice.reducer

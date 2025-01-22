@@ -13,7 +13,7 @@ const CreateForm = ({ createHandler }) => {
                 author.methods.reset()
                 url.methods.reset()
             })
-            .catch((err) => { })
+            .catch((err) => {})
     }
 
     return (

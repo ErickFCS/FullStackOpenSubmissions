@@ -17,9 +17,7 @@ const getToken = (request, response, next) => {
         authorization && authorization.startsWith('Bearer ')
             ? authorization.replace('Bearer ', '')
             : ''
-    request.decodedToken = request.token
-        ? jwt.verify(request.token, config.JWT_SECRET)
-        : {}
+    request.decodedToken = request.token ? jwt.verify(request.token, config.JWT_SECRET) : {}
     next()
 }
 
@@ -43,9 +41,7 @@ const errorHandler = (error, request, response, next) => {
         error.name === 'MongoServerError' &&
         error.message.includes('E11000 duplicate key error')
     ) {
-        return response
-            .status(400)
-            .json({ error: 'expected `username` to be unique' })
+        return response.status(400).json({ error: 'expected `username` to be unique' })
     } else if (error.name === 'JsonWebTokenError') {
         return response.status(401).json({ error: 'invalid token' })
     }

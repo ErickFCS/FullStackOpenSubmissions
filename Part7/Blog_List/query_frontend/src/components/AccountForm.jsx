@@ -18,8 +18,7 @@ const AccountForm = () => {
             .then((newUser) => {
                 userDispatch(setUser(newUser))
                 window.localStorage.setItem('user', JSON.stringify(newUser))
-                if (notification.lastTimeOut)
-                    clearTimeout(notification.lastTimeOut)
+                if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
                 const timeOut = setTimeout(() => {
                     notificationDispatch(clearNotification())
                 }, 5000)
@@ -33,8 +32,7 @@ const AccountForm = () => {
                 password.methods.reset()
             })
             .catch((err) => {
-                if (notification.lastTimeOut)
-                    clearTimeout(notification.lastTimeOut)
+                if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
                 const timeOut = setTimeout(() => {
                     notificationDispatch(clearNotification())
                 }, 5000)

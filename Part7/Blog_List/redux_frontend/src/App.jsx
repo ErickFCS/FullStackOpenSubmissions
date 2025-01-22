@@ -33,10 +33,10 @@ const App = () => {
             .then((res) => {
                 setUsers(res)
             })
-            .catch((err) => { })
+            .catch((err) => {})
     }, [])
 
-    const createHandler = (title, author, url) => (
+    const createHandler = (title, author, url) =>
         dispatch(newBlog(title, author, url, user))
             .then(() => {
                 dispatch(newNotification('blog creating successed', 5))
@@ -45,44 +45,39 @@ const App = () => {
                 console.error(err)
                 dispatch(newNotification('blog creating failed', 5, true))
             })
-    )
     const targetUser = matchUserId ? users.find((e) => e.id === matchUserId.params.id) : null
     const targetBlog = matchBlogId ? blogs.find((e) => e.id === matchBlogId.params.id) : null
     return (
         <>
             <Message message={message} error={error} />
-            {user.name ?
+            {user.name ? (
                 <div>
                     <Link to='/'>blogs</Link>
                     <Link to='/users'>users</Link>
                 </div>
-                : null
-            }
+            ) : null}
             <AccountForm />
             <Routes>
-                <Route path='/' element={
-                    <>
-                        {user.name ? (
-                            <>
-                                <Toggle
-                                    showButtonText='create new blog'
-                                    hideButtonText='cancel'>
-                                    <CreateForm createHandler={createHandler} />
-                                </Toggle>
-                                <Blogs blogs={blogs} />
-                            </>
-                        ) : null}
-                    </>
-                } />
-                <Route path='/blogs/:id' element={
-                    <Blog blog={targetBlog} />
-                } />
-                <Route path='/users' element={
-                    <Users users={users} />
-                } />
-                <Route path='/users/:id' element={
-                    <User user={targetUser} />
-                } />
+                <Route
+                    path='/'
+                    element={
+                        <>
+                            {user.name ? (
+                                <>
+                                    <Toggle
+                                        showButtonText='create new blog'
+                                        hideButtonText='cancel'>
+                                        <CreateForm createHandler={createHandler} />
+                                    </Toggle>
+                                    <Blogs blogs={blogs} />
+                                </>
+                            ) : null}
+                        </>
+                    }
+                />
+                <Route path='/blogs/:id' element={<Blog blog={targetBlog} />} />
+                <Route path='/users' element={<Users users={users} />} />
+                <Route path='/users/:id' element={<User user={targetUser} />} />
                 <Route path='*' element={<div>Unknown route</div>} />
             </Routes>
         </>

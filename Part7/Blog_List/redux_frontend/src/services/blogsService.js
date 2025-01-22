@@ -74,7 +74,7 @@ const commentBlog = async (blog, user, comment) => {
             Authorization: `Bearer ${user.token}`,
         },
         data: {
-            comment
+            comment,
         },
     }
     return axios

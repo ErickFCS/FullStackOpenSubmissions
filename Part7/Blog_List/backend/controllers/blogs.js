@@ -13,10 +13,8 @@ BlogsRouter.get('/', async (request, response) => {
 })
 
 BlogsRouter.post('/', async (request, response) => {
-    if (!request.decodedToken.id)
-        return response.status(401).json({ error: 'token invalid' })
-    if (!request.user)
-        return response.status(401).json({ error: 'no valid user' })
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const { title, url } = request.body
     const author = request.user.username
     let blog = new Blog({ title, author, url })
@@ -28,10 +26,8 @@ BlogsRouter.post('/', async (request, response) => {
 })
 
 BlogsRouter.post('/:id/comments', async (request, response) => {
-    if (!request.decodedToken.id)
-        return response.status(401).json({ error: 'token invalid' })
-    if (!request.user)
-        return response.status(401).json({ error: 'no valid user' })
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const blog = await Blog.findOne({ _id: request.params.id })
     if (!blog) return response.status(404).json({ error: 'no valid blog' })
     const { comment } = request.body
@@ -42,28 +38,22 @@ BlogsRouter.post('/:id/comments', async (request, response) => {
 })
 
 BlogsRouter.delete('/:id', async (request, response) => {
-    if (!request.decodedToken.id)
-        return response.status(401).json({ error: 'token invalid' })
-    if (!request.user)
-        return response.status(401).json({ error: 'no valid user' })
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const blog = await Blog.findOne({ _id: request.params.id })
     if (!blog) return response.status(404).json({ error: 'no valid blog' })
     if (blog.User.toString() !== request.decodedToken.id)
-        return response
-            .status(401)
-            .json({ error: 'You dont have permission to delete this blog' })
+        return response.status(401).json({ error: 'You dont have permission to delete this blog' })
     await Blog.deleteOne({ _id: request.params.id })
-    request.user.Blog = request.user.Blog.filter((e) => (e.toString() !== request.params.id))
-    console.log("user blog", request.user.Blog)
+    request.user.Blog = request.user.Blog.filter((e) => e.toString() !== request.params.id)
+    console.log('user blog', request.user.Blog)
     await request.user.save()
     response.status(204).end()
 })
 
 BlogsRouter.put('/:id', async (request, response) => {
-    if (!request.decodedToken.id)
-        return response.status(401).json({ error: 'token invalid' })
-    if (!request.user)
-        return response.status(401).json({ error: 'no valid user' })
+    if (!request.decodedToken.id) return response.status(401).json({ error: 'token invalid' })
+    if (!request.user) return response.status(401).json({ error: 'no valid user' })
     const blog = await Blog.findOne({ _id: request.params.id })
     if (!blog) return response.status(404).json({ error: 'no valid blog' })
     const { title, author, url, likes } = request.body

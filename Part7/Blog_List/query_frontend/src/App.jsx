@@ -84,7 +84,8 @@ const App = () => {
         },
     })
 
-    const createHandler = (title, author, url) => (blogsMutation.mutateAsync({ blog: { title, author, url }, user }))
+    const createHandler = (title, author, url) =>
+        blogsMutation.mutateAsync({ blog: { title, author, url }, user })
 
     if (blogsResult.isFetching) return <div>...Loading</div>
     if (blogsResult.error) return <div>Unable to reach server</div>
@@ -95,39 +96,57 @@ const App = () => {
     return (
         <>
             <Message message={notification.message} error={notification.error} />
-            {user.name ?
+            {user.name ? (
                 <div>
                     <Link to='/'>blogs</Link>
                     <Link to='/users'>users</Link>
                 </div>
-                : null
-            }
+            ) : null}
             <AccountForm />
             <Routes>
-                {user.name ? (<>
-                    <Route path='/' element={<>
-                        <Toggle
-                            showButtonText='create new blog'
-                            hideButtonText='cancel'>
-                            <CreateForm createHandler={createHandler} />
-                        </Toggle>
-                        <Blogs blogs={blogs} user={user} />
-                    </>} />
-                    <Route path='/blogs/:id' element={<>
-                        {targetBlog ?
-                            <Blog blog={targetBlog} /> :
-                            <Navigate replace to='/' />
-                        }
-                    </>} />
-                    <Route path='/users' element={<Users users={users} />} />
-                    <Route path='/users/:id' element={<>
-                        {targetUser ?
-                            <User user={targetUser} /> :
-                            <Navigate replace to='/' />
-                        }
-                    </>} />
-                </>) : null}
-            </Routes >
+                {user.name ? (
+                    <>
+                        <Route
+                            path='/'
+                            element={
+                                <>
+                                    <Toggle
+                                        showButtonText='create new blog'
+                                        hideButtonText='cancel'>
+                                        <CreateForm createHandler={createHandler} />
+                                    </Toggle>
+                                    <Blogs blogs={blogs} user={user} />
+                                </>
+                            }
+                        />
+                        <Route
+                            path='/blogs/:id'
+                            element={
+                                <>
+                                    {targetBlog ? (
+                                        <Blog blog={targetBlog} />
+                                    ) : (
+                                        <Navigate replace to='/' />
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route path='/users' element={<Users users={users} />} />
+                        <Route
+                            path='/users/:id'
+                            element={
+                                <>
+                                    {targetUser ? (
+                                        <User user={targetUser} />
+                                    ) : (
+                                        <Navigate replace to='/' />
+                                    )}
+                                </>
+                            }
+                        />
+                    </>
+                ) : null}
+            </Routes>
         </>
     )
 }

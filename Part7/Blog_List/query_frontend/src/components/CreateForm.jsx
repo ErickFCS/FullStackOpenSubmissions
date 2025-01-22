@@ -14,7 +14,9 @@ const CreateForm = ({ createHandler }) => {
                 title.methods.reset()
                 url.methods.reset()
             })
-            .catch((err) => { console.error(err) })
+            .catch((err) => {
+                console.error(err)
+            })
     }
 
     return (
@@ -22,13 +24,13 @@ const CreateForm = ({ createHandler }) => {
             <h2>create new</h2>
             <form onSubmit={onSubmitHandler}>
                 title:
-                <input {...title.values} placeholder="author" />
+                <input {...title.values} placeholder='author' />
                 <br />
                 author:
-                <input {...author.values} placeholder="title" />
+                <input {...author.values} placeholder='title' />
                 <br />
                 url:
-                <input {...url.values} placeholder="url" />
+                <input {...url.values} placeholder='url' />
                 <br />
                 <button type='submit'>create</button>
             </form>

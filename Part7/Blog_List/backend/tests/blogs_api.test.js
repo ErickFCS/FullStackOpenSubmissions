@@ -100,9 +100,7 @@ describe('Blogs API tests', () => {
             .expect(200)
             .expect('Content-Type', /application\/json/)
         assert.strictEqual(
-            result.body.every(
-                (e) => Object.hasOwn(e, 'id') && !Object.hasOwn(e, '_id')
-            ),
+            result.body.every((e) => Object.hasOwn(e, 'id') && !Object.hasOwn(e, '_id')),
             true
         )
     })
@@ -120,10 +118,7 @@ describe('Blogs API tests', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
         const { title, author, url, likes } = result.body
-        assert.deepStrictEqual(
-            { title, author, url, likes },
-            { ...newBlog, likes: 0 }
-        )
+        assert.deepStrictEqual({ title, author, url, likes }, { ...newBlog, likes: 0 })
         const result2 = await api
             .get('/api/blogs')
             .expect(200)
@@ -156,10 +151,7 @@ describe('Blogs API tests', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
         const { title, author, url, likes } = result.body
-        assert.deepStrictEqual(
-            { title, author, url, likes },
-            { ...newBlog, likes: 0 }
-        )
+        assert.deepStrictEqual({ title, author, url, likes }, { ...newBlog, likes: 0 })
     })
     test('Verify bad request', async () => {
         const newBlog = {
@@ -183,9 +175,7 @@ describe('Blogs API tests', () => {
     })
     test('Delete request to /api/blogs/:id', async () => {
         const { body: blogs } = await api.get('/api/blogs')
-        await api
-            .delete(`/api/blogs/${blogs[0].id}`)
-            .set({ Authorization: `Bearer ${token}` })
+        await api.delete(`/api/blogs/${blogs[0].id}`).set({ Authorization: `Bearer ${token}` })
         const { body: result } = await api.get('/api/blogs')
         assert.deepStrictEqual(result, blogs.slice(1))
     })

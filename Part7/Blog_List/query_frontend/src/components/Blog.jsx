@@ -20,17 +20,13 @@ const Blog = ({ blog }) => {
             let blogs = queryClient.getQueryData(['blogs'])
             queryClient.setQueryData(
                 ['blogs'],
-                blogs.map((e) =>
-                    e.id !== res.id ? e : { ...e, likes: e.likes + 1 }
-                )
+                blogs.map((e) => (e.id !== res.id ? e : { ...e, likes: e.likes + 1 }))
             )
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
             }, 5000)
-            notificationDispatch(
-                setNotification({ message: 'Liked', lastTimeOut: timeOut })
-            )
+            notificationDispatch(setNotification({ message: 'Liked', lastTimeOut: timeOut }))
         },
         onError: (err) => {
             console.error(err)
@@ -53,15 +49,13 @@ const Blog = ({ blog }) => {
             let blogs = queryClient.getQueryData(['blogs'])
             queryClient.setQueryData(
                 ['blogs'],
-                blogs.map((e) => e.id !== res.id ? e : res)
+                blogs.map((e) => (e.id !== res.id ? e : res))
             )
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
                 notificationDispatch(clearNotification())
             }, 5000)
-            notificationDispatch(
-                setNotification({ message: 'commented', lastTimeOut: timeOut })
-            )
+            notificationDispatch(setNotification({ message: 'commented', lastTimeOut: timeOut }))
         },
         onError: (err) => {
             console.error(err)
@@ -81,9 +75,7 @@ const Blog = ({ blog }) => {
         mutationKey: ['blogs'],
         mutationFn: BlogsService.deleteBlog,
         onSuccess: (res) => {
-            const newBlogs = queryClient
-                .getQueryData(['blogs'])
-                .filter((e) => e.id !== res.id)
+            const newBlogs = queryClient.getQueryData(['blogs']).filter((e) => e.id !== res.id)
             queryClient.setQueryData(['blogs'], newBlogs)
             if (notification.lastTimeOut) clearTimeout(notification.lastTimeOut)
             const timeOut = setTimeout(() => {
@@ -110,29 +102,38 @@ const Blog = ({ blog }) => {
         },
     })
 
-    const likesHandler = () => { blogsLikeMutation.mutate({ blog, user }) }
+    const likesHandler = () => {
+        blogsLikeMutation.mutate({ blog, user })
+    }
 
     const removeHandler = () => {
-        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`))
-            return
+        if (!window.confirm(`Are you sure yo want to remove ${blog.title}?`)) return
         blogsDeleteMutation.mutate({ blog, user })
     }
 
     const commentHandler = (event) => {
         event.preventDefault()
-        blogsCommentMutation.mutate({ blog, user, comment: comment.values.value })
+        blogsCommentMutation.mutate({
+            blog,
+            user,
+            comment: comment.values.value,
+        })
         comment.methods.reset()
     }
     return (
         <>
             <h2>{blog.title}</h2>
             <a href={blog.url}>{blog.url}</a>
-            <p>likes {blog.likes}<button onClick={likesHandler}>like</button></p>
+            <p>
+                likes {blog.likes}
+                <button onClick={likesHandler}>like</button>
+            </p>
             <p>added by {blog.author}</p>
-            {user.id === blog.User.id ?
-                <p><button onClick={removeHandler}>remove</button></p>
-                : null
-            }
+            {user.id === blog.User.id ? (
+                <p>
+                    <button onClick={removeHandler}>remove</button>
+                </p>
+            ) : null}
             <h3>comments</h3>
             <form onSubmit={commentHandler}>
                 <input {...comment.values} placeholder='comment here' />

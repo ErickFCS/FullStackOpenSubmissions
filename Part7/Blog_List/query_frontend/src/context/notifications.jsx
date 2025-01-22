@@ -11,11 +11,7 @@ const notificationReducer = (state, action) => {
     }
 }
 
-export const setNotification = ({
-    message = '',
-    error = '',
-    lastTimeOut = null,
-}) => ({
+export const setNotification = ({ message = '', error = '', lastTimeOut = null }) => ({
     type: 'SET',
     payload: { message, error, lastTimeOut },
 })
@@ -28,13 +24,12 @@ export const clearNotification = () => ({
 const notificationContext = createContext()
 
 export const NotificationContextProvider = (props) => {
-    const [notification, notificationDispatch] = useReducer(
-        notificationReducer,
-        { message: '', error: '' }
-    )
+    const [notification, notificationDispatch] = useReducer(notificationReducer, {
+        message: '',
+        error: '',
+    })
     return (
-        <notificationContext.Provider
-            value={[notification, notificationDispatch]}>
+        <notificationContext.Provider value={[notification, notificationDispatch]}>
             {props.children}
         </notificationContext.Provider>
     )
