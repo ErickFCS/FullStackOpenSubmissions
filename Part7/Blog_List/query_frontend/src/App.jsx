@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import { useEffect } from 'react'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import AccountForm from './components/AccountForm'
+import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import BlogService from './services/blogsService'
 import CreateForm from './components/CreateForm'
@@ -20,7 +21,8 @@ import userService from './services/userService'
 const App = () => {
     const [notification, notificationDispatch] = useContext(notificationContext)
     const [user, userDispatch] = useContext(userContext)
-    const match = useMatch('/users/:id')
+    const matchUserId = useMatch('/users/:id')
+    const matchBlogId = useMatch('/blogs/:id')
 
     useEffect(() => {
         const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
@@ -88,7 +90,8 @@ const App = () => {
     if (blogsResult.error) return <div>Unable to reach server</div>
     const blogs = blogsResult.data
     const users = usersResult.data
-    const targetUser = match ? users.find((e) => e.id === match.params.id) : null
+    const targetUser = matchUserId ? users.find((e) => e.id === matchUserId.params.id) : null
+    const targetBlog = matchBlogId ? blogs.find((e) => e.id === matchBlogId.params.id) : null
     return (
         <>
             <Message message={notification.message} error={notification.error} />
@@ -102,6 +105,12 @@ const App = () => {
                             <CreateForm createHandler={createHandler} />
                         </Toggle>
                         <Blogs blogs={blogs} user={user} />
+                    </>} />
+                    <Route path='/blogs/:id' element={<>
+                        {targetBlog ?
+                            <Blog blog={targetBlog} /> :
+                            <Navigate replace to='/' />
+                        }
                     </>} />
                     <Route path='/users' element={<Users users={users} />} />
                     <Route path='/users/:id' element={<>
