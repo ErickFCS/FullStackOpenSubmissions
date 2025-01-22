@@ -1,5 +1,5 @@
 import './index.css'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 import { setNotification, clearNotification } from './context/notifications'
 import { setUser } from './context/user'
 import { useContext } from 'react'
@@ -12,19 +12,30 @@ import CreateForm from './components/CreateForm'
 import Message from './components/Message'
 import notificationContext from './context/notifications'
 import Toggle from './components/Toggle'
+import User from './components/User'
 import userContext from './context/user'
 import Users from './components/Users'
+import userService from './services/userService'
 
 const App = () => {
     const [notification, notificationDispatch] = useContext(notificationContext)
     const [user, userDispatch] = useContext(userContext)
+    const match = useMatch('/users/:id')
 
     useEffect(() => {
         const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
         if (savedUser.name) userDispatch(setUser(savedUser))
     }, [])
 
-    const result = useQuery({
+    const usersResult = useQuery({
+        initialData: [],
+        queryKey: ['users'],
+        queryFn: userService.fetchAll,
+        retry: 3,
+        retryDelay: 1000,
+        refetchOnWindowFocus: false,
+    })
+    const blogsResult = useQuery({
         initialData: [],
         queryKey: ['blogs'],
         queryFn: BlogService.getAll,
@@ -73,9 +84,11 @@ const App = () => {
 
     const createHandler = (title, author, url) => (blogsMutation.mutateAsync({ blog: { title, author, url }, user }))
 
-    if (result.isFetching) return <div>...Loadiing</div>
-    if (result.error) return <div>Unable to reach server</div>
-    const blogs = result.data
+    if (blogsResult.isFetching) return <div>...Loading</div>
+    if (blogsResult.error) return <div>Unable to reach server</div>
+    const blogs = blogsResult.data
+    const users = usersResult.data
+    const targetUser = match ? users.find((e) => e.id === match.params.id) : null
     return (
         <>
             <Message message={notification.message} error={notification.error} />
@@ -90,7 +103,13 @@ const App = () => {
                         </Toggle>
                         <Blogs blogs={blogs} user={user} />
                     </>} />
-                    <Route path='/users' element={<Users />} />
+                    <Route path='/users' element={<Users users={users} />} />
+                    <Route path='/users/:id' element={<>
+                        {targetUser ?
+                            <User user={targetUser} /> :
+                            <Navigate replace to='/' />
+                        }
+                    </>} />
                 </>) : null}
             </Routes >
         </>

@@ -1,18 +1,7 @@
-import { useEffect, useState } from 'react'
-import userService from '../services/userService'
+import { Link } from "react-router-dom"
 
-const Users = () => {
-    const [users, setUsers] = useState([])
-    useEffect(() => {
-        userService
-            .fetchAll()
-            .then((res) => {
-                setUsers(res)
-            })
-            .catch((err) => {
-                console.error(err)
-            })
-    }, [])
+
+const Users = ({ users }) => {
     return (
         <>
             <h2>Users</h2>
@@ -26,7 +15,7 @@ const Users = () => {
                 <tbody>
                     {users.map((e, i) => (
                         <tr key={i}>
-                            <td>{e.username}</td>
+                            <td><Link to={e.id}>{e.username}</Link></td>
                             <td>{e.Blog.length}</td>
                         </tr>
                     ))}
