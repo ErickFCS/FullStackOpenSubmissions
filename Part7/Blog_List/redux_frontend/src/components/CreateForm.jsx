@@ -1,5 +1,8 @@
 import useInput from '../hooks/useInput'
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 const CreateForm = ({ createHandler }) => {
     const title = useInput('text')
     const author = useInput('text')
@@ -13,24 +16,28 @@ const CreateForm = ({ createHandler }) => {
                 author.methods.reset()
                 url.methods.reset()
             })
-            .catch((err) => {})
+            .catch((err) => { })
     }
 
     return (
         <>
             <h2>create new</h2>
-            <form onSubmit={onSubmitHandler}>
-                title:
-                <input {...title.values} placeholder='title' />
+            <Form onSubmit={onSubmitHandler}>
+                <Form.Group>
+                    <Form.Label>title:</Form.Label>
+                    <Form.Control {...title.values} placeholder='title' />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>author:</Form.Label>
+                    <Form.Control {...author.values} placeholder='author' />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>url:</Form.Label>
+                    <Form.Control {...url.values} placeholder='url' />
+                </Form.Group>
                 <br />
-                author:
-                <input {...author.values} placeholder='author' />
-                <br />
-                url:
-                <input {...url.values} placeholder='url' />
-                <br />
-                <button type='submit'>create</button>
-            </form>
+                <Button variant='success' type='submit'>create</Button>
+            </Form>
         </>
     )
 }

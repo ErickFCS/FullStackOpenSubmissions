@@ -15,6 +15,10 @@ import User from './components/User'
 import Users from './components/Users'
 import userService from './services/userService'
 
+import Container from 'react-bootstrap/Container'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+
 const App = () => {
     const [users, setUsers] = useState([])
     const { message, error } = useSelector((state) => state.notification)
@@ -33,7 +37,7 @@ const App = () => {
             .then((res) => {
                 setUsers(res)
             })
-            .catch((err) => {})
+            .catch((err) => { })
     }, [])
 
     const createHandler = (title, author, url) =>
@@ -51,35 +55,45 @@ const App = () => {
         <>
             <Message message={message} error={error} />
             {user.name ? (
-                <div>
-                    <Link to='/'>blogs</Link>
-                    <Link to='/users'>users</Link>
-                </div>
+                <Nav className="justify-content-center">
+                    <Nav.Item>
+                        <Nav.Link as='div'>
+                            <Link to='/'>blogs</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link as='div'>
+                            <Link to='/users'>users</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
             ) : null}
             <AccountForm />
-            <Routes>
-                <Route
-                    path='/'
-                    element={
-                        <>
-                            {user.name ? (
-                                <>
-                                    <Toggle
-                                        showButtonText='create new blog'
-                                        hideButtonText='cancel'>
-                                        <CreateForm createHandler={createHandler} />
-                                    </Toggle>
-                                    <Blogs blogs={blogs} />
-                                </>
-                            ) : null}
-                        </>
-                    }
-                />
-                <Route path='/blogs/:id' element={<Blog blog={targetBlog} />} />
-                <Route path='/users' element={<Users users={users} />} />
-                <Route path='/users/:id' element={<User user={targetUser} />} />
-                <Route path='*' element={<div>Unknown route</div>} />
-            </Routes>
+            {user.name ? (
+                <Routes>
+                    <Route
+                        path='/'
+                        element={
+                            <>
+                                {user.name ? (
+                                    <>
+                                        <Toggle
+                                            showButtonText='create new blog'
+                                            hideButtonText='cancel'>
+                                            <CreateForm createHandler={createHandler} />
+                                        </Toggle>
+                                        <Blogs blogs={blogs} />
+                                    </>
+                                ) : null}
+                            </>
+                        }
+                    />
+                    <Route path='/blogs/:id' element={<Blog blog={targetBlog} />} />
+                    <Route path='/users' element={<Users users={users} />} />
+                    <Route path='/users/:id' element={<User user={targetUser} />} />
+                    <Route path='*' element={<div>Unknown route</div>} />
+                </Routes>
+            ) : null}
         </>
     )
 }

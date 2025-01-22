@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import useInput from '../hooks/useInput'
 
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/esm/ListGroup'
+
 const Blog = ({ blog }) => {
     if (!blog) return null
     const dispatch = useDispatch()
@@ -41,25 +45,29 @@ const Blog = ({ blog }) => {
             <h2>{blog.title}</h2>
             <a href={blog.url}>{blog.url}</a>
             <p>
-                likes {blog.likes}
-                <button onClick={likesHandler}>like</button>
+                likes {blog.likes}{' '}
+                <Button variant='success' onClick={likesHandler}>like</Button>
             </p>
             <p>added by {blog.author}</p>
             {user.id === blog.User.id ? (
-                <p>
-                    <button onClick={removeHandler}>remove</button>
-                </p>
+                <Button variant='danger' onClick={removeHandler}>remove</Button>
             ) : null}
             <h3>comments</h3>
-            <form onSubmit={commentHandler}>
-                <input {...comment.values} placeholder='comment here' />
-                <button type='submit'>comment</button>
-            </form>
-            <ul>
+            <Form onSubmit={commentHandler}>
+                <Form.Group>
+                    <Form.Label>Comment your thoughts:</Form.Label>
+                    <Form.Control {...comment.values} placeholder='comment here' />
+                </Form.Group>
+                <div className='smallSpace' />
+                <Button variant='success' type='submit'>comment</Button>
+            </Form>
+            <div className='smallSpace' />
+            <div className='smallSpace' />
+            <ListGroup>
                 {blog.comments.map((e, i) => (
-                    <li key={i}>{e}</li>
+                    <ListGroup.Item key={i}>{e}</ListGroup.Item>
                 ))}
-            </ul>
+            </ListGroup>
         </>
     )
 }

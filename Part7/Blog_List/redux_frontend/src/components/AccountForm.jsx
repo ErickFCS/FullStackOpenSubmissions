@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import AccountService from '../services/accountService'
 import useInput from '../hooks/useInput'
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 const AccountForm = () => {
     const dispatch = useDispatch()
     const password = useInput('password')
@@ -35,25 +38,29 @@ const AccountForm = () => {
         return (
             <>
                 <h2>log in to application</h2>
-                <form onSubmit={loginHandler}>
-                    username:
-                    <input {...username.values} placeholder='username' />
-                    <br />
-                    password:
-                    <input {...password.values} placeholder='password' />
-                    <br />
-                    <button type='submit'>login</button>
-                </form>
+                <Form onSubmit={loginHandler}>
+                    <Form.Group>
+                        <Form.Label>username:</Form.Label>
+                        <Form.Control {...username.values} placeholder='username' />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>password:</Form.Label>
+                        <Form.Control {...password.values} placeholder='password' />
+                    </Form.Group>
+                    <Form.Group>
+                        <Button type='submit'>login</Button>
+                    </Form.Group>
+                </Form>
             </>
         )
     else
         return (
-            <div>
-                {user.username} is logged in
-                <button type='button' onClick={logoutHandler}>
-                    logout
-                </button>
-            </div>
+            <Form id='login_status'>
+                <Form.Group>
+                    <Form.Label>{user.username} is logged in</Form.Label>{' '}
+                    <Button variant='warning' type='button' onClick={logoutHandler}>logout</Button>
+                </Form.Group>
+            </Form>
         )
 }
 
