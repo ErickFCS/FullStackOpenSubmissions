@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import useInput from '../hooks/useInput'
+import { ADD_BOOK } from '../graphql/querys'
+import { useMutation } from '@apollo/client'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -10,9 +12,18 @@ const NewBook = () => {
   const published = useInput('text', 'published', 'published')
   const genre = useInput('text', 'genre', 'genre')
   const [genres, setGenres] = useState([])
+  const [addBook] = useMutation(ADD_BOOK)
 
   const submit = async (event) => {
     event.preventDefault()
+    addBook({
+      variables: {
+        title: title.value,
+        published: Number(published.value) || 0,
+        author: author.value,
+        genres: genres
+      }
+    })
     title.reset()
     published.reset()
     author.reset()
