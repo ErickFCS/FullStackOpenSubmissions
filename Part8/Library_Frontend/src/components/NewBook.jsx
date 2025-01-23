@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button'
 const NewBook = () => {
   const title = useInput('text', 'title', 'title')
   const author = useInput('text', 'author', 'author')
-  const published = useInput('text', 'published', 'published')
+  const published = useInput('number', 'published', 'published')
   const genre = useInput('text', 'genre', 'genre')
   const [genres, setGenres] = useState([])
   const [addBook] = useMutation(ADD_BOOK)
