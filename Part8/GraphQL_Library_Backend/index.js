@@ -4,7 +4,6 @@ import 'dotenv/config'
 import { ApolloServer } from '@apollo/server'
 import { mongoose } from 'mongoose'
 import { startStandaloneServer } from '@apollo/server/standalone'
-import { v1 as uuid } from 'uuid'
 import book from './models/books.js'
 import author from './models/authors.js'
 
@@ -58,13 +57,10 @@ const resolvers = {
             return await author.countDocuments({})
         },
         allBooks: async (root, args) => {
-            return await book.find({}).populate('author')
-            // let res = books
-            // if (args.author)
-            //     res = res.filter((e) => e.author === args.author)
-            // if (args.genre)
-            //     res = res.filter((e) => e.genres.some((ee) => ee === args.genre))
-            // return res
+            const authorId = await author.findOne({ name: args.author })
+            let query = args.author ? { author: authorId } : {}
+            query = args.genre ? { ...query, genres: args.genre } : query
+            return await book.find(query).populate('author')
         },
         allAuthors: async () => {
             return await author.find({})
@@ -83,16 +79,17 @@ const resolvers = {
             const savedBook = await newBook.save()
             return await savedBook.populate('author')
         },
-        editAuthor: (root, args) => {
-            return null
-            // const target = authors.find((e) => e.name == args.name)
-            // if (!target) return null
-            // target.born = args.setBornTo
-            // return target
+        editAuthor: async (root, args) => {
+            const target = await author.findOne({ name: args.name })
+            if (!target) return null
+            target.born = args.setBornTo
+            return await target.save()
         }
     },
     author: {
-        bookCount: (root) => 0
+        bookCount: async (root) => {
+            return await book.countDocuments({ author: root.id })
+        }
     }
 }
 
