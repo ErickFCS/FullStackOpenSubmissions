@@ -4,6 +4,7 @@ import 'dotenv/config'
 import { ApolloServer } from '@apollo/server'
 import { mongoose } from 'mongoose'
 import { startStandaloneServer } from '@apollo/server/standalone'
+import { GraphQLError } from 'graphql'
 import book from './models/books.js'
 import author from './models/authors.js'
 
@@ -76,14 +77,40 @@ const resolvers = {
                 newBookAuthor = await newBookAuthor.save()
             }
             const newBook = new book({ ...args, author: newBookAuthor.id })
-            const savedBook = await newBook.save()
+            try {
+                const savedBook = await newBook.save()
+            } catch (error) {
+                throw new GraphQLError('Saving book failed', {
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                        invalidArgs: args.author,
+                        error
+                    }
+                })
+            }
             return await savedBook.populate('author')
         },
         editAuthor: async (root, args) => {
             const target = await author.findOne({ name: args.name })
-            if (!target) return null
+            if (!target) throw new GraphQLError('Author do not exist', {
+                extensions: {
+                    code: 'BAD_USER_INPUT',
+                    invalidArgs: args.name,
+                    error
+                }
+            })
             target.born = args.setBornTo
-            return await target.save()
+            try {
+                return await target.save()
+            } catch (error) {
+                throw new GraphQLError('Saving person failed', {
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                        invalidArgs: args.name,
+                        error
+                    }
+                })
+            }
         }
     },
     author: {
