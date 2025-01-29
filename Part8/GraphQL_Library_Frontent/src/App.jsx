@@ -1,10 +1,11 @@
-import Authors from './components/Authors'
-import Books from './components/Books'
-import NewBook from './components/NewBook'
-import EditAuthorBirth from './components/EditAuthorBirth'
-import LoginForm from './components/LoginForm'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import Authors from './components/Authors'
+import Books from './components/Books'
+import EditAuthorBirth from './components/EditAuthorBirth'
+import LoginForm from './components/LoginForm'
+import NewBook from './components/NewBook'
+import Recommendations from './components/Recommendations'
 
 import Nav from 'react-bootstrap/Nav'
 
@@ -29,6 +30,7 @@ const App = () => {
         <>
           <Nav typeof='div' variant='tabs' fill>
             <Nav.Item><Link to='/authors'>authors</Link></Nav.Item>
+            <Nav.Item><Link to='/recommended'>recommended</Link></Nav.Item>
             <Nav.Item><Link to='/books'>books</Link></Nav.Item>
             <Nav.Item><Link to='/add'>add</Link></Nav.Item>
           </Nav>
@@ -39,6 +41,7 @@ const App = () => {
                 <EditAuthorBirth />
               </>
             } />
+            <Route path='/recommended' element={<Recommendations />} />
             <Route path='/books' element={<Books />} />
             <Route path='/add' element={<NewBook />} />
             <Route path='/*' element={<Navigate replace to='/authors' />} />

@@ -15,6 +15,7 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
+      {filter ? <p>in genre {filter}</p> : null}
       <Table>
         <tbody>
           <tr>

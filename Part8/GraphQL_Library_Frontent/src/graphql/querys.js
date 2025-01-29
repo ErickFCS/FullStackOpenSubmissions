@@ -53,3 +53,11 @@ mutation Mutation($username: String!, $password: String!) {
   }
 }
 `
+
+export const ME = gql`
+query Me {
+  me {
+    favoriteGenre
+  }
+}
+`
