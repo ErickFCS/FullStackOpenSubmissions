@@ -10,7 +10,8 @@ const Books = () => {
   const allBooks = useQuery(ALL_BOOKS, {
     variables: {
       genre: filter
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 
   if (allBooks.loading) return <div>...loading</div>
