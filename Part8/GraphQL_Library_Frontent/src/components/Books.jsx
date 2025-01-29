@@ -6,11 +6,15 @@ import Button from 'react-bootstrap/esm/Button'
 import { useState } from 'react'
 
 const Books = () => {
-  const allBooks = useQuery(ALL_BOOKS)
   const [filter, setFilter] = useState(null)
+  const allBooks = useQuery(ALL_BOOKS, {
+    variables: {
+      genre: filter
+    }
+  })
 
   if (allBooks.loading) return <div>...loading</div>
-  const genres = [...new Set(allBooks.data.allBooks.flatMap((e) => e.genres))]
+  const genres = ["refactoring", "agile", "patterns", "design", "classic", "crime", "revolution"]
   const books = filter ? allBooks.data.allBooks.filter((e) => (e.genres.includes(filter))) : allBooks.data.allBooks
   return (
     <div>
