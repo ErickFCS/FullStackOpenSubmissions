@@ -27,7 +27,7 @@ const App = () => {
       <LoginForm handleLog={handleLog} token={token} />
       {token ?
         <>
-          <Nav>
+          <Nav typeof='div' variant='tabs' fill>
             <Nav.Item><Link to='/authors'>authors</Link></Nav.Item>
             <Nav.Item><Link to='/books'>books</Link></Nav.Item>
             <Nav.Item><Link to='/add'>add</Link></Nav.Item>
