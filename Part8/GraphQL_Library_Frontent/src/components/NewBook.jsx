@@ -1,18 +1,37 @@
-import { useState } from 'react'
-import useInput from '../hooks/useInput'
 import { ADD_BOOK } from '../graphql/querys'
+import { ALL_BOOKS } from '../graphql/querys'
+import { BOOK_ADDED } from '../graphql/querys'
 import { useMutation } from '@apollo/client'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useSubscription } from '@apollo/client'
+import useInput from '../hooks/useInput'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-const NewBook = () => {
+const NewBook = ({ filterState }) => {
+  const navigate = useNavigate()
   const title = useInput('text', 'title', 'title')
   const author = useInput('text', 'author', 'author')
   const published = useInput('number', 'published', 'published')
   const genre = useInput('text', 'genre', 'genre')
   const [genres, setGenres] = useState([])
   const [addBook] = useMutation(ADD_BOOK)
+  const [filter, setFilter] = filterState
+  
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const bookAdded = data.data.bookAdded
+      client.cache.updateQuery(
+        {
+          query: ALL_BOOKS,
+          variables: { genre: filter },
+        },
+        ({ allBooks }) => ({ allBooks: allBooks.concat(bookAdded) })
+      )
+    }
+  })
 
   const submit = async (event) => {
     event.preventDefault()
@@ -29,6 +48,7 @@ const NewBook = () => {
     author.reset()
     genre.reset()
     setGenres([])
+    navigate('/books')
   }
 
   const addGenre = () => {

@@ -1,22 +1,30 @@
+import { ALL_BOOKS } from '../graphql/querys'
+import { BOOK_ADDED } from '../graphql/querys'
+import { useQuery } from '@apollo/client'
+import { useSubscription } from '@apollo/client'
+
+import Button from 'react-bootstrap/esm/Button'
 import Table from 'react-bootstrap/Table'
 
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../graphql/querys'
-import Button from 'react-bootstrap/esm/Button'
-import { useState } from 'react'
-
-const Books = () => {
-  const [filter, setFilter] = useState(null)
-  const allBooks = useQuery(ALL_BOOKS, {
-    variables: {
-      genre: filter
-    },
-    fetchPolicy: 'network-only'
+const Books = ({ filterState }) => {
+  const [filter, setFilter] = filterState
+  const allBooks = useQuery(ALL_BOOKS, { variables: { genre: filter } })
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const bookAdded = data.data.bookAdded
+      client.cache.updateQuery(
+        {
+          query: ALL_BOOKS,
+          variables: { genre: filter },
+        },
+        ({ allBooks }) => ({ allBooks: allBooks.concat(bookAdded) })
+      )
+    }
   })
 
   if (allBooks.loading) return <div>...loading</div>
   const genres = ["refactoring", "agile", "patterns", "design", "classic", "crime", "revolution"]
-  const books = filter ? allBooks.data.allBooks.filter((e) => (e.genres.includes(filter))) : allBooks.data.allBooks
+  const books = allBooks.data.allBooks
   return (
     <div>
       <h2>books</h2>
