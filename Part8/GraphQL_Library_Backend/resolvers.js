@@ -42,6 +42,8 @@ export const resolvers = {
             let newBookAuthor;
             if (await Author.countDocuments({ name: args.author })) {
                 newBookAuthor = await Author.findOne({ name: args.author })
+                newBookAuthor.bookCount = newBookAuthor.bookCount + 1
+                await newBookAuthor.save()
             } else {
                 newBookAuthor = new Author({ name: args.author })
                 newBookAuthor = await newBookAuthor.save()
@@ -113,11 +115,6 @@ export const resolvers = {
             }
         }
 
-    },
-    Author: {
-        bookCount: async (root) => {
-            return await Book.countDocuments({ author: root.id })
-        }
     },
     Subscription: {
         bookAdded: {

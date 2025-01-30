@@ -22,6 +22,7 @@ mongoose.connect(process.env.URI)
         console.log("Database connection failed")
         console.error(err)
     })
+mongoose.set('debug', true)
 const app = express()
 const httpServer = http.createServer(app)
 const wsServer = new WebSocketServer({
