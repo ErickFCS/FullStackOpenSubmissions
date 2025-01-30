@@ -1,8 +1,10 @@
-import { GraphQLError } from 'graphql'
+import { GraphQLError, subscribe } from 'graphql'
 import Author from './models/authors.js'
 import Book from './models/books.js'
 import User from './models/users.js'
 import jwt from 'jsonwebtoken'
+import { PubSub } from 'graphql-subscriptions'
+const pubsub = new PubSub()
 
 export const resolvers = {
     Query: {
@@ -47,7 +49,9 @@ export const resolvers = {
             const newBook = new Book({ ...args, author: newBookAuthor.id })
             try {
                 const savedBook = await newBook.save()
-                return await savedBook.populate('author')
+                const populatedSavedBook = await savedBook.populate('author')
+                pubsub.publish('BOOK_ADDED', { bookAdded: populatedSavedBook })
+                return populatedSavedBook
             } catch (error) {
                 throw new GraphQLError('Saving book failed', {
                     extensions: {
@@ -113,6 +117,11 @@ export const resolvers = {
     Author: {
         bookCount: async (root) => {
             return await Book.countDocuments({ author: root.id })
+        }
+    },
+    Subscription: {
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterableIterator(['BOOK_ADDED'])
         }
     }
 }

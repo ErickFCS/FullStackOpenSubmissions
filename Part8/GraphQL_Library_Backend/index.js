@@ -8,6 +8,8 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 import { mongoose } from 'mongoose'
 import { resolvers } from './resolvers.js'
 import { typeDefs } from './typeDefs.js'
+import { useServer } from 'graphql-ws/lib/use/ws'
+import { WebSocketServer } from 'ws'
 import cors from 'cors'
 import express from 'express'
 import http from 'http'
@@ -22,9 +24,26 @@ mongoose.connect(process.env.URI)
     })
 const app = express()
 const httpServer = http.createServer(app)
+const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/'
+})
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+const serverCleanUp = useServer({ schema }, wsServer)
 const server = new ApolloServer({
-    schema: makeExecutableSchema({ typeDefs, resolvers, }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+    schema: schema,
+    plugins: [
+        ApolloServerPluginDrainHttpServer({ httpServer }),
+        {
+            async serverWillStart() {
+                return {
+                    async drainServer() {
+                        await serverCleanUp.dispose()
+                    }
+                }
+            }
+        }
+    ]
 })
 await server.start()
 app.use(

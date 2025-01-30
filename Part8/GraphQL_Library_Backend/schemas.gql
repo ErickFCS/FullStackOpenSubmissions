@@ -23,6 +23,10 @@ type Book {
     genres: [String!]!
 }
 
+type Subscription {
+    bookAdded: Book!
+}  
+
 type Query {
     bookCount:Int!
     authorCount:Int!
