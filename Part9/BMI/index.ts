@@ -7,15 +7,17 @@ app.get('/hello', (_req, res) => {
     res.send("Hello Full Stack");
 });
 
-app.get('/bmi', (req, res): any => {
+app.get('/bmi', (req, res): undefined => {
     const height = Number(req.query.height);
     const weight = Number(req.query.weight);
-    if (isNaN(height) || isNaN(weight))
-        return res.send({ error: "malformatted parameters" });
+    if (isNaN(height) || isNaN(weight)) {
+        res.send({ error: "malformatted parameters" });
+        return;
+    }
     const bmi = calculateBmi(height, weight);
-    return res.send({ height, weight, bmi });
+    res.send({ height, weight, bmi });
 });
 
 const PORT = 3003;
 
-app.listen(PORT, () => { console.log(`SERVER RUNNING IN PORT: ${PORT}`) });
+app.listen(PORT, () => { console.log(`SERVER RUNNING IN PORT: ${PORT}`); });

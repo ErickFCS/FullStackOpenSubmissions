@@ -21,7 +21,7 @@ const parseArguments = (args: string[]): Arguments => {
     const daily_exercise_hours: number[] = args.slice(3).map(Number);
     if (isNaN(target) || daily_exercise_hours.some(isNaN)) throw new Error("invalid arguments");
     return { target, daily_exercise_hours };
-}
+};
 
 const calculateExercises = (daily_exercise_hours: number[], target: number): Exercise_report => {
     const average: number = daily_exercise_hours.reduce((p, a) => (p + a)) / daily_exercise_hours.length;
@@ -44,8 +44,8 @@ const calculateExercises = (daily_exercise_hours: number[], target: number): Exe
         success: average >= target,
         target: target,
         trainingDays: daily_exercise_hours.reduce((p, a) => (a > 0 ? p + 1 : p), 0),
-    }
-}
+    };
+};
 
 try {
     const { target, daily_exercise_hours } = parseArguments(process.argv);

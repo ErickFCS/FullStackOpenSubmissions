@@ -13,8 +13,8 @@ const parseArguments = (args: string[]): Arguments => {
     return {
         height: Number(args[2]),
         mass: Number(args[3])
-    }
-}
+    };
+};
 
 const calculateBmi = (height: number, mass: number): string => {
     const bmi: number = mass * 10000 / (height * height);
@@ -22,19 +22,19 @@ const calculateBmi = (height: number, mass: number): string => {
     if (bmi < 25) return 'normal weight';
     if (bmi < 30) return 'overweight';
     return 'obese';
-}
+};
 
 if (require.main === module) {
     try {
-        const { height, mass } = parseArguments(process.argv)
+        const { height, mass } = parseArguments(process.argv);
         console.log(calculateBmi(height, mass));
     }
     catch (error: unknown) {
         if (error instanceof Error)
-            console.error(error.message)
+            console.error(error.message);
         else
-            console.error(error)
+            console.error(error);
     }
 }
 
-export default calculateBmi
+export default calculateBmi;
