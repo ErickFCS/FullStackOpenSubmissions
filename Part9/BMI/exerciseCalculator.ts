@@ -1,5 +1,10 @@
 
 
+interface Arguments {
+    target: number,
+    daily_exercise_hours: number[]
+}
+
 interface Exercise_report {
     average: number,
     periodLength: number,
@@ -8,6 +13,14 @@ interface Exercise_report {
     success: boolean,
     target: number,
     trainingDays: number
+}
+
+const parseArguments = (args: string[]): Arguments => {
+    if (args.length < 4) throw new Error("missing arguments");
+    const target: number = Number(args[2]);
+    const daily_exercise_hours: number[] = args.slice(3).map(Number);
+    if (isNaN(target) || daily_exercise_hours.some(isNaN)) throw new Error("invalid arguments");
+    return { target, daily_exercise_hours };
 }
 
 const calculateExercises = (daily_exercise_hours: number[], target: number): Exercise_report => {
@@ -34,4 +47,15 @@ const calculateExercises = (daily_exercise_hours: number[], target: number): Exe
     }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+    const { target, daily_exercise_hours } = parseArguments(process.argv)
+    console.log(calculateExercises(daily_exercise_hours, target));
+}
+catch (error: unknown) {
+    if (error instanceof Error)
+        console.error(error.message);
+    else
+        console.error(error)
+}
+
+export default calculateExercises
