@@ -24,15 +24,17 @@ const calculateBmi = (height: number, mass: number): string => {
     return 'obese';
 }
 
-try {
-    const { height, mass } = parseArguments(process.argv)
-    console.log(calculateBmi(height, mass));
-}
-catch (error: unknown) {
-    if (error instanceof Error)
-        console.error(error.message)
-    else
-        console.error(error)
+if (require.main === module) {
+    try {
+        const { height, mass } = parseArguments(process.argv)
+        console.log(calculateBmi(height, mass));
+    }
+    catch (error: unknown) {
+        if (error instanceof Error)
+            console.error(error.message)
+        else
+            console.error(error)
+    }
 }
 
 export default calculateBmi

@@ -48,14 +48,14 @@ const calculateExercises = (daily_exercise_hours: number[], target: number): Exe
 }
 
 try {
-    const { target, daily_exercise_hours } = parseArguments(process.argv)
+    const { target, daily_exercise_hours } = parseArguments(process.argv);
     console.log(calculateExercises(daily_exercise_hours, target));
 }
 catch (error: unknown) {
     if (error instanceof Error)
         console.error(error.message);
     else
-        console.error(error)
+        console.error(error);
 }
 
-export default calculateExercises
+export default calculateExercises;
