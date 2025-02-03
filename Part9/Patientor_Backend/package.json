@@ -8,9 +8,9 @@
   "scripts": {
     "lint": "eslint .",
     "tsc": "tsc",
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "ts-node-dev": "ts-node-dev",
-    "start": "node build/index.js"
+    "start": "node build/src/index.js"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
