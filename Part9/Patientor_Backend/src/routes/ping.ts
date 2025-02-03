@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-const pingRouter = Router()
+const pingRouter = Router();
 
 pingRouter.get('/', (_req, res) => {
-    res.send('pong')
-})
+    res.send('pong');
+});
 
-export default pingRouter
+export default pingRouter;
