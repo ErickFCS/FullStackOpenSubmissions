@@ -1,12 +1,11 @@
+import Part from './Part';
+import { CoursePart } from '../types/CoursePart';
 
-
-const Content = ({ courseParts }: { courseParts: { name: string; exerciseCount: number; }[] }) => {
+const Content = ({ courseParts }: { courseParts: CoursePart[] }) => {
     return (
         <>
             {courseParts.map((e, i) => (
-                <p key={i}>
-                    {e.name} {e.exerciseCount}
-                </p>
+                <Part key={i} coursePart={e} />
             ))}
         </>
     );
