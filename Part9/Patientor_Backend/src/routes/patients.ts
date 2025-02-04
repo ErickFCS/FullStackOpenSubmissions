@@ -1,19 +1,16 @@
-import { Router } from 'express';
 import { getAllButSSN, addPatient } from '../services/patients.js';
-import { v1 as uuid } from 'uuid';
-import { toNewPatient } from '../utils/parseNewPatient.js';
-import { Patients } from '../types/patients.js';
+import { newPatientMiddleware } from '../utils/newPatientSchema.js';
+import { Patients, NewPatient } from '../types/patients.js';
+import { Router, Request, Response } from 'express';
 
 const patientsRouter = Router();
 
 patientsRouter.get('/', (_req, res) => {
-    res.send(getAllButSSN());
+    res.json(getAllButSSN());
 });
 
-patientsRouter.post('/', (req, res) => {
-    let newPatient = toNewPatient(req.body) as Patients;
-    newPatient.id = uuid();
-    res.json(addPatient(newPatient));
+patientsRouter.post('/', newPatientMiddleware, (req: Request<unknown, unknown, NewPatient>, res: Response<Patients>) => {
+    res.json(addPatient(req.body));
 });
 
 export default patientsRouter;

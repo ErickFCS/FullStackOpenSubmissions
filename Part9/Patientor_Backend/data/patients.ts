@@ -1,5 +1,5 @@
 import { Patients } from '../src/types/patients.js';
-import { toNewPatient } from '../src/utils/parseNewPatient.js';
+import { newPatientSchema } from '../src/utils/newPatientSchema.js';
 
 const rawData = [
     {
@@ -44,8 +44,8 @@ const rawData = [
     }
 ];
 
-var data: Patients[] = rawData.map((e) => {
-    const newPatient = toNewPatient(e) as Patients;
+const data: Patients[] = rawData.map((e) => {
+    const newPatient = newPatientSchema.parse(e) as Patients;
     newPatient.id = e.id;
     return newPatient;
 });
