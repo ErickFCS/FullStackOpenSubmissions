@@ -10,3 +10,8 @@ export const getAllButSSN = (): Omit<Patients, 'ssn'>[] => {
         { id, name, dateOfBirth, gender, occupation }
     ));
 };
+
+export const addPatient = (newPatient: Patients): Patients | undefined => {
+    data.push(newPatient);
+    return newPatient;
+}

@@ -1,6 +1,7 @@
 import { Patients } from '../src/types/patients.js';
+import { toNewPatient } from '../src/utils/parseNewPatient.js';
 
-const data: Patients[] = [
+const rawData = [
     {
         'id': 'd2773336-f723-11e9-8f0b-362b9e155667',
         'name': 'John McClane',
@@ -42,5 +43,11 @@ const data: Patients[] = [
         'occupation': 'Digital evangelist'
     }
 ];
+
+var data: Patients[] = rawData.map((e) => {
+    const newPatient = toNewPatient(e) as Patients;
+    newPatient.id = e.id;
+    return newPatient;
+});
 
 export default data;
