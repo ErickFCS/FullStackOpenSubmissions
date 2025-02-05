@@ -1,9 +1,9 @@
-import { Patient } from '../types';
+import { Diagnosis, Patient } from '../types';
 import { useEffect, useState } from 'react';
 import patientServices from '../services/patients';
 
 
-const PatientPage = ({ patientId }: { patientId: string | undefined }) => {
+const PatientPage = ({ patientId, diagnosis }: { patientId: string | undefined, diagnosis: Diagnosis[] }) => {
     const [patient, setPatient] = useState<Patient | null | undefined>(undefined)
 
     useEffect(() => {
@@ -33,7 +33,9 @@ const PatientPage = ({ patientId }: { patientId: string | undefined }) => {
                     <p key={`p${i}`}>{e.date} {e.description}</p>
                     <ul key={`ul${i}`}>
                         {e.diagnosisCodes?.map((ee, ii) => (
-                            <li key={`${i}-${ii}`}>{ee}</li>
+                            <li key={`${i}-${ii}`}>
+                                {ee} {diagnosis.find((eee) => (eee.code === ee))?.name}
+                            </li>
                         ))}
                     </ul>
                 </div>
