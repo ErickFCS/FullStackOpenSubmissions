@@ -6,10 +6,14 @@ export const getAll = (): Patients[] => {
     return data;
 };
 
-export const getAllButSSN = (): Omit<Patients, 'ssn'>[] => {
+export const getAllButSSN = (): Omit<Patients, 'ssn' | 'entries'>[] => {
     return data.map(({ id, name, dateOfBirth, gender, occupation }) => (
         { id, name, dateOfBirth, gender, occupation }
     ));
+};
+
+export const getPatient = (patientId: string): Patients | null => {
+    return data.find((e) => (e.id === patientId)) || null;
 };
 
 export const addPatient = (newPatient: NewPatient): Patients | undefined => {

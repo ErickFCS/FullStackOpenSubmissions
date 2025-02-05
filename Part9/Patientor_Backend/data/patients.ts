@@ -1,5 +1,5 @@
 import { Patients } from '../src/types/patients.js';
-import { newPatientSchema } from '../src/utils/newPatientSchema.js';
+import { newPatientSchema } from '../src/types/patients.js';
 
 const rawData = [
     {

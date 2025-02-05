@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "tsc": "tsc",
-    "dev": "nodemon --exec \"tsc && echo Done Compilation && npm run start\"",
+    "dev": "nodemon --exec \"tsc && echo Done Compilation && npm run start || exit 1\"",
     "start": "node build/src/index.js"
   },
   "dependencies": {
