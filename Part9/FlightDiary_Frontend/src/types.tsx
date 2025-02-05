@@ -9,6 +9,8 @@ export interface recordData {
     comment: string;
 }
 
+export type newRecordData = Omit<recordData, 'id'>
+
 export const recordDataSchema = z.object({
     id: z.number(),
     weather: z.string(),

@@ -1,11 +1,9 @@
 import { recordData } from './types';
 import { useEffect, useState } from 'react';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import flightDiaries from './services/flightDiaries';
-import Navbar from 'react-bootstrap/Navbar';
-import Record from './components/Record';
-import Row from 'react-bootstrap/Row';
+import Records from './components/Records';
+import Header from './components/Header';
+import RecordForm from './components/RecordForm';
 
 
 function App() {
@@ -22,18 +20,10 @@ function App() {
 
     return (
         <>
-            <Navbar>
-                <Navbar.Brand>Flight Diary</Navbar.Brand>
-            </Navbar>
-            <Container fluid>
-                <Row>
-                    {records.map((e, i) => (
-                        <Col key={i}>
-                            <Record {...e} />
-                        </Col>
-                    ))}
-                </Row>
-            </Container>
+            <Header />
+            <Records records={records} />
+            <br />
+            <RecordForm records={records} setRecords={setRecords} />
         </>
     );
 }
