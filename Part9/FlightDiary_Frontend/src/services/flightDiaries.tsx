@@ -18,7 +18,8 @@ const getAll = async (): Promise<recordData[]> => {
         })
         .catch((err) => {
             console.error(err);
-            return Promise.reject('Unable to get all diaries');
+            if (!axios.isAxiosError(err)) return Promise.reject('Unknown error');
+            return Promise.reject(err.response?.data);
         });
 };
 
@@ -31,7 +32,8 @@ const newOne = async (data: newRecordData): Promise<recordData> => {
         })
         .catch((err) => {
             console.error(err);
-            return Promise.reject('Unable to post new diary');
+            if (!axios.isAxiosError(err)) return Promise.reject('Unknown error');
+            return Promise.reject(err.response?.data);
         });
 };
 

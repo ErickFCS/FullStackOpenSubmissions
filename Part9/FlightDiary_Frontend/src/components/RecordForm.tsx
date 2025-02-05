@@ -1,11 +1,17 @@
 import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { recordData, newRecordData } from '../types';
+import { recordData, newRecordData, AlertData } from '../types';
 import useInput from '../hooks/useInput';
 import flightDiaries from '../services/flightDiaries';
 
-const RecordForm = ({ records, setRecords }: { records: recordData[], setRecords: React.Dispatch<React.SetStateAction<recordData[]>> }) => {
+interface Prop_Type {
+    records: recordData[];
+    setRecords: React.Dispatch<React.SetStateAction<recordData[]>>;
+    setAlertData: React.Dispatch<React.SetStateAction<AlertData>>;
+}
+
+const RecordForm = ({ records, setRecords, setAlertData }: Prop_Type) => {
     const date = useInput('date', 'date', 'date');
     const weather = useInput('text', 'weather', 'weather');
     const visibility = useInput('text', 'visibility', 'visibility');
@@ -27,9 +33,20 @@ const RecordForm = ({ records, setRecords }: { records: recordData[], setRecords
                 weather.reset();
                 visibility.reset();
                 comment.reset();
+                setAlertData({
+                    heading: 'Record creation succed',
+                    message: 'Record updated to the server',
+                    show: true,
+                    variant: 'sucess'
+                });
             })
-            .catch((err) => {
-                console.log(err);
+            .catch((err: string) => {
+                setAlertData({
+                    heading: 'Record creation failed',
+                    message: err,
+                    show: true,
+                    variant: 'danger'
+                });
             });
     };
 

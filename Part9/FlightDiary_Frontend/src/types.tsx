@@ -18,3 +18,10 @@ export const recordDataSchema = z.object({
     date: z.string(),
     comment: z.string(),
 });
+
+export interface AlertData {
+    heading: string;
+    message: string;
+    show: boolean;
+    variant: 'sucess' | 'danger';
+}
