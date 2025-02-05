@@ -28,8 +28,15 @@ const PatientPage = ({ patientId }: { patientId: string | undefined }) => {
             <p>born in: {patient.dateOfBirth}</p>
             <p>ssn: {patient.ssn}</p>
             <p>ocupation: {patient.occupation}</p>
-            {patient.entries.map((e) => (
-                <p>{e.name}</p>
+            {patient.entries.map((e, i) => (
+                <div key={`div${i}`}>
+                    <p key={`p${i}`}>{e.date} {e.description}</p>
+                    <ul key={`ul${i}`}>
+                        {e.diagnosisCodes?.map((ee, ii) => (
+                            <li key={`${i}-${ii}`}>{ee}</li>
+                        ))}
+                    </ul>
+                </div>
             ))}
         </>
     )
