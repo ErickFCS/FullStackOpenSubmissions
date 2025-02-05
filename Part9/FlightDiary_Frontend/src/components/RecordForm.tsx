@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { recordData, newRecordData, AlertData } from '../types';
 import useInput from '../hooks/useInput';
+import useRadio from '../hooks/useRadio';
 import flightDiaries from '../services/flightDiaries';
 
 interface Prop_Type {
@@ -13,8 +14,8 @@ interface Prop_Type {
 
 const RecordForm = ({ records, setRecords, setAlertData }: Prop_Type) => {
     const date = useInput('date', 'date', 'date');
-    const weather = useInput('text', 'weather', 'weather');
-    const visibility = useInput('text', 'visibility', 'visibility');
+    const weather = useRadio('weather', true);
+    const visibility = useRadio('visibility', true);
     const comment = useInput('text', 'comment', 'comment');
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +38,7 @@ const RecordForm = ({ records, setRecords, setAlertData }: Prop_Type) => {
                     heading: 'Record creation succed',
                     message: 'Record updated to the server',
                     show: true,
-                    variant: 'sucess'
+                    variant: 'success'
                 });
             })
             .catch((err: string) => {
@@ -59,11 +60,20 @@ const RecordForm = ({ records, setRecords, setAlertData }: Prop_Type) => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Weather</Form.Label>
-                    <Form.Control {...weather.values} />
+                    <br />
+                    <Form.Check {...weather.values} label='sunny' />
+                    <Form.Check {...weather.values} label='rainy' />
+                    <Form.Check {...weather.values} label='cloudy' />
+                    <Form.Check {...weather.values} label='stormy' />
+                    <Form.Check {...weather.values} label='windy' />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Visibility</Form.Label>
-                    <Form.Control {...visibility.values} />
+                    <br />
+                    <Form.Check {...visibility.values} label='great' />
+                    <Form.Check {...visibility.values} label='good' />
+                    <Form.Check {...visibility.values} label='ok' />
+                    <Form.Check {...visibility.values} label='poor' />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Comment</Form.Label>

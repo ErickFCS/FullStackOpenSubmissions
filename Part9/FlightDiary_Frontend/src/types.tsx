@@ -23,5 +23,5 @@ export interface AlertData {
     heading: string;
     message: string;
     show: boolean;
-    variant: 'sucess' | 'danger';
+    variant: 'success' | 'danger';
 }
