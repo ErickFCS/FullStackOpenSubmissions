@@ -11,6 +11,7 @@ export enum Gender {
   Female = 'female',
   Other = 'other'
 }
+
 interface BaseEntry {
   id: string;
   description: string;
@@ -20,7 +21,7 @@ interface BaseEntry {
 }
 
 const baseEntrySchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   description: z.string(),
   date: z.string(),
   specialist: z.string(),
@@ -46,7 +47,6 @@ const healthCheckEntrySchema = baseEntrySchema.extend({
 
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
-  description: string;
   sickLeave?: {
     startDate: string;
     endDate: string;
@@ -55,7 +55,6 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 
 const occupationalHealthcareEntrySchema = baseEntrySchema.extend({
   type: z.literal("OccupationalHealthcare"),
-  description: z.string(),
   sickLeave: z.object({
     startDate: z.string(),
     endDate: z.string(),
@@ -64,7 +63,6 @@ const occupationalHealthcareEntrySchema = baseEntrySchema.extend({
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  description: string;
   discharge: {
     date: string;
     criteria: string;
@@ -73,7 +71,6 @@ interface HospitalEntry extends BaseEntry {
 
 const hospitalEntrySchema = baseEntrySchema.extend({
   type: z.literal("Hospital"),
-  description: z.string(),
   discharge: z.object({
     date: z.string(),
     criteria: z.string(),
@@ -83,6 +80,12 @@ const hospitalEntrySchema = baseEntrySchema.extend({
 export type Entry = HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry;
 
 export const entrySchema = z.union([healthCheckEntrySchema, occupationalHealthcareEntrySchema, hospitalEntrySchema]);
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type NewEntry = UnionOmit<Entry, 'id'> 
+
+export const newEntrySchema = entrySchema;
 
 export interface Patient {
   id: string;
