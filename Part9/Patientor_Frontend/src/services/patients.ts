@@ -36,15 +36,15 @@ const createEntry = async (patientId: string, data: NewEntry) => {
             return Promise.resolve(data as Entry);
         })
         .catch((err) => {
-            console.error(err)
+            console.error(err);
             if (axios.isAxiosError(err)) {
                 return Promise.reject(err.message);
             } else {
                 return Promise.reject('unknown error');
             }
-        })
+        });
 
-}
+};
 
 export default {
     getAll, create, getPatient, createEntry

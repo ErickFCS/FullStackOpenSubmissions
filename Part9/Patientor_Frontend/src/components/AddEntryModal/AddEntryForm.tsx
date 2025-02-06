@@ -41,12 +41,12 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             type,
             healthCheckRating
         });
-        setDate('')
-        setDescription('')
-        setdiagnosisCodes('')
-        setSpecialist('')
-        setType('')
-        setHealthCheckRating('')
+        setDate('');
+        setDescription('');
+        setdiagnosisCodes('');
+        setSpecialist('');
+        setType('');
+        setHealthCheckRating('');
     };
 
     return (
