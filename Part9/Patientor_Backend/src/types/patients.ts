@@ -16,7 +16,7 @@ interface BaseEntry {
 }
 
 const baseEntrySchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     description: z.string(),
     date: z.string(),
     specialist: z.string(),
@@ -78,7 +78,13 @@ const hospitalEntrySchema = baseEntrySchema.extend({
 
 export type Entry = HealthCheckEntry | OccupationalHealthcareEntry | HospitalEntry;
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type NewEntry = UnionOmit<Entry, 'id'>
+
 export const entrySchema = z.union([healthCheckEntrySchema, occupationalHealthcareEntrySchema, hospitalEntrySchema]);
+
+export const newEntrySchema = entrySchema;
 
 export interface Patients {
     id: string;
@@ -100,5 +106,3 @@ export const newPatientSchema = z.object({
     occupation: z.string(),
     entries: z.array(entrySchema).default([])
 });
-
-// type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
