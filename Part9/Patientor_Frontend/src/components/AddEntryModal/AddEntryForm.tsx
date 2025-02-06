@@ -1,6 +1,7 @@
 import { useState, SyntheticEvent } from 'react';
 
-import { TextField, Grid, Button } from '@mui/material';
+import { Select, Grid, Button, Input, InputLabel, MenuItem } from '@mui/material';
+import { Diagnosis } from '../../types';
 
 interface Props {
     onCancel: () => void;
@@ -16,14 +17,15 @@ interface Props {
         dischargeDate?: string;
         criteria?: string;
     }) => void;
+    diagnosis: Diagnosis[]
 }
 
-const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
+const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
-    const [diagnosisCodes, setdiagnosisCodes] = useState('');
+    const [diagnosisCodes, setdiagnosisCodes] = useState<string[]>([]);
     const [specialist, setSpecialist] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('HealthCheck');
     // HealthCheck
     const [healthCheckRating, setHealthCheckRating] = useState('');
     // OccupationalHealthcare
@@ -40,7 +42,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         onSubmit({
             date,
             description,
-            diagnosisCodes,
+            diagnosisCodes: diagnosisCodes.join(', '),
             specialist,
             type,
             healthCheckRating,
@@ -51,7 +53,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         });
         setDate('');
         setDescription('');
-        setdiagnosisCodes('');
+        setdiagnosisCodes([]);
         setSpecialist('');
         setType('');
         setHealthCheckRating('');
@@ -60,56 +62,73 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     return (
         <div>
             <form onSubmit={addEntry}>
-                <TextField
-                    label="Creation Date"
+                <InputLabel >Date of creation</InputLabel>
+                <Input
+                    type='date'
                     placeholder="YYYY-MM-DD"
                     fullWidth
                     value={date}
                     onChange={({ target }) => setDate(target.value)}
                 />
-                <TextField
-                    label="Description"
+                <InputLabel>Description</InputLabel>
+                <Input
                     fullWidth
                     value={description}
                     onChange={({ target }) => setDescription(target.value)}
                 />
-                <TextField
-                    label="Diagnosis Codes"
-                    fullWidth
+                <InputLabel>Diagnosis Codes</InputLabel>
+                <Select
+                    multiple
                     value={diagnosisCodes}
-                    onChange={({ target }) => setdiagnosisCodes(target.value)}
-                />
-                <TextField
-                    label="Specialist"
+                    onChange={({ target: { value } }) => setdiagnosisCodes(typeof value === 'string' ? value.split(',') : value)}
+                >
+                    {diagnosis.map((e) => (
+                        <MenuItem
+                            key={e.code}
+                            value={e.code}
+                        >
+                            {e.name}
+                        </MenuItem>
+                    ))}
+                </Select>
+                <InputLabel>Specialist</InputLabel>
+                <Input
                     fullWidth
                     value={specialist}
                     onChange={({ target }) => setSpecialist(target.value)}
                 />
-                <TextField
-                    label="Entry Type"
-                    fullWidth
+                <InputLabel>Entry Type</InputLabel>
+                <Select
                     value={type}
                     onChange={({ target }) => setType(target.value)}
-                />
+                >
+                    <MenuItem value='HealthCheck'>Health Check</MenuItem>
+                    <MenuItem value='OccupationalHealthcare'>Occupational Healthcare</MenuItem>
+                    <MenuItem value='Hospital'>Hospital</MenuItem>
+                </Select>
                 {type === 'HealthCheck' ?
-                    <TextField
-                        label="Health Check Rating"
-                        fullWidth
-                        value={healthCheckRating}
-                        onChange={({ target }) => setHealthCheckRating(target.value)}
-                    />
+                    <>
+                        <InputLabel>Health Check Rating</InputLabel>
+                        <Input
+                            fullWidth
+                            value={healthCheckRating}
+                            onChange={({ target }) => setHealthCheckRating(target.value)}
+                        />
+                    </>
                     : null}
                 {type === 'OccupationalHealthcare' ?
                     <>
-                        <TextField
-                            label="Start date"
+                        <InputLabel>Start date</InputLabel>
+                        <Input
+                            type='date'
                             placeholder="YYYY-MM-DD"
                             fullWidth
                             value={startDate}
                             onChange={({ target }) => setStartDate(target.value)}
                         />
-                        <TextField
-                            label="End date"
+                        <InputLabel>End date</InputLabel>
+                        <Input
+                            type='date'
                             placeholder="YYYY-MM-DD"
                             fullWidth
                             value={endDate}
@@ -119,15 +138,16 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
                     : null}
                 {type === 'Hospital' ?
                     <>
-                        <TextField
-                            label="Discharge date"
+                        <InputLabel>Discharge date</InputLabel>
+                        <Input
+                            type='date'
                             placeholder="YYYY-MM-DD"
                             fullWidth
                             value={dischargeDate}
                             onChange={({ target }) => setDischargeDate(target.value)}
                         />
-                        <TextField
-                            label="Criteria"
+                        <InputLabel>Criteria</InputLabel>
+                        <Input
                             fullWidth
                             value={criteria}
                             onChange={({ target }) => setCriteria(target.value)}

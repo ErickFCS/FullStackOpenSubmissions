@@ -220,7 +220,7 @@ const PatientPage = ({ patientId, diagnosis }: { patientId: string, diagnosis: D
             {patient.entries.map((e, i) => (
                 <EntryComponent key={i} entry={e} diagnosis={diagnosis} />
             ))}
-            <AddEntryModal modalOpen={formOpen} onClose={() => { setFormOpen(false); }} onSubmit={handleAddEntry} error={formError} />
+            <AddEntryModal modalOpen={formOpen} onClose={() => { setFormOpen(false); }} onSubmit={handleAddEntry} error={formError} diagnosis={diagnosis} />
             <Button variant="contained" onClick={() => setFormOpen(true)}>
                 Add New Entry
             </Button>
