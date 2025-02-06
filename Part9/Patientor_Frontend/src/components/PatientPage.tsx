@@ -3,7 +3,7 @@ import { Diagnosis, Patient, Entry, NewEntry, HealthCheckRating } from '../types
 import { useEffect, useState } from 'react';
 import patientServices from '../services/patients';
 import AddEntryModal from './AddEntryModal';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 
 const assertNever = (value: never): never => {
     throw new Error(
@@ -92,13 +92,12 @@ const EntryComponent = ({ entry, diagnosis }: { entry: Entry, diagnosis: Diagnos
     }
 };
 
-const PatientPage = ({ patientId, diagnosis }: { patientId: string | undefined, diagnosis: Diagnosis[] }) => {
-    const [patient, setPatient] = useState<Patient | null | undefined>(undefined);
-    const [formOpen, setFormOpen] = useState(false);
+const PatientPage = ({ patientId, diagnosis }: { patientId: string, diagnosis: Diagnosis[] }) => {
     const [formError, setFormError] = useState('');
+    const [formOpen, setFormOpen] = useState(false);
+    const [patient, setPatient] = useState<Patient | null | undefined>(undefined);
 
     useEffect(() => {
-        if (typeof patientId === 'undefined') return setPatient(null);
         patientServices
             .getPatient(patientId)
             .then((res) => {
@@ -106,31 +105,75 @@ const PatientPage = ({ patientId, diagnosis }: { patientId: string | undefined, 
             });
     }, [patientId]);
 
-    const handleAddEntry = (values: {
-        date: string;
-        description: string;
-        diagnosisCodes: string;
-        specialist: string;
-        type: string;
-        healthCheckRating: string;
-    }) => {
-        if (patientId === undefined) {
-            setFormError('No patient Id');
-            return;
-        }
+    const handleAddEntry = (
+        { date,
+            description,
+            diagnosisCodes,
+            specialist,
+            type,
+            healthCheckRating,
+            startDate,
+            endDate,
+            dischargeDate,
+            criteria
+        }: {
+            date: string;
+            description: string;
+            diagnosisCodes: string;
+            specialist: string;
+            type: string;
+            healthCheckRating?: string;
+            startDate?: string;
+            endDate?: string;
+            dischargeDate?: string;
+            criteria?: string;
+        }) => {
         if (patient === null || patient === undefined) {
             setFormError('No patient');
             return;
         }
         try {
-            const data: NewEntry = {
-                date: values.date,
-                description: values.description,
-                diagnosisCodes: values.diagnosisCodes.split(', '),
-                specialist: values.specialist,
-                type: 'HealthCheck',
-                healthCheckRating: z.nativeEnum(HealthCheckRating).parse(Number(values.healthCheckRating))
-            };
+            let data: NewEntry;
+            switch (type) {
+            case 'HealthCheck':
+                data = {
+                    date,
+                    description,
+                    diagnosisCodes: diagnosisCodes.split(', '),
+                    specialist,
+                    type: 'HealthCheck',
+                    healthCheckRating: z.nativeEnum(HealthCheckRating).parse(Number(healthCheckRating))
+                };
+                break;
+            case 'OccupationalHealthcare':
+                data = {
+                    date,
+                    description,
+                    diagnosisCodes: diagnosisCodes.split(', '),
+                    specialist,
+                    type: 'OccupationalHealthcare',
+                    sickLeave: {
+                        startDate: z.string().parse(startDate),
+                        endDate: z.string().parse(endDate)
+                    }
+                };
+                break;
+            case 'Hospital':
+                data = {
+                    date,
+                    description,
+                    diagnosisCodes: diagnosisCodes.split(', '),
+                    specialist,
+                    type: 'Hospital',
+                    discharge: {
+                        date: z.string().parse(dischargeDate),
+                        criteria: z.string().parse(criteria)
+                    }
+                };
+                break;
+            default:
+                throw new Error(`Unhandled discriminated union member: ${JSON.stringify(type)}`);
+            }
             patientServices
                 .createEntry(patientId, data)
                 .then((res) => {
@@ -145,14 +188,12 @@ const PatientPage = ({ patientId, diagnosis }: { patientId: string | undefined, 
                     setFormError(err);
                 });
         }
-        catch (err: unknown) {
-            if (err instanceof z.ZodError) {
-                setFormError(err.message);
-            } else {
-                setFormError('unknown error');
-                console.error(err);
+        catch (err) {
+            if (err instanceof ZodError) {
+                setFormError(err.errors[0].message);
             }
         }
+
     };
 
     if (patient === undefined) return (

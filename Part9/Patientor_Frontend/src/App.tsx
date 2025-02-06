@@ -14,7 +14,7 @@ const App = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
     const match = useMatch('/patients/:id');
-    const patientId = match ? match.params.id : undefined;
+    const patientId = match ? match.params.id || '' : '';
 
     useEffect(() => {
         void axios.get<void>(`${apiBaseUrl}/ping`);

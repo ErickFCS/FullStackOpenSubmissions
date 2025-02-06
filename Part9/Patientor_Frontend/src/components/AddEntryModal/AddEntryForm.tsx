@@ -10,7 +10,11 @@ interface Props {
         diagnosisCodes: string;
         specialist: string;
         type: string;
-        healthCheckRating: string;
+        healthCheckRating?: string;
+        startDate?: string;
+        endDate?: string;
+        dischargeDate?: string;
+        criteria?: string;
     }) => void;
 }
 
@@ -24,12 +28,12 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     const [healthCheckRating, setHealthCheckRating] = useState('');
     // OccupationalHealthcare
     // ---Sick Leave
-    // const [startDate, setStartDate] = useState('');
-    // const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     // Hospital
     // discharge
-    // const [dischargeDate, setDischargeDate] = useState('');
-    // const [criteria, setCriteria] = useState('');
+    const [dischargeDate, setDischargeDate] = useState('');
+    const [criteria, setCriteria] = useState('');
 
     const addEntry = (event: SyntheticEvent) => {
         event.preventDefault();
@@ -39,7 +43,11 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             diagnosisCodes,
             specialist,
             type,
-            healthCheckRating
+            healthCheckRating,
+            startDate,
+            endDate,
+            dischargeDate,
+            criteria,
         });
         setDate('');
         setDescription('');
@@ -83,12 +91,49 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
                     value={type}
                     onChange={({ target }) => setType(target.value)}
                 />
-                <TextField
-                    label="Health Check Rating"
-                    fullWidth
-                    value={healthCheckRating}
-                    onChange={({ target }) => setHealthCheckRating(target.value)}
-                />
+                {type === 'HealthCheck' ?
+                    <TextField
+                        label="Health Check Rating"
+                        fullWidth
+                        value={healthCheckRating}
+                        onChange={({ target }) => setHealthCheckRating(target.value)}
+                    />
+                    : null}
+                {type === 'OccupationalHealthcare' ?
+                    <>
+                        <TextField
+                            label="Start date"
+                            placeholder="YYYY-MM-DD"
+                            fullWidth
+                            value={startDate}
+                            onChange={({ target }) => setStartDate(target.value)}
+                        />
+                        <TextField
+                            label="End date"
+                            placeholder="YYYY-MM-DD"
+                            fullWidth
+                            value={endDate}
+                            onChange={({ target }) => setEndDate(target.value)}
+                        />
+                    </>
+                    : null}
+                {type === 'Hospital' ?
+                    <>
+                        <TextField
+                            label="Discharge date"
+                            placeholder="YYYY-MM-DD"
+                            fullWidth
+                            value={dischargeDate}
+                            onChange={({ target }) => setDischargeDate(target.value)}
+                        />
+                        <TextField
+                            label="Criteria"
+                            fullWidth
+                            value={criteria}
+                            onChange={({ target }) => setCriteria(target.value)}
+                        />
+                    </>
+                    : null}
                 <Grid>
                     <Grid item>
                         <Button

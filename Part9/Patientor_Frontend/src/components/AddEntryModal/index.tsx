@@ -10,7 +10,11 @@ interface Props {
         diagnosisCodes: string;
         specialist: string;
         type: string;
-        healthCheckRating: string;
+        healthCheckRating?: string;
+        startDate?: string;
+        endDate?: string;
+        dischargeDate?: string;
+        criteria?: string;
     }) => void;
     error?: string;
 }
