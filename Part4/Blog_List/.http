@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
     "username": "root",
-    "password": "9h50KcYZ",
+    "password": "password",
     "name": "user",
     "EOF": ""
 }
@@ -46,7 +46,7 @@ Content-Type: application/json
 
 {
     "username": "root",
-    "password": "9h50KcYZ",
+    "password": "password",
     "name": "user",
     "EOF": ""
 }

@@ -1,4 +1,3 @@
-import './index.css'
 import { initializeBlogs, newBlog } from './reducers/blogs'
 import { newNotification } from './reducers/notifications'
 import { Routes, Route, useMatch, Link } from 'react-router-dom'
@@ -15,9 +14,7 @@ import User from './components/User'
 import Users from './components/Users'
 import userService from './services/userService'
 
-import Container from 'react-bootstrap/Container'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import Stack from 'react-bootstrap/Stack'
 
 const App = () => {
     const [users, setUsers] = useState([])
@@ -52,30 +49,16 @@ const App = () => {
     const targetUser = matchUserId ? users.find((e) => e.id === matchUserId.params.id) : null
     const targetBlog = matchBlogId ? blogs.find((e) => e.id === matchBlogId.params.id) : null
     return (
-        <>
+        <Stack gap={3} style={{ marginTop: 30, marginBottom: 30, }}>
             <Message message={message} error={error} />
-            {user.name ? (
-                <Nav className="justify-content-center">
-                    <Nav.Item>
-                        <Nav.Link as='div'>
-                            <Link to='/'>blogs</Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link as='div'>
-                            <Link to='/users'>users</Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                </Nav>
-            ) : null}
             <AccountForm />
-            {user.name ? (
+            {user.name && (
                 <Routes>
                     <Route
                         path='/'
                         element={
                             <>
-                                {user.name ? (
+                                {user.name && (
                                     <>
                                         <Toggle
                                             showButtonText='create new blog'
@@ -84,7 +67,7 @@ const App = () => {
                                         </Toggle>
                                         <Blogs blogs={blogs} />
                                     </>
-                                ) : null}
+                                )}
                             </>
                         }
                     />
@@ -93,8 +76,8 @@ const App = () => {
                     <Route path='/users/:id' element={<User user={targetUser} />} />
                     <Route path='*' element={<div>Unknown route</div>} />
                 </Routes>
-            ) : null}
-        </>
+            )}
+        </Stack>
     )
 }
 

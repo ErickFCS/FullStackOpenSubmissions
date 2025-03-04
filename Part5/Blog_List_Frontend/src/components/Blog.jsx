@@ -1,37 +1,61 @@
-import { useState } from 'react'
+import { useState, } from 'react'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Stack from 'react-bootstrap/esm/Stack'
+import Table from 'react-bootstrap/Table'
 
-const Blog = ({ blog, likesHandler, removeHandler, user }) => {
-    const [isVisible, setIsVisible] = useState(false)
-    const [buttonText, setButtonText] = useState('Show')
-    const visibleWhenVisible = { display: isVisible ? 'block' : 'none' }
+const Blog = ({ blog, likesHandler, removeHandler, user, },) => {
+    const [isVisible, setIsVisible,] = useState(false,)
+    const [buttonText, setButtonText,] = useState('Show',)
+    const visibleWhenVisible = { display: isVisible ? '' : 'none', }
     const toggleVisibility = () => {
         let buttonText = isVisible ? 'Show' : 'Hide'
-        setButtonText(buttonText)
-        setIsVisible(!isVisible)
-    }
-    const border = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5
-    }
-    const text = {
-        fontSize: 18,
-        margin: 0,
+        setButtonText(buttonText,)
+        setIsVisible(!isVisible,)
     }
     return (
-        <div style={border}>
-            <p style={text}>{blog.title}<button onClick={toggleVisibility}>{buttonText}</button></p>
-            <p style={text}>{blog.author}</p>
-            <p style={{ ...text, ...visibleWhenVisible }}>{blog.url}</p>
-            <p style={{ ...text, ...visibleWhenVisible }}>likes {blog.likes}
-                <button onClick={() => { likesHandler(blog) }}>like</button>
-            </p>
-            {user.id === blog.User.id ?
-                <p style={{ ...text, ...visibleWhenVisible }}><button onClick={() => { removeHandler(blog) }}>remove</button></p> :
-                null}
-        </div >
+        <Card>
+            <Card.Body>
+                <Card.Title>
+                    {blog.title}<Button onClick={toggleVisibility}>{buttonText}</Button>
+                </Card.Title>
+                <Table>
+                    <thead>
+                        <th></th>
+                        <th></th>
+                        {/* <th></th> */}
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Author:</td>
+                            <td>{blog.author}</td>
+                            {/* <td></td> */}
+                        </tr>
+                        <tr style={visibleWhenVisible}>
+                            <td>Url:</td>
+                            <td>{blog.url}</td>
+                            {/* <td></td> */}
+                        </tr>
+                        <tr style={visibleWhenVisible}>
+                            <td>Total likes:</td>
+                            <td>
+                                <Stack direction='horizontal' style={{ justifyContent: 'space-between', }}>
+                                    {blog.likes}
+                                    <Button variant='warning' onClick={() => { likesHandler(blog,) }}>Give like</Button>
+                                </Stack>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
+                {user.id === blog.User.id &&
+                    <Stack style={{ alignItems: 'end', ...visibleWhenVisible, }}>
+                        <Button variant='danger' onClick={() => { removeHandler(blog,) }}>Delete</Button>
+                    </Stack>
+                }
+            </Card.Body>
+        </Card >
     )
 }
 

@@ -1,17 +1,10 @@
-const Notification = ({ message }) => {
-    const style = {
-        border: 'solid',
-        padding: 10,
-        borderWidth: 1,
-        marginBottom: 5
-    }
+import Alert from 'react-bootstrap/Alert'
 
+
+const Notification = ({ message, },) => {
     if (!message) return null
-
     return (
-        <div style={style}>
-            {message}
-        </div>
+        <Alert>{message}</Alert>
     )
 }
 

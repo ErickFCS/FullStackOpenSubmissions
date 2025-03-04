@@ -1,57 +1,57 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, } from 'react'
 import Blogs from './components/Blogs'
 import Message from './components/Message'
 import Toggle from './components/Toggle'
 import AccountForm from './components/AccountForm'
 import CreateForm from './components/CreateForm'
 import BlogService from './services/blogsService'
-import './index.css'
+import Stack from 'react-bootstrap/Stack'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
-    const [user, setUser] = useState({})
-    const [message, setMessage] = useState(null)
-    const [error, setError] = useState(null)
+    const [blogs, setBlogs,] = useState([],)
+    const [user, setUser,] = useState({},)
+    const [message, setMessage,] = useState(null,)
+    const [error, setError,] = useState(null,)
 
     useEffect(() => {
         BlogService.getAll().then(blogs =>
-            setBlogs(blogs)
+            setBlogs(blogs,),
         )
-    }, [])
+    }, [],)
 
     useEffect(() => {
-        const savedUser = JSON.parse(window.localStorage.getItem('user')) || {}
-        if (savedUser.name) setUser(savedUser)
-    }, [])
+        const savedUser = JSON.parse(window.localStorage.getItem('user',),) || {}
+        if (savedUser.name) setUser(savedUser,)
+    }, [],)
 
     useEffect(() => {
         setTimeout(() => {
-            setMessage(null)
-            setError(null)
-        }, 5000)
-    }, [message, error])
+            setMessage(null,)
+            setError(null,)
+        }, 5000,)
+    }, [message, error,],)
 
-    const createHandler = (title, author, url) => {
+    const createHandler = (title, author, url,) => {
         return BlogService
-            .createBlog({ title, author, url }, user)
-            .then((createdBlog) => {
-                setMessage('blog creating successed')
+            .createBlog({ title, author, url, }, user,)
+            .then((createdBlog,) => {
+                setMessage('blog creating successed',)
                 createdBlog.User = {
                     id: user.id,
                     name: user.name,
-                    username: user.username
+                    username: user.username,
                 }
-                const newBlogs = blogs.concat(createdBlog)
-                setBlogs(newBlogs)
-            })
-            .catch((err) => {
-                setError('blog creating failed')
-                return Promise.reject(err)
-            })
+                const newBlogs = blogs.concat(createdBlog,)
+                setBlogs(newBlogs,)
+            },)
+            .catch((err,) => {
+                setError('blog creating failed',)
+                return Promise.reject(err,)
+            },)
     }
 
     return (
-        <div>
+        <Stack gap={3} style={{ marginTop: 30, marginBottom: 30, }}>
             <Message
                 message={message}
                 error={error} />
@@ -76,7 +76,7 @@ const App = () => {
                         setError={setError} />
                 </>
                 : null}
-        </div>
+        </Stack>
     )
 }
 

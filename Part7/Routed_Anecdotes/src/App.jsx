@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
+import { useState, } from 'react'
+import { Routes, Route, Link, useMatch, useNavigate, } from 'react-router-dom'
 import useField from './hooks/useField'
 
 const Menu = () => {
     const padding = {
-        paddingRight: 5
+        paddingRight: 5,
     }
     return (
         <div>
@@ -15,7 +15,7 @@ const Menu = () => {
     )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
+const AnecdoteList = ({ anecdotes, },) => (
     <div>
         <h2>Anecdotes</h2>
         <ul>
@@ -25,7 +25,7 @@ const AnecdoteList = ({ anecdotes }) => (
                         {anecdote.content}
                     </Link>
                 </li>
-            ))}
+            ),)}
         </ul>
     </div>
 )
@@ -52,19 +52,19 @@ const Footer = () => (
     </div>
 )
 
-const CreateNew = (props) => {
-    const content = useField('text')
-    const author = useField('text')
-    const info = useField('text')
+const CreateNew = (props,) => {
+    const content = useField('text',)
+    const author = useField('text',)
+    const info = useField('text',)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e,) => {
         e.preventDefault()
         props.addNew({
             content: content.value,
             author: author.value,
             info: info.value,
-            votes: 0
-        })
+            votes: 0,
+        },)
     }
 
     const handleReset = () => {
@@ -98,46 +98,46 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
-    const [anecdotes, setAnecdotes] = useState([
+    const [anecdotes, setAnecdotes,] = useState([
         {
             content: 'If it hurts, do it more often',
             author: 'Jez Humble',
             info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
             votes: 0,
-            id: 1
+            id: 1,
         },
         {
             content: 'Premature optimization is the root of all evil',
             author: 'Donald Knuth',
             info: 'http://wiki.c2.com/?PrematureOptimization',
             votes: 0,
-            id: 2
-        }
-    ])
-    const [notification, setNotification] = useState('')
-    const match = useMatch('/anecdotes/:id')
-    const anecdote = match ? anecdotes.find(e => e.id === Number(match.params.id)) : null
+            id: 2,
+        },
+    ],)
+    const [notification, setNotification,] = useState('',)
+    const match = useMatch('/anecdotes/:id',)
+    const anecdote = match ? anecdotes.find(e => e.id === Number(match.params.id,),) : null
     const navigate = useNavigate()
 
-    const addNew = (anecdote) => {
-        anecdote.id = Math.round(Math.random() * 10000)
-        setAnecdotes(anecdotes.concat(anecdote))
-        navigate('/')
-        setNotification(`${anecdote.content} was created`)
+    const addNew = (anecdote,) => {
+        anecdote.id = Math.round(Math.random() * 10000,)
+        setAnecdotes(anecdotes.concat(anecdote,),)
+        navigate('/',)
+        setNotification(`${anecdote.content} was created`,)
         setTimeout(() => {
-            setNotification('')
-        }, 5000)
+            setNotification('',)
+        }, 5000,)
     }
 
-    const anecdoteById = (id) => anecdotes.find(a => a.id === id)
-
-    const vote = (id) => {
-        const anecdote = anecdoteById(id)
+    const anecdoteById = (id,) => anecdotes.find(a => a.id === id,)
+    // eslint-disable-next-line no-unused-vars
+    const vote = (id,) => {
+        const anecdote = anecdoteById(id,)
         const voted = {
             ...anecdote,
-            votes: anecdote.votes + 1
+            votes: anecdote.votes + 1,
         }
-        setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+        setAnecdotes(anecdotes.map(a => a.id === id ? voted : a,),)
     }
 
     return (
@@ -149,7 +149,7 @@ const App = () => {
                 <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
                 <Route path='/about' element={<About />} />
                 <Route path='/create' element={<CreateNew addNew={addNew} />} />
-                <Route path='/anecdotes/:id' element={<AnecdoteList anecdotes={[anecdote]} />} />
+                <Route path='/anecdotes/:id' element={<AnecdoteList anecdotes={[anecdote,]} />} />
             </Routes>
             <Footer />
         </>

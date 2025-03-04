@@ -1,47 +1,60 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { setNotification, clearNotification, } from '../contexts/notifications'
+import { useContext, } from 'react'
+import { useMutation, useQueryClient, } from '@tanstack/react-query'
 import anecdoteService from '../services/anecdotes'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import notificationContext from '../contexts/notifications'
-import { setNotification, clearNotification } from '../contexts/notifications'
-import { useContext } from 'react'
+
 
 const AnecdoteForm = () => {
 
-    const [notification, notificationDispatch] = useContext(notificationContext)
+    const [, notificationDispatch,] = useContext(notificationContext,)
 
     const queryClient = useQueryClient()
     const newAnecdoteMutation = useMutation({
         mutationFn: anecdoteService.createNew,
-        onSuccess: (res) => {
-            const anecdotes = queryClient.getQueryData(['anecdotes'])
-            queryClient.setQueryData(['anecdotes'], anecdotes.concat(res))
-            notificationDispatch(setNotification(`${res.content} was created`))
+        onSuccess: (res,) => {
+            const anecdotes = queryClient.getQueryData(['anecdotes',],)
+            queryClient.setQueryData(['anecdotes',], anecdotes.concat(res,),)
+            notificationDispatch(setNotification(`${res.content} was created`,),)
             setTimeout(() => {
-                notificationDispatch(clearNotification())
-            }, 5000)
+                notificationDispatch(clearNotification(),)
+            }, 5000,)
         },
-        onError: (err) => {
-            notificationDispatch(setNotification('to short anecdote, must have lenght 5 or more'))
+        onError: () => {
+            notificationDispatch(setNotification('to short anecdote, must have lenght 5 or more',),)
             setTimeout(() => {
-                notificationDispatch(clearNotification())
-            }, 5000)
-        }
-    })
+                notificationDispatch(clearNotification(),)
+            }, 5000,)
+        },
+    },)
 
-    const onCreate = (event) => {
+    const onCreate = (event,) => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        newAnecdoteMutation.mutate(content)
+        newAnecdoteMutation.mutate(content,)
     }
 
     return (
-        <div>
-            <h3>create new</h3>
-            <form onSubmit={onCreate}>
-                <input name='anecdote' />
-                <button type="submit">create</button>
-            </form>
-        </div>
+        <Card>
+            <Card.Body>
+                <Card.Title>
+                    <h3>Create</h3>
+                </Card.Title>
+                <Form onSubmit={onCreate}>
+                    <Form.Group>
+                        <InputGroup>
+                            <Form.Control name='anecdote' />
+                            <Button variant='success' type='submit'>Create</Button>
+                        </InputGroup>
+                    </Form.Group>
+                </Form>
+            </Card.Body>
+        </Card>
     )
 }
 

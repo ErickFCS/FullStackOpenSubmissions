@@ -1,49 +1,101 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, } from 'react'
+import Card from 'react-bootstrap/Card'
 import fetchWeatherFromCity from '../services/weatherApiService'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Stack from 'react-bootstrap/Stack'
+import Table from 'react-bootstrap/Table'
 
-const WeatherInfo = ({ weather }) => {
+const WeatherInfo = ({ weather, },) => {
     if (!weather) return null
     return (
         <>
-            <h2>Weather in {weather.city.name}</h2>
-            <h3>summery: {weather.list[0].summery}</h3>
-            <h3>temperature: {weather.list[0].main.temprature}°Kevin</h3>
-            <h3>humidity: {weather.list[0].main.humidity}%</h3>
-            <h3>wind: {weather.list[0].wind.speed} m/s from {weather.list[0].wind.direction}</h3>
-            <h3>description: {weather.list[0].weather[0].description}</h3>
-            <img src={weather.list[0].weather[0].icon} alt="" />
+            <h2 style={{ textAlign: 'center', margin: 0, }}>Weather in {weather.city.name}</h2>
+            <Stack direction='horizontal' style={{ justifyContent: 'center', }}>
+                <img src={weather.list[0].weather[0].icon} alt='' />
+            </Stack>
+            <Table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Summery:</td>
+                        <td>{weather.list[0].summery}</td>
+                    </tr>
+                    <tr>
+                        <td>Temperature:</td>
+                        <td>{weather.list[0].main.temperature}°Kevin</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity:</td>
+                        <td>{weather.list[0].main.humidity}%</td>
+                    </tr>
+                    <tr>
+                        <td>Wind:</td>
+                        <td>{weather.list[0].wind.speed} m/s from {weather.list[0].wind.direction}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>{weather.list[0].weather[0].description}</td>
+                    </tr>
+                </tbody>
+            </Table>
         </>
     )
 }
 
-const CountryInfo = ({ info }) => {
-    if (!info) return null
-    const [weather, setWeather] = useState(null)
+const CountryInfo = ({ info, },) => {
+    const [weather, setWeather,] = useState(null,)
 
     useEffect(() => {
-        fetchWeatherFromCity(info.capital[0])
-            .then((res) => {
-                setWeather(res)
-            })
-    }, [])
-    console.log(info.capital[0]);
+        if (!info) return
+        fetchWeatherFromCity(info.capital[0],)
+            .then((res,) => {
+                setWeather(res,)
+            },)
+            .catch(() => { },)
+    }, [info,],)
 
+    if (!info) return null
+    console.log(info.capital[0],)
 
     return (
-        <div>
-            <h1>{info.name.common}</h1>
-            <h2>{info.name.official}</h2>
-            <h3>capital: {info.capital}</h3>
-            <h3>area: {info.area}</h3>
-            <h3>Languages: </h3>
-            <ul>
-                {Object.values(info.languages).map((e) => (
-                    <li key={e}>{e}</li>
-                ))}
-            </ul>
-            <img src={info.flags.png} alt={`${info.name.common} flag`} />
-            <WeatherInfo weather={weather} />
-        </div>
+        <Card style={{ maxWidth: 500, }}>
+            <Card.Body>
+                <Stack gap={2}>
+                    <Card.Img src={info.flags.png} />
+                    <Card.Title>
+                        <h1 style={{ margin: 0, }}>{info.name.common}</h1>
+                    </Card.Title>
+                    <Table style={{ margin: 0, }}>
+                        <thead>
+                            <tr>
+                                <th>Official Name</th>
+                                <th>Capital</th>
+                                <th>Area</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{info.name.official}</td>
+                                <td>{info.capital}</td>
+                                <td>{info.area} km<sup>2</sup></td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                    <h3 style={{ margin: 0, }}>Languages:</h3>
+                    <ListGroup>
+                        {Object.values(info.languages,).map((e,) => (
+                            <ListGroup.Item key={e}>{e}</ListGroup.Item>
+                        ),)}
+                    </ListGroup>
+                    <WeatherInfo weather={weather} />
+                </Stack>
+            </Card.Body>
+        </Card>
     )
 }
 

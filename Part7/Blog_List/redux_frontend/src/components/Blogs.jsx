@@ -1,21 +1,21 @@
-import { Link } from 'react-router-dom'
-
-import ListGroup from 'react-bootstrap/ListGroup'
+import { useNavigate } from 'react-router-dom'
+import Nav from 'react-bootstrap/Nav'
 
 const Blogs = ({ blogs }) => {
     let sortedBlog = [...blogs]
     sortedBlog.sort((a, b) => b.likes - a.likes)
+    const navigate = useNavigate()
 
     return (
         <>
-            <h2>blogs</h2>
-            <ListGroup>
-                {sortedBlog.map((blog, index) => (
-                    <ListGroup.Item className='blogContainer' key={index}>
-                        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                    </ListGroup.Item>
+            <h2>Blogs</h2>
+            <Nav variant='underline' onSelect={(eventKey) => { navigate(eventKey) }} style={{ flexDirection: 'column', alignItems: 'start' }}>
+                {blogs.map((blog, index) => (
+                    <Nav.Item key={index}>
+                        <Nav.Link eventKey={`/blogs/${blog.id}`}>{blog.title}</Nav.Link>
+                    </Nav.Item>
                 ))}
-            </ListGroup>
+            </Nav>
         </>
     )
 }

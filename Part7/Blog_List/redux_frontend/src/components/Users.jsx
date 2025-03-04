@@ -1,29 +1,33 @@
 import { Link } from 'react-router-dom'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
-import Table from 'react-bootstrap/Table'
 
 const Users = ({ users }) => {
     return (
         <>
             <h2>Users</h2>
-            <Table striped >
-                <thead>
-                    <tr>
-                        <th>username</th>
-                        <th>blogs created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((e, i) => (
-                        <tr key={i}>
-                            <td>
+            <ListGroup>
+                <ListGroup.Item>
+                    <Row>
+                        <Col>Username</Col>
+                        <Col>Blogs created</Col>
+                    </Row>
+                </ListGroup.Item>
+                {users.map((e, i) => (
+                    <ListGroup.Item>
+                        <Row>
+                            <Col>
                                 <Link to={e.id}>{e.username}</Link>
-                            </td>
-                            <td>{e.Blog.length}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+                            </Col>
+                            <Col>
+                                {e.Blog.length}
+                            </Col>
+                        </Row>
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
         </>
     )
 }

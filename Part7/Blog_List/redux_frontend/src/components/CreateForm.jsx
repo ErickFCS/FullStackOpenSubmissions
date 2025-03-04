@@ -1,7 +1,9 @@
-import useInput from '../hooks/useInput'
-
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Stack from 'react-bootstrap/esm/Stack'
+import useInput from '../hooks/useInput'
 
 const CreateForm = ({ createHandler }) => {
     const title = useInput('text')
@@ -20,25 +22,38 @@ const CreateForm = ({ createHandler }) => {
     }
 
     return (
-        <>
-            <h2>create new</h2>
-            <Form onSubmit={onSubmitHandler}>
-                <Form.Group>
-                    <Form.Label>title:</Form.Label>
-                    <Form.Control {...title.values} placeholder='title' />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>author:</Form.Label>
-                    <Form.Control {...author.values} placeholder='author' />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>url:</Form.Label>
-                    <Form.Control {...url.values} placeholder='url' />
-                </Form.Group>
-                <br />
-                <Button variant='success' type='submit'>create</Button>
-            </Form>
-        </>
+        <Stack style={{ alignItems: 'center', }}>
+            <Card style={{ width: '90%', maxWidth: 400, }}>
+                <Card.Body>
+                    <Card.Title>
+                        <h2 style={{ margin: 0, textAlign: 'center', marginTop: 24, marginBottom: 40, }}>Create new</h2>
+                    </Card.Title>
+                    <Form onSubmit={onSubmitHandler}>
+                        <Stack gap={3}>
+                            <Form.Group>
+                                <InputGroup>
+                                    <InputGroup.Text>title:</InputGroup.Text>
+                                    <Form.Control {...title.values} placeholder='author' />
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group>
+                                <InputGroup>
+                                    <InputGroup.Text>author:</InputGroup.Text>
+                                    <Form.Control {...author.values} placeholder='title' />
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group>
+                                <InputGroup>
+                                    <InputGroup.Text>url:</InputGroup.Text>
+                                    <Form.Control {...url.values} placeholder='url' />
+                                </InputGroup>
+                            </Form.Group>
+                            <Button variant='success' type='submit'>create</Button>
+                        </Stack>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </Stack>
     )
 }
 

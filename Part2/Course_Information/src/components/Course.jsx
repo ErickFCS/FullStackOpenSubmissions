@@ -1,37 +1,49 @@
-const Header = ({ course }) => (
+import Badge from 'react-bootstrap/Badge'
+import Card from 'react-bootstrap/Card'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Stack from 'react-bootstrap/Stack'
+
+
+const Header = props => (
     <>
-        <h1>{course}</h1>
+        <h2 style={{ textAlign: 'center', margin: 0, }}>{props.course}</h2>
     </>
 )
 
-const Part = ({ part, exercises }) => (
-    <p>
-        {part} {exercises}
-    </p>
+const Part = props => (
+    <ListGroup.Item>
+        {props.part} <Badge bg='secondary'>{props.exercises}</Badge>
+    </ListGroup.Item>
 )
 
-const Content = ({ parts }) => (
-    <>
-        {parts.map((e, i) => (
+const Content = ({ parts, },) => (
+    <ListGroup>
+        {parts.map((e, i,) => (
             <Part key={e.name + i} part={e.name} exercises={e.exercises} />
-        ))}
-    </>
+        ),)}
+    </ListGroup>
 )
 
-const Total = ({ parts }) => (
-    <>
-        <p>Number of exercises {parts.reduce((v, e) => (v + e.exercises), 0)}</p>
-    </>
+const Total = ({ parts, },) => (
+    <Card>
+        <Card.Body>
+            <Card.Text>
+                <h3 style={{ margin: 0, }}>
+                    Number of exercises {parts.reduce((v, e,) => (v + e.exercises), 0,)}
+                </h3>
+            </Card.Text>
+        </Card.Body>
+    </Card>
 )
 
-const Course = ({ course }) => {
-    const { name, parts } = course
+const Course = ({ course, },) => {
+    const { name, parts, } = course
     return (
-        <div>
+        <Stack gap={3} style={{ marginTop: 10, }}>
             <Header course={name} />
             <Content parts={parts} />
             <Total parts={parts} />
-        </div>
+        </Stack>
     )
 }
 

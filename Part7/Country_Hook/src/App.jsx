@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, } from 'react'
 import axios from 'axios'
 
-const useField = (type) => {
-    const [value, setValue] = useState('')
+const useField = (type,) => {
+    const [value, setValue,] = useState('',)
 
-    const onChange = (event) => {
-        setValue(event.target.value)
+    const onChange = (event,) => {
+        setValue(event.target.value,)
     }
 
     return {
         type,
         value,
-        onChange
+        onChange,
     }
 }
 
-const useCountry = (name) => {
-    const [country, setCountry] = useState(null)
+const useCountry = (name,) => {
+    const [country, setCountry,] = useState(null,)
 
     useEffect(() => {
         axios
-            .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
-            .then((res) => {
-                setCountry({ ...res.data, found: true })
-            })
-            .catch((err) => {
-                setCountry({ found: false })
-            })
-    }, [name])
+            .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`,)
+            .then((res,) => {
+                setCountry({ ...res.data, found: true, },)
+            },)
+            .catch(() => {
+                setCountry({ found: false, },)
+            },)
+    }, [name,],)
 
     return country
 }
 
-const Country = ({ country }) => {
+const Country = ({ country, },) => {
     if (!country) {
         return null
     }
-    console.log(country.found)
+    console.log(country.found,)
     if (!country.found) {
         return (
             <div>
@@ -56,13 +56,13 @@ const Country = ({ country }) => {
 }
 
 const App = () => {
-    const nameInput = useField('text')
-    const [name, setName] = useState('')
-    const country = useCountry(name)
+    const nameInput = useField('text',)
+    const [name, setName,] = useState('',)
+    const country = useCountry(name,)
 
-    const fetch = (e) => {
+    const fetch = (e,) => {
         e.preventDefault()
-        setName(nameInput.value)
+        setName(nameInput.value,)
     }
 
     return (

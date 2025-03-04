@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useState, } from 'react'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Card from 'react-bootstrap/Card'
+import Stack from 'react-bootstrap/Stack'
+import StyledButton from 'react-bootstrap/Button'
 
-const Button = ({ text, onClick }) => (
+const Button = ({ text, onClick, variant, style, },) => (
     <>
-        <button onClick={onClick}>{text}</button>
+        <StyledButton variant={variant} style={style} onClick={onClick}>{text}</StyledButton>
     </>
 )
 
@@ -15,39 +19,57 @@ const App = () => {
         'Premature optimization is the root of all evil.',
         'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
         'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
-        'The only way to go fast, is to go well.'
+        'The only way to go fast, is to go well.',
     ]
 
-    const [selected, setSelected] = useState(0)
-    const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
-    const [maxVoteIndex, setMaxVoteIndex] = useState(0)
+    const [selected, setSelected,] = useState(0,)
+    const [votes, setVotes,] = useState(Array(anecdotes.length,).fill(0,),)
+    const [maxVoteIndex, setMaxVoteIndex,] = useState(0,)
 
     const handleNextAnecdote = () => {
-        setSelected(Math.floor(Math.random() * anecdotes.length))
+        setSelected(Math.floor(Math.random() * anecdotes.length,),)
     }
 
     const handleVote = () => {
-        let newVotes = [...votes]
+        let newVotes = [...votes,]
         newVotes[selected] += 1
-        if (newVotes[selected] > newVotes[maxVoteIndex]) setMaxVoteIndex(selected)
-        setVotes(newVotes)
+        if (newVotes[selected] > newVotes[maxVoteIndex]) setMaxVoteIndex(selected,)
+        setVotes(newVotes,)
     }
 
     return (
-        <>
-            <h2>Anecdote of the day</h2>
-            <div>
-                {anecdotes[selected]}
-            </div>
-            <p>has {votes[selected]} votes</p>
-            <Button text="vote" onClick={handleVote} />
-            <Button text="next anecdote" onClick={handleNextAnecdote} />
-            <h2>Anecdote with most votes</h2>
-            <div>
-                {anecdotes[maxVoteIndex]}
-            </div>
-            <p>has {votes[maxVoteIndex]} votes</p>
-        </>
+        <Stack gap={3} style={{ marginTop: 30, marginBottom: 30, }}>
+            <Card>
+                <Card.Body>
+                    <Card.Title >
+                        <h2 style={{ textAlign: 'center', }}>Anecdote of the day</h2>
+                    </Card.Title>
+                    <Card.Text style={{ textAlign: 'center', }}>
+                        {anecdotes[selected]}
+                        <br />
+                        has {votes[selected]} votes
+                    </Card.Text>
+                    <Stack direction='horizontal' style={{ justifyContent: 'center', }}>
+                        <ButtonGroup size='lg' style={{ justifyContent: 'center', width: '90%', maxWidth: 500, }}>
+                            <Button text='Vote' onClick={handleVote} variant='success' style={{ width: '50%', }} />
+                            <Button text='Next anecdote' onClick={handleNextAnecdote} variant='secondary' style={{ width: '50%', }} />
+                        </ButtonGroup>
+                    </Stack>
+                </Card.Body>
+            </Card >
+            <Card>
+                <Card.Body>
+                    <Card.Title>
+                        <h2 style={{ textAlign: 'center', }}>Anecdote with most votes</h2>
+                    </Card.Title>
+                    <Card.Text style={{ textAlign: 'center', }}>
+                        {anecdotes[maxVoteIndex]}
+                        <br />
+                        has {votes[maxVoteIndex]} votes
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        </Stack>
     )
 }
 

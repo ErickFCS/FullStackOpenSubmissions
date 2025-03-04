@@ -1,8 +1,59 @@
-# React + Vite
+# Mini Blog List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a mini web application built with React, Vite, and Bootstrap. It allows users share and rate blogs.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React: A JavaScript library for building user interfaces.
+- Vite: A next-generation front-end tool that provides a fast development server and optimized production builds.
+- Bootstrap: A popular CSS framework for building responsive and mobile-first websites.
+
+## Features
+
+- Account system
+- Rate system
+- Responsive design using Bootstrap.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js installed on your local machine.
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+2. Start development vite server
+- With NPM
+
+   ```bash
+   npm install
+   npm run dev
+- With PNPM
+
+   ```bash
+   pnpm install
+   pnpm dev
+
+### Build
+
+1. Clone the repository:
+   
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+2. Build the source
+- With NPM
+
+   ```bash
+   npm install
+   npm run build
+- With PNPM
+
+   ```bash
+   pnpm install
+   pnpm build
